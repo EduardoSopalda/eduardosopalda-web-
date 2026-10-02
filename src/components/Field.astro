@@ -2219,6 +2219,18 @@ import { STOPS } from '../data/stops';
         straightenAmt = 1 - eased;
         nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * eased;
         nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * eased;
+        // "The rest of the specimens move out of the screen" -- direct
+        // spec. Before this, departing only ever straightened the nerve
+        // and panned the world; specimens, fragments and the other six
+        // stop links just sat there unchanged until the hard navigate
+        // cut them away mid-frame. #world is a sibling of the #nerve
+        // canvas, not a parent (see the markup above), so fading ITS
+        // opacity clears everything the eye shouldn't keep tracking
+        // while leaving the nerve canvas untouched. Eased faster than
+        // the straighten (squared) so the screen is already reading as
+        // clear well before the flattened line finishes arriving at
+        // the corner, rather than the two finishing in a dead heat.
+        world.style.opacity = String(Math.max(0, 1 - eased * eased * 1.4));
         if (p >= 1 && departHref) {
           const href = departHref;
           departHref = '';
@@ -2230,6 +2242,12 @@ import { STOPS } from '../data/stops';
         if (!drag) targetX += reduced ? 0 : DRIFT_PER_SEC * idleMul * dt;
         worldX += (targetX - worldX) * approachFactor(0.06, dt);
         straightenAmt = 1;
+        // Only touched by the departing branch above; clearing it here
+        // (rather than never setting it when not departing) means a
+        // reduced-motion session, which skips `departing` entirely at
+        // the click handler, never has a stray inline opacity to worry
+        // about in the first place.
+        if (world.style.opacity) world.style.opacity = '';
       }
       worldYoff = dragY + (reduced ? 0 : Math.sin(t * 0.0817) * H * 0.16);
 

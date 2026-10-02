@@ -33,8 +33,8 @@ const { entries } = Astro.props;
 ---
 
 <ol class="list">
-  {entries.map((a) => (
-    <li>
+  {entries.map((a, i) => (
+    <li style={`animation-delay: ${Math.min(i, 16) * 45}ms`}>
       <a class="row" href={`/writing/${a.id}`}>
         <span class="no">{a.no ? `No.${String(a.no).padStart(2, '0')}` : ''}</span>
         <span class="title">{a.title}</span>
@@ -60,6 +60,47 @@ const { entries } = Astro.props;
 
   .list li:last-child {
     border-bottom: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  /* "The menu falls from the nerve, as if being printed" -- direct
+     spec, for the room this list lands in right after the field's
+     departing nerve flattens into the corner mark above it (see
+     writing.astro's .nerve-rest and Field.astro's departure comments).
+     A pure CSS entrance, not a JS one: this file is shared by /writing
+     and every /thread/[name] page, some of which a visitor can reach
+     directly with no JS at all (CLAUDE.md non-negotiable 7 is about
+     the reader specifically, but the same "must still work" spirit
+     applies here) -- clip-path + a per-row animation-delay (set as an
+     inline style from the server loop above, not a runtime stagger)
+     plays identically whether or not any script ever runs, and simply
+     doesn't animate at all if the browser doesn't support clip-path
+     transitions, which still leaves a perfectly readable static list.
+     clip-path over a plain opacity fade specifically because "printed"
+     implies something emerging downward past a fixed line, not
+     dissolving into view -- inset(0 0 100% 0) hides the row below its
+     own top edge, animating toward inset(0 0 0 0) reveals it top to
+     bottom, like paper coming out from under a print head. */
+  .list li {
+    clip-path: inset(0 0 100% 0);
+    animation: row-print 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+
+  @keyframes row-print {
+    from {
+      clip-path: inset(0 0 100% 0);
+      opacity: 0.4;
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .list li {
+      clip-path: none;
+      animation: none;
+    }
   }
 
   .row {
