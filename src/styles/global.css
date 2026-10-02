@@ -1,5 +1,41 @@
 @import './tokens.css';
 
+/* Direct feedback, after watching the field->room departure live: "the
+   transition is not done properly, one page disappears and the other
+   one shows up." Measured first, not assumed -- the hard navigation
+   itself was already clean (both documents are true --void black, no
+   white flash, and Field.astro's own departure already lands the
+   nerve/wordmark in the exact corner spot writing.astro's static
+   .nerve-rest illusion sits in). What was missing is any actual
+   continuity BETWEEN the two documents -- a traditional MPA swap has
+   no visual relationship between the old page's last frame and the
+   new page's first one at all, position-matched or not.
+   This is the browser's own answer to exactly that, not a framework:
+   opting a plain multi-page site into native cross-document View
+   Transitions costs nothing architecturally. It's pure CSS (no JS, so
+   it can't break CLAUDE.md's "reader pages must work with JavaScript
+   off" -- this isn't even scoped to the reader, it's every navigation,
+   and it still works identically with scripting disabled entirely), it
+   doesn't convert the site into a client-routed SPA (every link is
+   still a real navigation, still works with JS off, still gives a
+   crawler a real page per URL), and a browser that doesn't support it
+   yet just keeps today's plain cut -- strictly additive, nothing to
+   regress. Default root-swap animation (a smooth crossfade of the
+   whole page) applies site-wide the instant this loads. Deliberately
+   NOT pairing it with a named view-transition on the nerve/canvas
+   itself: Field.astro's #nerve canvas also paints every specimen and
+   fragment, not just the line, so naming it for a cross-document morph
+   would squash that entire painted scene down into writing.astro's
+   thin 1px .nerve-rest bar, not cleanly hand off one line to another.
+   The plain crossfade alone already turns "one page disappears, the
+   other shows up" into one continuous dissolve between two frames that
+   were already position-matched by Field.astro's own departure; a
+   true named-element morph is a real follow-up, not a safe one to ship
+   without separately cropping the nerve onto its own layer first. */
+@view-transition {
+  navigation: auto;
+}
+
 * {
   box-sizing: border-box;
 }
