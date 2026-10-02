@@ -27,6 +27,9 @@ const talks = [
       <p class="back"><a href="/">Back to the field</a></p>
       <p class="label">talks, panels, DAMA, the white paper</p>
       <h1>Out Loud</h1>
+      <a class="cover" href="/out-loud/automa-chem-2026" tabindex="-1" aria-hidden="true">
+        <img src="/out-loud/automa-chem-2026/00.jpg" alt="" />
+      </a>
       <ol class="list">
         {
           talks.map((talk) => (
@@ -99,6 +102,17 @@ const talks = [
     font-family: var(--font-display);
     font-weight: 400;
     font-size: 1.8rem;
+  }
+
+  .cover {
+    display: block;
+    margin-top: 1.75rem;
+    background: #000;
+  }
+
+  .cover img {
+    width: 100%;
+    height: auto;
   }
 
   .list {

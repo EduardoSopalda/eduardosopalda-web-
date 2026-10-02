@@ -4,13 +4,13 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '../../styles/global.css';
 
 const chapters = [
-  { id: 'open', t: 0, kicker: 'OPEN', title: 'Two distances' },
-  { id: 'architect', t: 58, kicker: 'ACT 01', title: 'The Architect' },
-  { id: 'brasilia', t: 128, kicker: 'ACT 02', title: 'Brasília' },
-  { id: 'evidence', t: 232, kicker: 'ACT 03', title: 'When ambition becomes evidence' },
-  { id: 'scales', t: 312, kicker: 'ACT 04', title: 'AI scales what is there' },
-  { id: 'twins', t: 404, kicker: 'ACT 05', title: 'AI digital twins' },
-  { id: 'close', t: 504, kicker: 'ACT 06', title: 'Close' },
+  { id: 'open', t: 0, still: '00', kicker: 'OPEN', title: 'Two distances' },
+  { id: 'architect', t: 58, still: '01', kicker: 'ACT 01', title: 'The Architect' },
+  { id: 'brasilia', t: 128, still: '02', kicker: 'ACT 02', title: 'Brasília' },
+  { id: 'evidence', t: 232, still: '03', kicker: 'ACT 03', title: 'When ambition becomes evidence' },
+  { id: 'scales', t: 312, still: '04', kicker: 'ACT 04', title: 'AI scales what is there' },
+  { id: 'twins', t: 404, still: '05', kicker: 'ACT 05', title: 'AI digital twins' },
+  { id: 'close', t: 504, still: '06', kicker: 'ACT 06', title: 'Close' },
 ];
 
 const script = [
@@ -130,6 +130,7 @@ const script = [
             <video
               id="talk-film"
               src="/out-loud/automa-chem-2026/film.mp4"
+              poster="/out-loud/automa-chem-2026/00.jpg"
               playsinline
               muted
               preload="metadata"
@@ -140,11 +141,21 @@ const script = [
             <input class="scrub" id="talk-scrub" type="range" min="0" max="600" step="0.1" value="0" aria-label="Film position" />
             <div class="times" id="talk-time">0:00 / 10:00</div>
           </div>
+          <div class="strip" id="talk-strip">
+            {
+              chapters.map((c) => (
+                <button type="button" data-t={c.t} data-id={c.id} data-kicker={c.kicker} data-title={c.title} aria-label={c.title}>
+                  <img src={`/out-loud/automa-chem-2026/${c.still}.jpg`} alt="" />
+                </button>
+              ))
+            }
+          </div>
         </section>
         <aside class="rail" aria-label="Acts">
           <div class="act-kicker" id="talk-kicker">OPEN</div>
           <h2 class="act-title" id="talk-act">Two distances</h2>
           <div class="copper-rule"></div>
+          <p class="line" id="talk-line">Data and AI in sustainable digital transformation. From Brasília to the plant floor.</p>
           <ol class="chapters">
             {
               chapters.map((c, i) => (
@@ -190,8 +201,26 @@ const script = [
         var timeEl = document.getElementById('talk-time');
         var kicker = document.getElementById('talk-kicker');
         var act = document.getElementById('talk-act');
+        var line = document.getElementById('talk-line');
         var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-t]'));
         var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapters [data-t]'));
+        var cues = [
+          [0, 'Data and AI in sustainable digital transformation. From Brasília to the plant floor.'],
+          [58, '…not as a metaphor.'],
+          [112, 'We design from above. Not always for the person who has to live with the result.'],
+          [128, 'From above, every line found its place.'],
+          [168, 'Below, every line met a person.'],
+          [210, 'I built a plaza nobody wanted to stand in.'],
+          [240, '11,001.8 kt CO₂e. It is a data product.'],
+          [276, 'The number is ours. Much of the evidence is elsewhere.'],
+          [312, 'AI scales what is there.'],
+          [372, 'Sometimes AI is the answer. Sometimes the answer is better data. Sometimes it is a better process.'],
+          [404, 'AI digital twins and smarter decisions.'],
+          [468, 'Helping people find better ways to run the systems they already have, with less waste built in.'],
+          [504, 'Agents do not own risk. They do not carry accountability. Humans do. Always.'],
+          [540, 'Agents do not own risk. They do not carry accountability.'],
+          [572, 'Humans do. Always.']
+        ];
         if (!video || !play || !scrub) return;
 
         function fmt(s) {
@@ -216,6 +245,17 @@ const script = [
           });
           if (kicker) kicker.textContent = current.getAttribute('data-kicker') || '';
           if (act) act.textContent = current.getAttribute('data-title') || '';
+          var spoken = cues[0][1];
+          cues.forEach(function (c) {
+            if (c[0] <= t + 0.15) spoken = c[1];
+          });
+          if (line) line.textContent = spoken;
+          document.querySelectorAll('.strip [data-t]').forEach(function (b) {
+            var on = b.getAttribute('data-id') === id;
+            b.classList.toggle('on', on);
+            if (on) b.setAttribute('aria-current', 'true');
+            else b.removeAttribute('aria-current');
+          });
         }
 
         function paint() {
@@ -472,6 +512,41 @@ const script = [
     font-variant-numeric: tabular-nums;
     font-size: 0.75rem;
     color: #48565f;
+  }
+
+  .strip {
+    display: flex;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding: 0 1rem 0.85rem;
+  }
+
+  .strip button {
+    flex: 0 0 8.5rem;
+    padding: 0;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+  }
+
+  .strip img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .strip button.on {
+    border-bottom-color: #762f0b;
+  }
+
+  .line {
+    margin: 0 0 0.8rem;
+    min-height: 4.4rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.35;
   }
 
   .scrub {
