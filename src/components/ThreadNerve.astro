@@ -50,17 +50,44 @@ const { active = null } = Astro.props;
   }
 
   .thread-nerve a {
+    /* Direct feedback: "is not easy to click in the options of the
+       nerve." The link itself was bare text with zero padding -- at
+       0.65rem mono, the real hit box was only a few pixels tall, well
+       under any reasonable tap target. display:block + padding gives
+       it one; the negative margin cancels the padding back out of the
+       flex gap so the row's own spacing and wrap behaviour read
+       exactly as before -- only the invisible clickable area grew. */
+    display: block;
+    padding: 0.4em 0.3em;
+    margin: -0.4em -0.3em;
     font-family: var(--font-mono);
     font-size: 0.65rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
     color: rgba(227, 175, 149, 0.55);
+    /* Same grammar as the field's own .stop approach state (Field.astro:
+       "the bead brightens, the label rises and letterspaces," FIELD-
+       SPEC.md) -- borrowed deliberately rather than the field's full
+       flatten-and-rise departure move, which is reserved for crossing
+       an actual room threshold, not a frequent in-page filter click.
+       Scaled down to this nav's own proportions: no halo-grade glow,
+       no 600-weight jump, just the same three ingredients at a size
+       that fits one thin filter row instead of the real navigation. */
+    transform: scale(1);
+    transition:
+      color 0.5s,
+      letter-spacing 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+      text-shadow 0.5s;
   }
 
   .thread-nerve a:hover,
   .thread-nerve a:focus-visible {
     color: var(--gold);
+    letter-spacing: 0.22em;
+    transform: scale(1.16);
+    text-shadow: 0 0 8px rgba(247, 197, 106, 0.45);
   }
 
   /* The one thread actually being read right now -- gold, same as
@@ -74,5 +101,17 @@ const { active = null } = Astro.props;
     outline: 1.5px solid var(--gold);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .thread-nerve a {
+      transition: color 0.5s;
+    }
+
+    .thread-nerve a:hover,
+    .thread-nerve a:focus-visible {
+      letter-spacing: 0.14em;
+      transform: scale(1);
+    }
   }
 </style>
