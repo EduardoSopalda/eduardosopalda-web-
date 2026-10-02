@@ -1,10 +1,10 @@
 ---
 import EmptyStop from '../components/EmptyStop.astro';
 import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/manifesto')!;
+const stop = STOPS.find((s) => s.href === '/context')!;
 ---
 <EmptyStop
   title={stop.label}
   subtitle={stop.subtitle}
-  todo="the manifesto text. Not drafted by anyone else -- see CLAUDE.md non-negotiable 1."
+  todo="the Context text. Not drafted by anyone else -- see CLAUDE.md non-negotiable 1."
 />

@@ -728,6 +728,20 @@ import { STOPS } from '../data/stops';
   const SCALE_FLOOR_MOBILE: Record<ScaleTier, number> = { dominant: 0, mesa: 140, perdido: 96 };
 
   const SPECIMENS: Specimen[] = [
+    // chimp stays alta, octopus (below) moves to baja -- per direct
+    // feedback the lower half of the screen read as barely used.
+    // dominantNow already alternates which of these two actually
+    // renders every 45s (see dominantCandidates below); both being
+    // alta meant that alternation only ever changed WHICH creature
+    // held the screen's one dominant slot, never WHERE -- the single
+    // biggest, heaviest shape in the whole composition was
+    // structurally guaranteed to sit above the nerve, every single
+    // time, since neither of the only two dominant-tier specimens on
+    // the roster ever anchored below it. Splitting them across both
+    // bands means the 45s alternation now also alternates top/bottom,
+    // with zero new assets and no change to the alternation mechanic
+    // itself -- just which side each candidate was already declared
+    // to prefer.
     { img: '/specimens/chimp.png', w: 460, d: 1.0, tag: 'SP.04 · PROXIMITY · CHIMP', vignette: true, cutout: true, band: 'alta', scale: 'dominant' },
     // Every webm below was confirmed genuinely alpha-cut by decoding a
     // real frame via canvas + getImageData in a browser -- but that
@@ -749,7 +763,7 @@ import { STOPS } from '../data/stops';
     // since goldfish/piglet already proved a poster is worth having on
     // its own merits: something to paint before the video itself has
     // buffered, instead of nothing.
-    { vid: '/specimens/octopus.webm', poster: '/specimens/octopus-poster.png', w: 640, d: 0.97, tag: 'SP.02 · GOVERNANCE · OCTOPUS', vignette: true, cutout: true, band: 'alta', scale: 'dominant' },
+    { vid: '/specimens/octopus.webm', poster: '/specimens/octopus-poster.png', w: 640, d: 0.97, tag: 'SP.02 · GOVERNANCE · OCTOPUS', vignette: true, cutout: true, band: 'baja', scale: 'dominant' },
     { vid: '/specimens/jellyfish.webm', poster: '/specimens/jellyfish-poster.png', w: 560, d: 0.66, tag: 'SP.03 · TRUST · JELLYFISH', vignette: true, cutout: true, band: 'alta', scale: 'mesa' },
     // Was goldfish.mp4 -- reported "some specimens... the animation is
     // not triggered." This sandbox can't decode H.264 at all, so MP4
@@ -796,7 +810,16 @@ import { STOPS } from '../data/stops';
     // can't be fixed without a new render with the floor actually
     // removed -- a content/asset request, not a code fix, same
     // category as the original piglet.mp4 -> piglet.webm swap.
-    { vid: '/specimens/piglet.webm', poster: '/specimens/piglet-poster.png', w: 300, d: 0.74, tag: 'SP.05 · MEANING · PIGLET', vignette: true, band: 'baja', scale: 'mesa', witness: true, sizeMul: 1.2 },
+    // d was 0.74 -- reported directly, "the little piggy seems
+    // blurry." Measured it: d below the dofT=1 floor of 1.0 puts a
+    // specimen inside the depth-of-field blur range (see blurPx,
+    // below), and 0.74 computed to a real blur(1.11px) on the live
+    // element, confirmed via getComputedStyle, not eyeballed. That
+    // directly fights sizeMul 1.2 and witness:true just above --
+    // both already say piglet should read as a clear, present
+    // specimen, not atmosphere. Raised to 0.95, matching the
+    // already-sharp precedent of goldfish (0.94) and octopus (0.97).
+    { vid: '/specimens/piglet.webm', poster: '/specimens/piglet-poster.png', w: 300, d: 0.95, tag: 'SP.05 · MEANING · PIGLET', vignette: true, band: 'baja', scale: 'mesa', witness: true, sizeMul: 1.2 },
     { img: '/specimens/eyefish.png', w: 260, d: 0.58, boost: 1.15, band: 'nervio', scale: 'perdido' },
     // Same conversion as goldfish above, same reason.
     { vid: '/specimens/seaweed.webm', w: 300, d: 0.5, band: 'baja', scale: 'mesa' },
@@ -1427,6 +1450,10 @@ import { STOPS } from '../data/stops';
         loopFading: false,
         tapAwakeUntil: 0,
         leanX: 0, leanY: 0,
+        // Eased separation nudge, away from whatever other SHOWN
+        // specimen it currently overlaps -- see the per-frame pass
+        // right after ROLE_BUDGET resolves `shown`, below.
+        sepX: 0, sepY: 0,
         // Independent per-specimen cycle, per the field spec: "Every
         // few seconds one flares unprompted... asking to be looked
         // at." This is the one piece of aliveness that doesn't depend
@@ -1611,9 +1638,21 @@ import { STOPS } from '../data/stops';
         decayT: 0,
         respawnDelay: 0,
         // How long this chair's current quote has sat overlapping a
-        // visible specimen's bounding box -- "el texto espera o se
-        // va" -- accumulated so a one-frame graze doesn't trigger it.
+        // visible specimen's bounding box, OR another live fragment, OR
+        // the landing cue -- "el texto espera o se va" -- accumulated so
+        // a one-frame graze doesn't trigger it.
         collideTime: 0,
+        // Specimen overlap only, tracked separately from collideTime.
+        // "El texto espera o se va" is a rule about fish crossing text,
+        // not about two citation cards drifting into each other -- that
+        // second case was only ever a legibility bug-fix (see the
+        // liveFragRects comment below). A persistent fragment (one in 5
+        // spawns, "not all the phrases need to die") should still die if
+        // a specimen crosses it, but should survive another fragment or
+        // the cue drifting past -- confirmed directly via a debug trace
+        // that collideTime climbs past even a raised 12s threshold
+        // during ordinary sustained drift, not just a brief graze.
+        specCollideTime: 0,
         // Vertical nudge, eased in and out, that pushes this slot's
         // quote away from whatever it's currently overlapping -- "el
         // texto espera o se va" was only ever built as "waits, then
@@ -1885,6 +1924,7 @@ import { STOPS } from '../data/stops';
       slot.entryAmt = 1;
       slot.aloneTime = 0;
       slot.collideTime = 0;
+      slot.specCollideTime = 0;
       // Touch users can't rest a cursor near a fragment to hold it the
       // way a mouse user can, so they'd otherwise lose every fragment to
       // decay regardless of attention. Longer base life, not proximity,
@@ -2505,6 +2545,48 @@ import { STOPS } from '../data/stops';
           .forEach((c) => shown.add(c.n));
       });
 
+      // Mutual separation -- nothing above gives two specimens any
+      // awareness of each other at all, each one orbits its own band/
+      // xn/depth completely independently, so nothing ever stopped two
+      // concurrently SHOWN ones from drifting into the same patch of
+      // screen. Direct feedback: "space the specimens so they don't
+      // stump into each other." Same grammar as the fragment dodge and
+      // the cursor lean elsewhere in this file -- a slow, eased nudge
+      // apart, not a hard constraint solver, recomputed fresh every
+      // frame from the live overlap rather than solved once. Only
+      // checked among `shown` candidates; a specimen currently faded
+      // out of budget isn't a real obstacle to anyone. Height is
+      // approximated as w*0.7 (the roster's own typical aspect, same
+      // fallback visibleSpecRects below already uses) rather than a
+      // second offsetHeight read per specimen every frame.
+      const shownList = candidates.filter((c) => shown.has(c.n));
+      for (const a of shownList) {
+        const ah = a.w * 0.7;
+        let pushX = 0, pushY = 0;
+        for (const b of shownList) {
+          if (b === a) continue;
+          const bh = b.w * 0.7;
+          const overlapX = Math.min(a.X + a.w, b.X + b.w) - Math.max(a.X, b.X);
+          const overlapY = Math.min(a.Y + ah, b.Y + bh) - Math.max(a.Y, b.Y);
+          if (overlapX <= 0 || overlapY <= 0) continue;
+          // Push along whichever axis has LESS overlap -- the cheaper
+          // separation, the same way two people stepping apart in a
+          // doorway pick whichever direction actually clears them
+          // rather than always sidestepping regardless of the gap.
+          if (overlapX < overlapY) pushX += Math.sign(a.sx - b.sx || 1) * overlapX * 0.5;
+          else pushY += Math.sign(a.sy - b.sy || 1) * overlapY * 0.5;
+        }
+        // Clamped to a fraction of the specimen's own size -- enough to
+        // visibly clear another specimen it's actually overlapping, not
+        // enough to drag it clear across its own band into a different
+        // part of the composition.
+        const maxSep = a.w * 0.6;
+        pushX = Math.max(-maxSep, Math.min(maxSep, pushX));
+        pushY = Math.max(-maxSep, Math.min(maxSep, pushY));
+        a.n.sepX += (pushX - a.n.sepX) * approachFactor(0.05, dt);
+        a.n.sepY += (pushY - a.n.sepY) * approachFactor(0.05, dt);
+      }
+
       // Specimen DATA tags: max 3 visible at once, per direct spec --
       // a wake state that would show a tag past that budget still
       // brightens/glows normally, it just doesn't add a fourth label
@@ -2512,7 +2594,14 @@ import { STOPS } from '../data/stops';
       let tagsShown = 0;
 
       for (const c of candidates) {
-        const { n, w, X, Y, sx, sy, anchorX, nerveYHere, dofT, blurPx } = c;
+        const { n, w, anchorX, nerveYHere, dofT, blurPx } = c;
+        // The separation pass above only ever touches n.sepX/n.sepY,
+        // not c.X/c.Y themselves -- applied here, once, so every use of
+        // X/Y/sx/sy below (the transform, visibleSpecRects, the
+        // connector filament) already reflects it consistently rather
+        // than needing its own adjustment.
+        const X = c.X + n.sepX, Y = c.Y + n.sepY;
+        const sx = c.sx + n.sepX, sy = c.sy + n.sepY;
         const on = shown.has(n);
         // The CSS fade (see .spec[data-shown='0'], 1.1s opacity
         // transition) means a specimen dropping out of ROLE_BUDGET
@@ -2769,6 +2858,10 @@ import { STOPS } from '../data/stops';
       // loop's own comment for why this is a stop's problem to solve,
       // not the quote's.
       const liveFragRects: { x: number; y: number; w: number; h: number; slot: typeof fragSlots[number] }[] = [];
+      // Per-slot geometry handed from pass one to pass two below -- see
+      // that second loop's own opening comment for why the split
+      // exists.
+      const frameFrags: { slot: typeof fragSlots[number]; X: number; Y: number; bw: number; bh: number; on: boolean }[] = [];
       for (const slot of fragSlots) {
         if (slot.state === 'pending') {
           slot.pendingT -= dt;
@@ -2858,6 +2951,31 @@ import { STOPS } from '../data/stops';
           liveFragRects.push({ x: X, y: Y, w: bw, h: bh, slot });
         }
 
+        // Collision/decay resolution happens in a SECOND pass, below,
+        // not inline here -- this loop (pass one) only measures and
+        // positions every fragment and finishes collecting
+        // liveFragRects. Collecting and resolving in the same single
+        // forward pass meant collision detection was order-dependent:
+        // a fragment's own liveFragRects check below could only ever
+        // see rects already pushed by EARLIER slots in fragSlots,
+        // never later ones, since each slot pushed its own rect and
+        // read the array back in that same iteration. Confirmed
+        // directly: the first fragment in fragSlots never detected a
+        // collision with any other live fragment (nothing had been
+        // pushed yet when its own check ran), so it never nudged away
+        // and sat there anchoring a pile-up the later-ordered
+        // fragments kept failing to fully clear around -- the three-
+        // fragment overlap the audit screenshotted. frameFrags carries
+        // each slot's already-computed X/Y/bw/bh/on forward so the
+        // second pass doesn't re-measure anything (no extra layout
+        // reads, no change to how a single fragment positions itself)
+        // -- it just runs the exact same per-slot logic that used to
+        // live here, against a liveFragRects that's finally complete
+        // for every fragment, not just whichever were processed first.
+        frameFrags.push({ slot, X, Y, bw, bh, on });
+      }
+
+      for (const { slot, X, Y, bw, bh, on } of frameFrags) {
         const fx = X + 140, fy = Y + 20;
         let near = false;
         if (on && hasPointer) near = Math.hypot(px - fx, py - fy) < 240;
@@ -2881,10 +2999,11 @@ import { STOPS } from '../data/stops';
           // liveFragRects already has this slot's own rect pushed just
           // above, so it's excluded by identity here.
           if (on) {
-            let colliding = false;
+            let specColliding = false;
             for (const r of visibleSpecRects) {
-              if (X < r.x + r.w && X + bw > r.x && Y < r.y + r.h && Y + bh > r.y) { colliding = true; break; }
+              if (X < r.x + r.w && X + bw > r.x && Y < r.y + r.h && Y + bh > r.y) { specColliding = true; break; }
             }
+            let colliding = specColliding;
             if (!colliding) {
               for (const r of liveFragRects) {
                 if (r.slot === slot) continue;
@@ -2898,6 +3017,7 @@ import { STOPS } from '../data/stops';
               if (X < cueRect.right && X + bw > cueRect.left && Y < cueRect.bottom && Y + bh > cueRect.top) colliding = true;
             }
             slot.collideTime = colliding ? slot.collideTime + dt : Math.max(0, slot.collideTime - dt * 2);
+            slot.specCollideTime = specColliding ? slot.specCollideTime + dt : Math.max(0, slot.specCollideTime - dt * 2);
 
             // Duck out of the way before giving up and dying -- "el
             // texto espera o se va" was only ever built as "waits, then
@@ -2947,7 +3067,38 @@ import { STOPS } from '../data/stops';
           // that a fragment genuinely stuck under something for
           // several seconds still gets the fast exit this mechanism
           // exists for.
-          const forcedByCollision = slot.collideTime >= 3.5;
+          // Persistent fragments (slot.persistent, ~1 in 5 spawns, set
+          // in assignFragment) were only ever immune to the NATURAL
+          // aloneTime timeout -- collision-forced decay, the safety
+          // valve just above, never checked for it at all. But this
+          // same measurement (32/32 collision-forced, zero natural
+          // timeouts) means collision was already effectively the ONLY
+          // way anything in this field ever died, persistent or not --
+          // a persistent fragment got exactly the same 3.5s tolerance
+          // as everyone else, so in a four-slot field sharing a channel
+          // with up to four specimens, it died to a passing graze
+          // almost as readily as a fragment with no immunity at all,
+          // defeating the actual point of marking it persistent.
+          // First attempt just raised the threshold to 12s for
+          // persistent slots -- confirmed directly, via a debug trace
+          // of collideTime every 5s, that this was still not enough:
+          // during ordinary sustained drift collideTime climbed
+          // monotonically past 12 with no recovery dip, because two
+          // fragments converging isn't a one-frame graze, it's minutes
+          // of real overlap. Raising one shared number further just
+          // delays the same outcome. The actual fix is to stop treating
+          // every kind of overlap as equally serious: "el texto espera o
+          // se va" is specifically about a specimen crossing the text,
+          // not about two citation cards finding each other -- that
+          // second case (liveFragRects, above) was only ever a
+          // legibility bug-fix layered on afterward, not the rule itself.
+          // So a persistent fragment now only forces out on genuine
+          // specimen overlap (specCollideTime); fragment-on-fragment or
+          // cue overlap still nudges it away (the dodge mechanism below
+          // still runs off collideTime) but never kills it outright.
+          const forcedByCollision = slot.persistent
+            ? slot.specCollideTime >= 3.5
+            : slot.collideTime >= 3.5;
 
           // Reduced motion: no death at all, per direct spec -- a
           // fragment just stays put, static, its own citation card

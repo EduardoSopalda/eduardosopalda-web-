@@ -23,7 +23,7 @@ src/                    the actual Astro build, in progress. Currently built: th
                         (src/components/Field.astro) — drift, decay, the nerve, the
                         seven stops as real links; /writing as a real archive over
                         the Astro content collection; a reader for individual
-                        articles. Manifesto, Lexicon, Out Loud, First Dates, Who,
+                        articles. Context (formerly Manifesto), Lexicon, Out Loud, First Dates, Who,
                         and Contact exist as honest TODO shells — real routes, no
                         invented copy, waiting on Eduardo's own words per
                         CLAUDE.md's non-negotiable 1. Not yet built: /archive,

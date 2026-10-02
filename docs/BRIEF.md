@@ -35,12 +35,12 @@ entry to a room, fully vertical as the reading spine.
 
 ## The seven stops
 
-Manifesto, Writing, Lexicon, Out Loud, First Dates, Who, Contact.
+Context, Writing, Lexicon, Out Loud, First Dates, Who, Contact.
 
 Position on the line is an argument: state a position, show the work, then show the person.
 LinkedIn is a small mark near the name, not a stop.
 
-- **Manifesto** the argument stated once. Being written, do not draft it.
+- **Context** (was Manifesto) the argument stated once. Being written, do not draft it.
 - **Writing** 25 signals, filterable by thread.
 - **Lexicon** contested terms defined in public, with a note on who disagrees. Empty so far.
 - **Out Loud** talks, panels, workshops, DAMA, a white paper in progress. Includes AUTOMA
