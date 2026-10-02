@@ -189,6 +189,25 @@ body.is-docked .tagline {
   letter-spacing: .16em;
   text-align: right;
   max-width: 16rem;
+  /* Overrides .tagline's own base opacity:0 + delayed fade-in keyframe
+     (above) -- that fade is Act I's own entrance drama, timed from page
+     load. A tab that lands already docked (see index.astro's own
+     before-paint script and Field.astro's `returning` flag) never runs
+     dock()'s FLIP, which is the only other thing that otherwise ever
+     sets this to visible, so without this override the corner tagline
+     would just never appear at all. */
+  animation: none;
+  opacity: 1;
+}
+
+/* Same reasoning as .is-docked .tagline just above: .given b/.family b
+   (letters rendered down in that rule's own comment) start at opacity:0
+   and normally only reach 1 via Landing.astro's animateWordmark(), which
+   an already-docked tab deliberately never runs -- there's no hero
+   entrance left to animate. */
+body.is-docked .given b,
+body.is-docked .family b {
+  opacity: 1;
 }
 
 body.is-docked .cue {
