@@ -916,6 +916,21 @@ import { STOPS } from '../data/stops';
     let W = 0, H = 0, DPR = Math.min(devicePixelRatio || 1, 2);
     let WORLD_W = 4200;
     let px = -9999, py = -9999, hasPointer = false, t = 0;
+    // "Is like writing is running away" -- direct feedback. A stop's
+    // own X tracks worldX every frame (see the stops loop, far below),
+    // and nothing ever paused that drift just because a visitor was
+    // hovering one, trying to click it -- confirmed directly, the same
+    // ~20px/s baseline (faster still after idle ramps it up) ran
+    // whether or not the cursor was sitting right on a stop. Fragments
+    // already get this courtesy ("a fragment holds while something is
+    // near it," FIELD-SPEC.md); the seven stops are this site's real
+    // navigation (CLAUDE.md non-negotiable 2) and got none of it. Set
+    // at the END of the stops loop (this frame's own near-detection,
+    // which needs X values the drift step below -- earlier in the same
+    // frame -- hasn't computed yet) and read by NEXT frame's drift
+    // step: a one-frame lag, same trade the fragment dodge logic
+    // elsewhere in this file already makes for the same reason.
+    let anyStopNear = false;
     let worldX = 0, targetX = 0, worldYoff = 0, dragY = 0;
     let drag = false, lastX = 0, lastY = 0;
     // Act II -> Act III departure: clicking a stop used to navigate the
@@ -2253,7 +2268,7 @@ import { STOPS } from '../data/stops';
       } else {
         const idleFor = t - lastActiveT;
         const idleMul = 1 + Math.min(0.7, (Math.max(0, idleFor - 8) / 12) * 0.7);
-        if (!drag) targetX += reduced ? 0 : DRIFT_PER_SEC * idleMul * dt;
+        if (!drag && !anyStopNear) targetX += reduced ? 0 : DRIFT_PER_SEC * idleMul * dt;
         worldX += (targetX - worldX) * approachFactor(0.06, dt);
         straightenAmt = 1;
         // Only touched by the departing branch above; clearing it here
@@ -3362,6 +3377,11 @@ import { STOPS } from '../data/stops';
       // Raised well past the label's own height so the gap itself is
       // unmistakable at a glance, not just legible on close reading.
       const STOP_LIFT = 56;
+      // Accumulates this frame's real answer; anyStopNear (declared
+      // near hasPointer, above) only gets overwritten with it once,
+      // after the loop -- see that declaration's own comment for why
+      // next frame, not this one, is what actually reads it.
+      let nearAnyThisFrame = false;
       for (const s of stopNodes) {
         const X = wrap(s.xn * WORLD_W - worldX, WORLD_W) - Math.min(520, W * 0.4);
         // Captured before STOP_LIFT and the dodge logic below move y
@@ -3487,6 +3507,14 @@ import { STOPS } from '../data/stops';
         } else if (hasPointer) {
           const d = Math.hypot(px - X, py - y);
           near = d < 140 ? 1 : 0;
+          // Deliberately NOT the isTouch branch above: that one is
+          // permanently "near" for every on-screen stop regardless of
+          // real proximity (see its own comment), so feeding it into
+          // the drift pause would mean drift stays paused basically
+          // any time a stop is visible at all on a phone -- the
+          // opposite of FIELD-SPEC's "always moving." A genuine
+          // mouse-proximity read only.
+          if (near) nearAnyThisFrame = true;
         }
         // The departing stop is gliding away from wherever the pointer
         // actually is (that's the whole point -- it's headed to screen
@@ -3569,6 +3597,7 @@ import { STOPS } from '../data/stops';
           });
         }
       }
+      anyStopNear = nearAnyThisFrame;
 
       // Under reduced motion everything above this point is already a
       // no-op (drift, springs, decay, entry-fade are each gated on
