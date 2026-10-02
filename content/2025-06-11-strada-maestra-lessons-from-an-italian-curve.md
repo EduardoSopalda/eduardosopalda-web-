@@ -4,8 +4,8 @@ date:     2025-06-11
 kind:     article
 threads:  [MEANING]
 dek:
-image:
-family:   void
+image:    /illustrations/strada.jpg
+family:   specimen
 people:   [Daniel Keohane, Gillian, Milly (a goat)]
 question:
 ---

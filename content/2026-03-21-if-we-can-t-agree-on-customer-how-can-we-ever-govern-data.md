@@ -4,8 +4,8 @@ date:     2026-03-21
 kind:     article
 threads:  [MEANING, GOVERNANCE]
 dek:      We all love to talk about data governance. The frameworks. The policies. The dashboards with fifty shades of data quality.
-image:
-family:   void
+image:    /illustrations/customer.jpg
+family:   specimen
 people:   []
 question:
 ---

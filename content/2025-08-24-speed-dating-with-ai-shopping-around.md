@@ -4,8 +4,8 @@ date:     2025-08-24
 kind:     experiment
 threads:  [CURIOSITY, PROXIMITY]
 dek:      You know you won’t find “the one” if you don’t shop around.
-image:
-family:   void
+image:    /illustrations/speeddating.jpg
+family:   specimen
 people:   []
 question:
 ---

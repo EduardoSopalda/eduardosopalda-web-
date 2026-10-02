@@ -4,8 +4,8 @@ date:     2025-09-18
 kind:     experiment
 threads:  [CURIOSITY, PROXIMITY]
 dek:
-image:
-family:   void
+image:    /illustrations/grok.jpg
+family:   specimen
 people:   []
 question:
 ---

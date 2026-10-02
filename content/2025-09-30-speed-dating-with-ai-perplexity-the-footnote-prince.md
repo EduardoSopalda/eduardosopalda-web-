@@ -4,8 +4,8 @@ date:     2025-09-30
 kind:     experiment
 threads:  [CURIOSITY, TRUST]
 dek:
-image:
-family:   void
+image:    /illustrations/perplexity.jpg
+family:   specimen
 people:   []
 question:
 ---

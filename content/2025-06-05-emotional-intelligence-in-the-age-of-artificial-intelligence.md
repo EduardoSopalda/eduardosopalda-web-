@@ -4,8 +4,8 @@ date:     2025-06-05
 kind:     article
 threads:  [PROXIMITY]
 dek:      Or how a six-year-old taught me to walk on ice — and manage data with empathy.
-image:
-family:   void
+image:    /illustrations/emotionalinteligence.jpg
+family:   specimen
 people:   []
 question:
 ---

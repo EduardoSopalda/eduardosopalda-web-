@@ -4,8 +4,8 @@ date:     2026-02-13
 kind:     article
 threads:  [MEANING, GOVERNANCE]
 dek:
-image:
-family:   void
+image:    /illustrations/atlan.jpg
+family:   specimen
 people:   []
 question:
 ---

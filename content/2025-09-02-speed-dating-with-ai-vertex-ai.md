@@ -4,8 +4,8 @@ date:     2025-09-02
 kind:     experiment
 threads:  [CURIOSITY, MEMORY]
 dek:
-image:
-family:   void
+image:    /illustrations/vertex.jpg
+family:   specimen
 people:   []
 question: My palms were sweaty. Heart racing. First AI date, and I was a nervous wreck. Expectations? Sky-high. Then the door creaked open. Vertex AI stood there—in brown corduroys, no less—towing Google Cloud like an overeager cousin. My head screamed, “Edu, think fast! Where’s the nearest exit? Say you need to walk the dog!” (I don’t even have one.) Yes, I’m speed-dating AIs to save you awkward meets. Turns out, Vertex is a grower, not a shower—quirky at first, but it blooms with effort. My mission? Test the tech, decode the jargon, and deliver a scorecard. Swipe-right or ghost?
 ---

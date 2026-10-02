@@ -4,8 +4,8 @@ date:     2026-02-20
 kind:     article
 threads:  [GOVERNANCE, MEANING]
 dek:
-image:
-family:   void
+image:    /illustrations/joutney.jpg
+family:   specimen
 people:   []
 question: Need Help or Guidance?
 ---
