@@ -889,6 +889,20 @@ import { STOPS } from '../data/stops';
     const cueEl = document.getElementById('cue');
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // "The transition to go back to the main page is the same as the
+    // landing page" -- direct feedback: navigating here from a room (a
+    // real document, not a client-side route, so there's no SPA state
+    // to carry across) always restarted Act I from literal zero,
+    // including THIS nerve's own flat-to-curved entrance tween below,
+    // even for a visitor who was already standing in the live field two
+    // clicks ago. sessionStorage persists across that hard navigation;
+    // dock() in Landing.astro sets this the first time this tab ever
+    // actually docks, undock() (Escape) clears it back out. Reused
+    // exactly like the reduced-motion branch below, not a parallel
+    // third path: a returning visit should land already-arrived, the
+    // same instant settle reduced motion already gets, not a new kind
+    // of skip invented for this.
+    const returning = sessionStorage.getItem('sopalda-docked') === '1';
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
     // A touch device has no hover, only contact, so on its own terms
@@ -2274,7 +2288,7 @@ import { STOPS } from '../data/stops';
       // every single frame for the same two variables.
       if (haveRealChannel && !departing) {
         if (!entranceSettled) {
-          if (reduced) {
+          if (reduced || returning) {
             nerveMin = realNerveMin;
             nerveMax = realNerveMax;
             entranceSettled = true;

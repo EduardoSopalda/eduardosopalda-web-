@@ -212,7 +212,15 @@ import '../styles/sopalda-landing.css';
   let letters: HTMLElement[] = [];
   let decaying = false;
   let held = false;
-  let docked = false;
+  // Set by dock() the first time this tab genuinely docks, cleared by
+  // undock() (Escape -- FIELD-SPEC's "leaves"). index.astro's own
+  // before-paint script already reads this same key to set the DOM
+  // attribute/class before first paint; this mirrors it into the
+  // internal flag so THIS script's own choreography (beginReveal just
+  // below, dock()'s FLIP) agrees with what's already on screen instead
+  // of trying to animate a hero that was never shown.
+  const returning = sessionStorage.getItem('sopalda-docked') === '1';
+  let docked = returning;
 
   // revealNow=false builds the line's real DOM structure (and, with
   // it, its real layout position and height) without starting the
@@ -422,6 +430,11 @@ import '../styles/sopalda-landing.css';
     if (docked) return;
     docked = true;
     held = false;
+    // Read by Field.astro's own `returning` flag and by index.astro's
+    // before-paint script -- the only thing that survives the hard
+    // navigation back to this document from a room, so a later visit
+    // can skip straight to the live field instead of replaying Act I.
+    sessionStorage.setItem('sopalda-docked', '1');
 
     document.body.setAttribute('data-landing', 'field');
 
@@ -500,6 +513,11 @@ import '../styles/sopalda-landing.css';
   function undock() {
     if (!docked) return;
     docked = false;
+    // Explicit "leave" (Escape, FIELD-SPEC's own word for this) clears
+    // the flag dock() sets -- a visitor who chose to step back out to
+    // Act I gets the real thing again on their next visit to `/`,
+    // rather than this tab silently skipping straight past it forever.
+    sessionStorage.removeItem('sopalda-docked');
 
     const tag = document.querySelector('.tagline') as HTMLElement;
     // Cancels dock()'s own still-"filling" animations first -- those
@@ -627,7 +645,14 @@ import '../styles/sopalda-landing.css';
     if (!reduced) setTimeout(decay, 12000);
   }
 
-  if (reduced) {
+  if (returning) {
+    // Already docked before this script even ran (see `docked` above,
+    // and index.astro's own before-paint script) -- there's no hero
+    // left to reveal. Never call beginReveal() at all: the manifesto
+    // line stays built but unrevealed (setLine's own revealNow=false
+    // call, earlier in this script) rather than fading in on top of a
+    // field that's already live and moving.
+  } else if (reduced) {
     // No entrance to wait for under reduced motion -- same as before,
     // immediate.
     beginReveal();

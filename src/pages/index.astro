@@ -54,6 +54,26 @@ const ogImageUrl = new URL('/og-image.png', Astro.site);
     <meta name="theme-color" content="#000000" />
   </head>
   <body data-landing="landing">
+    {/* Runs before Field/Landing paint a single frame -- same is:inline,
+        before-paint pattern Landing.astro's own wordmark script uses.
+        "The transition to go back to the main page is the same as the
+        landing page" -- direct feedback: this document is reached by a
+        real navigation (not a client route) from every room, so without
+        this, EVERY return trip replayed the full Act I hero and the
+        nerve's own flat-to-curved entrance from zero, even for a
+        visitor who was already standing in the live, drifting field
+        thirty seconds earlier. sessionStorage (set by Landing.astro's
+        dock(), cleared by its undock()) is the only thing that persists
+        across that hard navigation. Setting both here, synchronously,
+        is what Landing.astro's dock() itself does at the DOM level --
+        this just does it before first paint instead of animating into
+        it, for a tab that's already seen the real thing once. */}
+    <script is:inline>
+      if (sessionStorage.getItem('sopalda-docked') === '1') {
+        document.body.setAttribute('data-landing', 'field');
+        document.body.classList.add('is-docked');
+      }
+    </script>
     <Field />
     <Landing />
   </body>
