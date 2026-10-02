@@ -358,6 +358,26 @@ body[data-landing='field'] .frag-source {
   animation: pulse 5.6s ease-in-out infinite .8s;
 }
 
+/* Eduardo's own phrase, small and steady under the line and the dot --
+   the one visible word of invitation on an otherwise silent first
+   screen. Not pulsing with the dot/line on purpose: this is a caption
+   to be read, not another light to watch. Same restrained mono voice
+   as .meta (Barcelona/LinkedIn) rather than the tagline's louder
+   uppercase, since this is closer to a whispered aside than a label.
+   .65 alpha, not a lower value tried first -- this codebase already
+   measured that exact alpha against this exact gold-on-black pairing
+   for .frag-ref's own citations (4.82:1) and reuses it here rather
+   than picking a dimmer number by eye: computed directly, .55 alpha
+   lands at 4.25:1, under the 4.5:1 AA floor for text this small; .65
+   clears it at 5.69:1. */
+.cue-label {
+  font-family: var(--font-mono);
+  font-size: .5rem;
+  letter-spacing: .08em;
+  color: rgba(247, 197, 106, .65);
+  white-space: nowrap;
+}
+
 .cue:focus-visible {
   outline: 1.5px solid var(--gold);
   outline-offset: 4px;
