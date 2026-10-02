@@ -4,8 +4,8 @@ date:     2026-05-02
 kind:     article
 threads:  [MEANING, PROXIMITY]
 dek:      On data governance, meaning in use, hammers, towers, and why you cannot govern people you have never talked to.
-image:
-family:   void
+image:    /illustrations/sheppard.jpg
+family:   specimen
 people:   [Winfried Adalbert Etzel]
 question:
 ---

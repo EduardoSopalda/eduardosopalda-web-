@@ -4,8 +4,8 @@ date:     2025-05-30
 kind:     note
 threads:  [CURIOSITY, MEANING]
 dek:      One summer in Mallorca, while staying at a friend’s place in Port d’Andratx, I volunteered to make the welcome cocktail. “Let me take care of it — I’ll do Margaritas!”
-image:
-family:   void
+image:    /illustrations/margaritas.jpg
+family:   specimen
 people:   [Juan]
 question: 'Hypothesis: What if we change the tequila?'
 ---

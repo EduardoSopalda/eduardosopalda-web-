@@ -4,8 +4,8 @@ date:     2025-05-16
 kind:     article
 threads:  [PROXIMITY]
 dek:
-image:
-family:   void
+image:    /illustrations/uncle.jpg
+family:   specimen
 people:   [Tía Karin, Tío Porriqui]
 question:
 ---

@@ -4,8 +4,8 @@ date:     2025-05-13
 kind:     note
 threads:  [PROXIMITY]
 dek:      '"The witch, the stranger, the colleague"...'
-image:
-family:   void
+image:    /illustrations/todoelmundo.jpeg
+family:   specimen
 people:   []
 question:
 ---

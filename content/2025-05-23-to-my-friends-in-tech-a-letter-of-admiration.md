@@ -4,8 +4,8 @@ date:     2025-05-23
 kind:     note
 threads:  [MEANING, PROXIMITY]
 dek:      'There’s a saying that hits hard on days like today: “I could not walk a mile in any of their shoes... by this point, any of their muddy boots.”'
-image:
-family:   void
+image:    /illustrations/letter.jpg
+family:   specimen
 people:   [Clare Sheriff, Laura Gheorghe, Veronica Recanati, Sara Bermejo, Andrea Onhaus]
 question:
 ---

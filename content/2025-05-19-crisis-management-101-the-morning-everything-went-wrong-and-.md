@@ -4,8 +4,8 @@ date:     2025-05-19
 kind:     note
 threads:  [MEMORY]
 dek:      Not every lesson comes wrapped in a beautiful memory. Some arrive in full-blown panic mode.
-image:
-family:   void
+image:    /illustrations/crisis.jpg
+family:   specimen
 people:   []
 question: What did I learn from that experience?
 ---

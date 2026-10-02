@@ -4,8 +4,8 @@ date:     2025-09-24
 kind:     experiment
 threads:  [CURIOSITY, MEMORY]
 dek:
-image:
-family:   void
+image:    /illustrations/chatgpt.jpg
+family:   specimen
 people:   []
 question: In the end, isn’t that what we want on a speed date? Someone curious, clever, and a little unpredictable. So go ahead—slide into her DMs, ask for a sonnet, and let your inbox fill with more random trivia than you ever dreamed possible. Who said AI can’t have a sense of humor (or a few lovable quirks)?
 ---

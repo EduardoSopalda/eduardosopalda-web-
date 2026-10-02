@@ -4,8 +4,8 @@ date:     2025-10-29
 kind:     experiment
 threads:  [MEMORY, CURIOSITY]
 dek:
-image:
-family:   void
+image:    /illustrations/githubcop.jpg
+family:   specimen
 people:   []
 question: Who’d swipe left on that?
 ---

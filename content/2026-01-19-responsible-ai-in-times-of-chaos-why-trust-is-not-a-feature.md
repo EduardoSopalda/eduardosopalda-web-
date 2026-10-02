@@ -4,8 +4,8 @@ date:     2026-01-19
 kind:     article
 threads:  [TRUST, GOVERNANCE]
 dek:      We live in an age of permanent instability.
-image:
-family:   void
+image:    /illustrations/trust.jpg
+family:   specimen
 people:   []
 question:
 ---

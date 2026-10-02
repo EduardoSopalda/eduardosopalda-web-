@@ -4,8 +4,8 @@ date:     2026-02-21
 kind:     article
 threads:  [GOVERNANCE, MEMORY]
 dek:      “If governance has to be re-explained every time, it’s not an operating model. It’s institutional memory, and that doesn’t scale.”
-image:
-family:   void
+image:    /illustrations/governancememory.jpg
+family:   specimen
 people:   []
 question: 'In your experience, what tends to embed muscle memory most effectively: tooling constraints, workflow design or accountability pressure?'
 ---

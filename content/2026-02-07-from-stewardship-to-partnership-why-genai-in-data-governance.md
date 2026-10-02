@@ -4,8 +4,8 @@ date:     2026-02-07
 kind:     article
 threads:  [GOVERNANCE, TRUST]
 dek:
-image:
-family:   void
+image:    /illustrations/fromstewarship.jpg
+family:   specimen
 people:   []
 question:
 ---
