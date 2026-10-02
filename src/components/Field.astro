@@ -1664,6 +1664,10 @@ import { STOPS } from '../data/stops';
         // timeouts FIELD-SPEC calls for ever getting a chance to run.
         // See the dodge logic in frame() for how this is set.
         dodgeY: 0,
+        // Horizontal counterpart, added alongside dodgeY once a purely
+        // vertical push proved unable to clear a mostly-horizontal
+        // overlap between two fragments -- see the dodge logic below.
+        dodgeX: 0,
         // How long this chair has sat off-screen while still "alive".
         // assignFragment spawns a fragment ON-screen on purpose, but
         // the drifting world is much wider than the viewport (WORLD_W
@@ -2901,7 +2905,7 @@ import { STOPS } from '../data/stops';
         else if (slot.entryDir === 'top') oy = -off;
         else oy = off;
 
-        const X = baseX + ox, Y = baseY + oy + slot.dodgeY;
+        const X = baseX + ox + slot.dodgeX, Y = baseY + oy + slot.dodgeY;
         // Visibility is checked against the RESTING position (no entry
         // offset), and requires the whole block to fit -- not a wide
         // fixed-pixel margin around a partial overlap. The old margin
@@ -3003,19 +3007,59 @@ import { STOPS } from '../data/stops';
             for (const r of visibleSpecRects) {
               if (X < r.x + r.w && X + bw > r.x && Y < r.y + r.h && Y + bh > r.y) { specColliding = true; break; }
             }
-            let colliding = specColliding;
-            if (!colliding) {
-              for (const r of liveFragRects) {
-                if (r.slot === slot) continue;
-                if (X < r.x + r.w && X + bw > r.x && Y < r.y + r.h && Y + bh > r.y) { colliding = true; break; }
-              }
+            // Fragment-vs-fragment gets its own direct 2D separation
+            // (fragPushX/Y below), not just a yes/no flag -- "lets avoid
+            // the collision of the phrases," direct feedback, after the
+            // old single vertical-only dodge (still used for specimen/
+            // cue collision just below) was measured live overlapping
+            // two phrases for up to several real seconds, including a
+            // case that was almost entirely horizontal (ox=326,oy=0) --
+            // a push that can only move a fragment up or down can never
+            // clear an overlap like that at all.
+            // First attempt pushed along whichever single axis had the
+            // smaller overlap (same as the specimen-separation pass
+            // above). Measured live and found insufficient here
+            // specifically: fragments keep drifting independently on
+            // BOTH axes the whole time they're colliding, so committing
+            // the entire push to one axis means the other axis's gap
+            // keeps reopening from drift faster than the chosen axis
+            // can close -- watched directly, overlapY shrinking from a
+            // real push while overlapX simultaneously grew past 300px
+            // from drift alone, racing the 3.5s decay tolerance and
+            // sometimes losing. Specimens don't have this problem since
+            // only ONE side of that pair (the fragment) ever moves to
+            // separate.
+            // Second attempt scaled a combined center-to-center push by
+            // min(overlapX, overlapY) -- also measured insufficient:
+            // whenever one axis was nearly clear on its own (say
+            // overlapY down to a sliver, oy=1, while overlapX still sat
+            // past 100px), that shared min() starved the push to almost
+            // nothing right when the OTHER axis still needed real force,
+            // leaving a wide, long-lived horizontal graze the push
+            // barely touched. Each axis now gets pushed by its OWN
+            // overlap amount independently, not a value borrowed from
+            // whichever axis happens to be more resolved.
+            let fragColliding = false;
+            let fragPushX = 0, fragPushY = 0;
+            for (const r of liveFragRects) {
+              if (r.slot === slot) continue;
+              const overlapX = Math.min(X + bw, r.x + r.w) - Math.max(X, r.x);
+              const overlapY = Math.min(Y + bh, r.y + r.h) - Math.max(Y, r.y);
+              if (overlapX <= 0 || overlapY <= 0) continue;
+              fragColliding = true;
+              const dx = (X + bw / 2) - (r.x + r.w / 2);
+              const dy = (Y + bh / 2) - (r.y + r.h / 2);
+              fragPushX += Math.sign(dx || 1) * overlapX * 0.5;
+              fragPushY += Math.sign(dy || 1) * overlapY * 0.5;
             }
             // Landing's "Continue" cue -- fixed chrome, not part of
             // specNodes/fragSlots, so it needs its own check. Reported
             // directly: a citation line sitting right through it.
-            if (!colliding && cueRect && cueRect.width >= 10) {
-              if (X < cueRect.right && X + bw > cueRect.left && Y < cueRect.bottom && Y + bh > cueRect.top) colliding = true;
+            let cueColliding = false;
+            if (cueRect && cueRect.width >= 10) {
+              if (X < cueRect.right && X + bw > cueRect.left && Y < cueRect.bottom && Y + bh > cueRect.top) cueColliding = true;
             }
+            const colliding = specColliding || fragColliding || cueColliding;
             slot.collideTime = colliding ? slot.collideTime + dt : Math.max(0, slot.collideTime - dt * 2);
             slot.specCollideTime = specColliding ? slot.specCollideTime + dt : Math.max(0, slot.specCollideTime - dt * 2);
 
@@ -3028,25 +3072,52 @@ import { STOPS } from '../data/stops';
             // channel, that meant collision-forced decay firing on
             // effectively every fragment, 2-25s after spawn -- none of
             // FIELD-SPEC's own ~40s natural "alone" timeouts ever got a
-            // real chance to run. A small, slow vertical nudge away
-            // from the obstacle, eased the same way as every other
-            // proximity response here, gives a graze an actual chance
-            // to clear on its own before the 3.5s tolerance below is
-            // even reached. Clamped to roughly a third of this slot's
-            // own zone-third (see zoneIdx in assignFragment) so it
-            // trades one collision for breathing room within its own
-            // band, not for a new collision next door. Direction is
-            // toward whichever edge of that band currently has more
-            // room, recomputed fresh each frame from the live position
-            // (not fixed once) so it keeps adapting as things drift --
-            // stable in practice since the ease itself is slow enough
-            // not to flicker near the band's own midpoint.
-            const zoneThird = Math.max(1, (nerveMax - nerveMin) / 3);
-            const zoneLo = nerveMin + slot.zoneIdx * zoneThird;
-            const maxDodge = zoneThird * 0.32;
-            const towardTop = Y - zoneLo < zoneLo + zoneThird - (Y + bh);
-            const dodgeTarget = colliding ? (towardTop ? -1 : 1) * maxDodge : 0;
-            slot.dodgeY += (dodgeTarget - slot.dodgeY) * approachFactor(0.05, dt);
+            // real chance to run.
+            //
+            // Specimen and cue collision keep the original band-relative
+            // vertical-only duck (a real fish should still get the right
+            // of way, per "el texto espera o se va" -- the text waits or
+            // leaves, it doesn't actively steer around a moving
+            // specimen). Fragment-vs-fragment uses the precise push
+            // computed above instead, since there the other object is
+            // just as free to move as this one is, and a real direction
+            // is already known.
+            if (fragColliding) {
+              const maxFragDodge = bw * 0.6;
+              const dodgeTargetX = Math.max(-maxFragDodge, Math.min(maxFragDodge, fragPushX));
+              const dodgeTargetY = Math.max(-maxFragDodge, Math.min(maxFragDodge, fragPushY));
+              // Rate was 0.05 (~1s to mostly settle) when dodge only
+              // ever had to find room within a band, not actually clear
+              // a specific overlap against something equally free to
+              // drift. Raised to 0.15 (~0.3s) here specifically, after
+              // the per-axis independent push above replaced an earlier
+              // shared-minimum version that starved one axis whenever
+              // the other was nearly clear. Tried 0.3 next, expecting it
+              // to resolve even faster -- measured directly that it did
+              // the opposite (max observed overlap duration rose from
+              // 3.0s to 6.1s): both fragments in a colliding pair push
+              // off each other every frame, so too strong a gain on a
+              // live, symmetric, two-body reaction overshoots and
+              // oscillates instead of settling, same failure mode as an
+              // overtuned spring. 0.15 is the measured sweet spot.
+              slot.dodgeX += (dodgeTargetX - slot.dodgeX) * approachFactor(0.15, dt);
+              slot.dodgeY += (dodgeTargetY - slot.dodgeY) * approachFactor(0.15, dt);
+            } else {
+              let dodgeTargetY = 0;
+              if (specColliding || cueColliding) {
+                const zoneThird = Math.max(1, (nerveMax - nerveMin) / 3);
+                const zoneLo = nerveMin + slot.zoneIdx * zoneThird;
+                const maxDodge = zoneThird * 0.32;
+                const towardTop = Y - zoneLo < zoneLo + zoneThird - (Y + bh);
+                dodgeTargetY = (towardTop ? -1 : 1) * maxDodge;
+              }
+              // Unchanged from the original: a small, slow vertical
+              // nudge for specimen/cue collision, and the same slow
+              // ease relaxing dodgeX back to 0 once a fragment collision
+              // clears.
+              slot.dodgeX += (0 - slot.dodgeX) * approachFactor(0.05, dt);
+              slot.dodgeY += (dodgeTargetY - slot.dodgeY) * approachFactor(0.05, dt);
+            }
           }
           // Was 0.25s (lowered from 0.4s in an earlier fix) -- measured
           // directly what that actually did over a real 60s session
