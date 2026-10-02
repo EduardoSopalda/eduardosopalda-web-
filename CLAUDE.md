@@ -47,7 +47,7 @@ No CMS in v1.
 
 ```
 src/
-  pages/            index (field), manifesto, writing, writing/[slug],
+  pages/            index (field), context, writing, writing/[slug],
                     lexicon, out-loud, first-dates, who, contact,
                     thread/[name], with/[person], archive, 404
   components/       Field (client island), Nerve, Specimen, Fragment, Reader, Spine
@@ -68,5 +68,6 @@ public/specimens/   the images in assets/specimens
 
 ## What is not done and needs Eduardo, not you
 
-Manifesto text. Lexicon entries. Out Loud entries, he is transcribing them. Contact page
+Context text (the stop formerly called Manifesto). Lexicon entries. Out Loud entries, he
+is transcribing them. Contact page
 copy. Article images. Whether the site publishes first or archives from LinkedIn.

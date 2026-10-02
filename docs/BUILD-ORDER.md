@@ -23,7 +23,7 @@ Do these in sequence. Each one is checkable before the next begins.
    alone, at 60fps, before wiring it to real rooms.
 
 7. **Rooms.** Writing first, since it has content. Then First Dates and Who, which are
-   queries over the same articles. Manifesto, Lexicon, Out Loud and Contact are empty until
+   queries over the same articles. Context, Lexicon, Out Loud and Contact are empty until
    Eduardo writes them: build the shells with visible TODOs, invent nothing.
 
 8. **Threads.** `/thread/[name]` and thread hold in the field, including the rule that a held

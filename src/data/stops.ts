@@ -18,7 +18,7 @@ export type Stop = {
 };
 
 export const STOPS: Stop[] = [
-  { label: 'Manifesto', subtitle: 'the argument, stated once', href: '/manifesto' },
+  { label: 'Context', subtitle: 'the argument, stated once', href: '/context' },
   { label: 'Writing', subtitle: 'twenty five signals', href: '/writing' },
   { label: 'Lexicon', subtitle: 'contested words, defined in public', href: '/lexicon' },
   { label: 'Out Loud', subtitle: 'talks, panels, DAMA, the white paper', href: '/out-loud' },
