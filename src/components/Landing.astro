@@ -69,9 +69,18 @@ import '../styles/sopalda-landing.css';
           non-negotiable 1, invent nothing, not even a placeholder
           destination. Becomes a real <a> the day there's a URL. */}
       <p class="meta">Barcelona<br /><span class="li">LinkedIn</span></p>
-      <button type="button" class="cue" id="cue" aria-label="Continue">
+      {/* Per the audit's own finding: a bare dot and a hairline, no
+          visible label, only aria-label="Continue" -- discoverable by
+          click or by wheel, but a first-time visitor on a phone (no
+          wheel event) had only a near-invisible dot to go on. Eduardo's
+          own real phrase, not invented copy -- replaces aria-label
+          entirely rather than sitting alongside it, so the accessible
+          name is his actual words, not a generic placeholder the
+          sighted page no longer even shows. */}
+      <button type="button" class="cue" id="cue">
         <span class="cue-line" aria-hidden="true"></span>
         <span class="cue-dot" aria-hidden="true"></span>
+        <span class="cue-label">unroll the logic</span>
       </button>
     </footer>
   </div>
