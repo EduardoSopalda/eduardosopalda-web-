@@ -254,7 +254,7 @@ import { STOPS } from '../data/stops';
 
   body.is-returning.is-arrived .stop {
     opacity: 1;
-    transition: opacity 4.8s ease 1.4s;
+    transition: opacity 5.6s ease 1.8s;
   }
 
   body.is-returning.is-nerve #nerve {
@@ -1009,8 +1009,10 @@ import { STOPS } from '../data/stops';
     // of skip invented for this.
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
     if (document.body.classList.contains('is-returning')) {
-      requestAnimationFrame(() => document.body.classList.add('is-arrived'));
       document.body.classList.add('is-nerve');
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        document.body.classList.add('is-arrived');
+      }));
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
