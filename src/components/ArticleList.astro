@@ -37,6 +37,13 @@ function stamp(d: Date) {
             <li>
               <a class="row" href={`/writing/${a.id}`}>
                 <span class="meta">{stamp(a.date)}</span>
+                <span class="plate">
+                  {a.image ? (
+                    <img src={a.image} alt="" />
+                  ) : (
+                    <span class="index">{a.no ? String(a.no).padStart(2, '0') : ''}</span>
+                  )}
+                </span>
                 <span class="copy">
                   <span class="title">{a.title}</span>
                   {(a.dek || a.lead) && <span class="lead">{a.dek || a.lead}</span>}
@@ -82,10 +89,10 @@ function stamp(d: Date) {
 
   .row {
     display: grid;
-    grid-template-columns: 4.6rem minmax(0, 1fr) auto;
-    column-gap: 2rem;
-    align-items: start;
-    padding: 1.35rem 0 1.5rem;
+    grid-template-columns: 4.2rem 4.6rem minmax(0, 1fr) auto;
+    column-gap: 1.6rem;
+    align-items: center;
+    padding: 1.05rem 0;
     text-decoration: none;
     color: inherit;
   }
@@ -96,40 +103,62 @@ function stamp(d: Date) {
   }
 
   .meta {
-    padding-top: 0.55rem;
     font-size: 0.66rem;
     letter-spacing: 0.16em;
     color: var(--champagne);
   }
 
+  .plate {
+    width: 4.6rem;
+    height: 5.8rem;
+    display: grid;
+    place-items: center;
+    background: #070707;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+    overflow: hidden;
+  }
+
+  .plate img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .index {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--bronze);
+  }
+
   .copy {
     min-width: 0;
+    padding-right: 2rem;
   }
 
   .title {
     display: block;
-    max-width: 22em;
     font-family: var(--font-display);
-    font-size: clamp(1.65rem, 2.3vw, 2.15rem);
+    font-size: clamp(1.45rem, 1.8vw, 1.85rem);
     font-weight: 400;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
     color: var(--bone);
   }
 
   .lead {
     display: block;
-    max-width: 38rem;
-    margin-top: 0.45rem;
+    margin-top: 0.35rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     line-height: 1.4;
     color: var(--flesh);
   }
 
   .thread {
-    padding-top: 0.7rem;
     font-size: 0.62rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -139,17 +168,23 @@ function stamp(d: Date) {
 
   @media (max-width: 720px) {
     .row {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 3.4rem 1fr auto;
       row-gap: 0.35rem;
     }
 
-    .meta {
-      grid-column: 1 / -1;
-      padding-top: 0;
+    .plate {
+      grid-row: 1 / span 2;
+      width: 3.4rem;
+      height: 4.4rem;
     }
 
-    .thread {
-      padding-top: 0.15rem;
+    .meta {
+      grid-column: 2 / -1;
+    }
+
+    .copy {
+      grid-column: 2;
+      padding-right: 0;
     }
   }
 </style>
