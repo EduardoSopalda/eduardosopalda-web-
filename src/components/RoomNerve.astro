@@ -34,11 +34,11 @@ const here = STOPS.find((s) => s.href === current);
     ))}
   </nav>
   <div class="room-line" aria-hidden="true">
-    <span class="bead"></span>
-    <span class="bead"></span>
-    <span class="bead"></span>
-    <span class="bead"></span>
-    <span class="bead"></span>
+    <span class="comet"></span>
+    <span class="comet"></span>
+    <span class="comet"></span>
+    <span class="comet"></span>
+    <span class="comet"></span>
   </div>
 </header>
 
@@ -166,26 +166,40 @@ const here = STOPS.find((s) => s.href === current);
     box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
   }
 
-  .bead {
+  .comet {
     position: absolute;
-    top: -3px;
+    top: -2px;
+    width: 130px;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(255, 255, 240, 0), rgba(255, 250, 220, 0.5) 60%, rgba(255, 255, 245, 1));
+    filter: drop-shadow(0 0 6px rgba(255, 255, 235, 0.9));
+    animation: comet-run linear infinite;
+  }
+
+  .comet::after {
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: -1px;
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #fff8e6;
-    box-shadow: 0 0 8px 2px rgba(247, 197, 106, 0.95), 0 0 1px #fff;
-    animation: bead-run 11s linear infinite;
+    background: rgba(255, 255, 250, 1);
+    box-shadow: 0 0 10px 2px rgba(255, 255, 235, 0.95);
   }
 
-  .bead:nth-child(1) { animation-duration: 9s; animation-delay: -1s; }
-  .bead:nth-child(2) { animation-duration: 13s; animation-delay: -4s; }
-  .bead:nth-child(3) { animation-duration: 7.5s; animation-delay: -2.2s; }
-  .bead:nth-child(4) { animation-duration: 15s; animation-delay: -8s; }
-  .bead:nth-child(5) { animation-duration: 10s; animation-delay: -6s; }
+  /* Same five pulses as the field: speed 0.055, 0.08, 0.038, 0.067, 0.046
+     of the width per second, phases 0.1, 0.62, 0.35, 0.82, 0.5. */
+  .comet:nth-child(1) { animation-duration: 18.2s; animation-delay: -1.8s; }
+  .comet:nth-child(2) { animation-duration: 12.5s; animation-delay: -7.8s; }
+  .comet:nth-child(3) { animation-duration: 26.3s; animation-delay: -9.2s; }
+  .comet:nth-child(4) { animation-duration: 14.9s; animation-delay: -12.2s; }
+  .comet:nth-child(5) { animation-duration: 21.7s; animation-delay: -10.9s; }
 
-  @keyframes bead-run {
-    from { left: -2%; }
-    to { left: 102%; }
+  @keyframes comet-run {
+    from { left: -140px; }
+    to { left: 100%; }
   }
 
   .room-stops {
@@ -241,7 +255,7 @@ const here = STOPS.find((s) => s.href === current);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .bead,
+    .comet,
     .room-nerve[data-arrive='1'] .room-stops a,
     .room-nerve[data-arrive='1'] .room-plate {
       animation: none;
