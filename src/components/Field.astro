@@ -1015,6 +1015,13 @@ import { STOPS } from '../data/stops';
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
     if (document.body.classList.contains('is-returning')) {
       document.body.classList.add('is-nerve');
+      window.setTimeout(() => {
+        document.querySelectorAll('.stop').forEach((el) => {
+          const node = el as HTMLElement;
+          node.style.transition = 'opacity 6.4s cubic-bezier(.22, .7, .2, 1)';
+          node.style.opacity = '1';
+        });
+      }, 1600);
       requestAnimationFrame(() => requestAnimationFrame(() => {
         document.body.classList.add('is-arrived');
       }));
@@ -2220,6 +2227,7 @@ import { STOPS } from '../data/stops';
     const stopNodes = STOPS.map((s, i) => {
       const el = document.createElement('a');
       el.className = 'stop';
+      if (document.body.classList.contains('is-returning')) el.style.opacity = '0';
       el.href = s.href;
       el.textContent = s.label;
       const sub = document.createElement('span');
