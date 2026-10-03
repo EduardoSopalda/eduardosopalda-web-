@@ -253,10 +253,7 @@ import { STOPS } from '../data/stops';
     transition: opacity 2.6s var(--ease);
   }
 
-  body.is-returning .nerve-rail {
-    opacity: 1;
-  }
-
+  body.is-returning .nerve-rail,
   body.is-returning #nerve {
     opacity: 0;
   }
@@ -1010,10 +1007,18 @@ import { STOPS } from '../data/stops';
       requestAnimationFrame(() => document.body.classList.add('is-arrived'));
       const nerve = document.getElementById('nerve');
       const rail = document.getElementById('nerve-rail');
-      window.setTimeout(() => {
+      const reveal = () => {
         if (rail) rail.style.opacity = '0';
         if (nerve) nerve.style.opacity = '1';
-      }, 40);
+      };
+      if (document.startViewTransition) {
+        document.addEventListener('pagereveal', (event) => {
+          const transition = event.viewTransition;
+          if (transition) transition.finished.then(reveal);
+          else reveal();
+        }, { once: true });
+      }
+      window.setTimeout(reveal, 700);
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.

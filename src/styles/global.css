@@ -35,11 +35,15 @@
 /* The page may dissolve. The nerve must not. Both documents name the
    same filament, so the group holds while the rest of the field leaves. */
 ::view-transition-group(nerve-rail),
-::view-transition-old(nerve-rail),
-::view-transition-new(nerve-rail) {
+::view-transition-old(nerve-rail) {
   animation: none;
   opacity: 1;
   mix-blend-mode: normal;
+}
+
+::view-transition-new(nerve-rail) {
+  animation: none;
+  opacity: 0;
 }
 
 * {
