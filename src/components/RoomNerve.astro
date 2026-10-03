@@ -220,9 +220,9 @@ const here = STOPS.find((s) => s.href === current);
   .room-stops a {
     color: rgba(247, 197, 106, 0.45);
     text-decoration: none;
-    font-size: clamp(0.78rem, 1.7vw, 0.95rem);
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
     font-weight: 600;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -231,20 +231,6 @@ const here = STOPS.find((s) => s.href === current);
   .room-stops a:focus-visible,
   .room-stops a[aria-current='page'] {
     color: var(--gold);
-  }
-
-  .room-stops a[aria-current='page'] {
-    letter-spacing: 0.18em;
-  }
-
-  .room-nerve[data-arrive='1'] .room-stops a,
-  .room-nerve[data-arrive='1'] .room-plate {
-    animation: rail-settle 0.7s var(--ease) both;
-  }
-
-  @keyframes rail-settle {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: none; }
   }
 
   @media (max-width: 720px) {
@@ -262,10 +248,6 @@ const here = STOPS.find((s) => s.href === current);
     .comet {
       animation: none;
       opacity: 0;
-    }
-    .room-nerve[data-arrive='1'] .room-stops a,
-    .room-nerve[data-arrive='1'] .room-plate {
-      animation: none;
     }
   }
 </style>
