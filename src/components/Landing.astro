@@ -594,23 +594,8 @@ import '../styles/sopalda-landing.css';
     // adjustment does (see its own frame() loop), not a second
     // dramatic entrance.
     //
-    // wheel/touchstart were {once:true} -- already consumed by the
-    // very first dock, so scrolling or touching again after an undock
-    // would otherwise do nothing. Re-armed here so the same low-friction
-    // fallback works again; cue/mark's own click listeners were never
-    // {once:true} and already still work without this.
-    //
-    // Not gated on reduced -- these are registered unconditionally at
-    // the bottom of this script now (see that code's own comment on why
-    // reduced motion still needs the same triggers, just an instant
-    // reveal instead of an animated one), so re-arming them here has to
-    // match, not fall back to the old reduced-skips-registration
-    // pattern. Confirmed directly: under reduced motion, a second
-    // Escape-then-wheel did nothing at all, because this re-arm alone
-    // was still gated on !reduced while the initial registration no
-    // longer was.
-    addEventListener('wheel', dock, { once: true, passive: true });
-    addEventListener('touchstart', dock, { once: true, passive: true });
+    // Scroll and touch no longer enter the field. Unroll is the only
+    // way in, including after Escape.
   }
   addEventListener('field-escape', undock);
 
