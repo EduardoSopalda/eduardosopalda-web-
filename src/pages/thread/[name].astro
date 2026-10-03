@@ -97,7 +97,8 @@ const bySource = entries
   .room {
     grid-column: 3;
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 1.25rem;
     align-items: start;
     min-width: 0;
   }
