@@ -98,19 +98,22 @@ const months = [
   }
 
   main {
-    max-width: 92rem;
-    margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 2.75rem) 2.25rem 8rem 22rem;
+    --rail: 17rem;
+    --inset: 1.75rem;
+    --gutter: 3rem;
+    margin: 0;
+    max-width: none;
+    padding: calc(var(--nerve-dock) + 2.75rem) 2.5rem 8rem calc(var(--inset) + var(--rail) + var(--gutter));
     font-family: var(--font-mono);
     color: var(--bone);
   }
 
   .room-title {
     position: fixed;
-    top: calc(var(--nerve-dock) + 2.4rem);
-    left: 2.25rem;
+    top: calc(var(--nerve-dock) + 2.2rem);
+    left: var(--inset);
     z-index: 12;
-    width: 16rem;
+    width: var(--rail);
     margin: 0;
     pointer-events: none;
   }
@@ -137,7 +140,7 @@ const months = [
     margin: 0.7rem 0 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(3.6rem, 6.4vw, 5.4rem);
+    font-size: clamp(3.1rem, 4.4vw, 4.4rem);
     line-height: 0.86;
     letter-spacing: -0.03em;
     color: var(--bone);
