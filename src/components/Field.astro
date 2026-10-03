@@ -254,7 +254,7 @@ import { STOPS } from '../data/stops';
 
   body.is-returning.is-arrived .stop {
     opacity: 1;
-    transition: opacity 3.2s ease 0.8s;
+    transition: opacity 4.8s ease 1.4s;
   }
 
   body.is-returning.is-nerve #nerve {
@@ -2435,11 +2435,12 @@ import { STOPS } from '../data/stops';
                 entranceFromMax = nerveMax;
               }
             }
-            const duration = fromRoom ? 2400 : ENTRANCE_MS;
+            const duration = fromRoom ? 3600 : ENTRANCE_MS;
             const p = Math.min(1, (now - entranceStartT) / duration);
-            const eased = 0.5 - 0.5 * Math.cos(p * Math.PI);
+            const eased = p * p * (3 - 2 * p);
             nerveMin = entranceFromMin + (realNerveMin - entranceFromMin) * eased;
             nerveMax = entranceFromMax + (realNerveMax - entranceFromMax) * eased;
+            if (fromRoom) straightenAmt = eased;
             if (p >= 1) {
               entranceSettled = true;
               dispatchEvent(new Event('nerve-settled'));
