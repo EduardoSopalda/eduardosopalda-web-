@@ -98,16 +98,21 @@ const months = [
   }
 
   main {
-    max-width: 72rem;
+    max-width: 92rem;
     margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 2.75rem) 2.25rem 8rem;
+    padding: calc(var(--nerve-dock) + 2.75rem) 2.25rem 8rem 22rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }
 
   .room-title {
-    margin: 0 0 4.2rem;
-    max-width: 16em;
+    position: fixed;
+    top: calc(var(--nerve-dock) + 2.4rem);
+    left: 2.25rem;
+    z-index: 12;
+    width: 16rem;
+    margin: 0;
+    pointer-events: none;
   }
 
   .room-kicker {
@@ -315,7 +320,19 @@ const months = [
     color: var(--flesh);
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 900px) {
+    main {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .room-title {
+      position: static;
+      width: auto;
+      margin: 0 0 2.4rem;
+      pointer-events: auto;
+    }
+
     .featured {
       grid-template-columns: 1fr;
     }
