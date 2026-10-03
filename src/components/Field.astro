@@ -1007,9 +1007,15 @@ import { STOPS } from '../data/stops';
       const nerve = document.getElementById('nerve');
       const rail = document.getElementById('nerve-rail');
       window.setTimeout(() => {
-        if (nerve) nerve.style.opacity = '1';
-        if (rail) rail.style.opacity = '0';
-      }, 700);
+        if (nerve) {
+          nerve.style.transition = 'opacity 0.8s ease';
+          nerve.style.opacity = '1';
+        }
+        if (rail) {
+          rail.style.transition = 'opacity 0.8s ease';
+          rail.style.opacity = '0';
+        }
+      }, 80);
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
@@ -2413,7 +2419,8 @@ import { STOPS } from '../data/stops';
       // every single frame for the same two variables.
       if (haveRealChannel && !departing) {
         if (!entranceSettled) {
-          if (reduced || returning) {
+          const fromRoom = document.body.classList.contains('is-returning');
+          if (reduced || (returning && !fromRoom)) {
             nerveMin = realNerveMin;
             nerveMax = realNerveMax;
             entranceSettled = true;
@@ -2421,16 +2428,20 @@ import { STOPS } from '../data/stops';
           } else {
             if (entranceStartT < 0) {
               entranceStartT = now;
-              entranceFromMin = nerveMin;
-              entranceFromMax = nerveMax;
+              if (fromRoom) {
+                const probe = document.getElementById('nerve-dock-probe');
+                const dockY = probe ? probe.getBoundingClientRect().top : nerveMin;
+                entranceFromMin = dockY;
+                entranceFromMax = dockY;
+                nerveMin = dockY;
+                nerveMax = dockY;
+              } else {
+                entranceFromMin = nerveMin;
+                entranceFromMax = nerveMax;
+              }
             }
-            const p = Math.min(1, (now - entranceStartT) / ENTRANCE_MS);
-            // Cosine ease-in-out: 0 at p=0, 1 at p=1, slope zero at
-            // both ends -- gentle start, faster through the middle,
-            // gentle finish. Same shape --ease-slow describes,
-            // expressed as a number instead of a CSS timing function
-            // since this drives a canvas value, not a transitionable
-            // style property.
+            const duration = fromRoom ? 2400 : ENTRANCE_MS;
+            const p = Math.min(1, (now - entranceStartT) / duration);
             const eased = 0.5 - 0.5 * Math.cos(p * Math.PI);
             nerveMin = entranceFromMin + (realNerveMin - entranceFromMin) * eased;
             nerveMax = entranceFromMax + (realNerveMax - entranceFromMax) * eased;
