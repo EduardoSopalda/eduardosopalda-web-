@@ -1,10 +1,512 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/who')!;
+// Who, built from Eduardo's own concept mockup (who-mockup.html, pushed
+// to the repo root and relocated into this page -- see public/concepts/
+// and the removed root files in this same change). The copy below is
+// transcribed verbatim from that mockup, not invented here: CLAUDE.md
+// non-negotiable 1 is about never writing copy IN Eduardo's voice, and
+// this is his own voice, supplied directly, not guessed at.
+//
+// Deliberately NOT carrying over the mockup's own top nav/sticky
+// beamnav -- CLAUDE.md non-negotiable 2: the field is the only
+// navigation, no second menu bar anywhere else on the site. This page
+// keeps the same single "back to the field" convention writing.astro
+// and every reader page already use, plus the same static .nerve-rest
+// illusion at the top of the document (see writing.astro's own comment
+// on why that exists as CSS, not a shared animated component).
+import '../styles/global.css';
+
+// live-specimen.mov, named in the mockup bundle's own README.txt as the
+// Who page's jellyfish footage, was never actually present in any of
+// the three "Add files via upload" commits that delivered the rest of
+// this bundle (confirmed directly: no .mov anywhere in the repo tree,
+// not assumed missing). The transparent cutout the README names as this
+// video's own fallback is real and ships here; the <video> element
+// below points at a path that doesn't exist yet so swapping in the real
+// file later is a one-line add, not a rebuild -- the poster image
+// covers that gap until then exactly the way a fallback is supposed to.
+const jellyfishVideo = '/concepts/live-specimen.mov';
+const jellyfishPoster = '/concepts/data-jellyfish-cutout.png';
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="not a text gap -- this is a query built from the real `people` front matter already on each article, not yet built. See docs/BUILD-ORDER.md step 9."
-/>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Who · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="nerve-rest" aria-hidden="true"></div>
+    <main>
+      <p class="back"><a href="/">Back to the field</a></p>
+
+      <header class="hero">
+        <p class="eyebrow">Who &middot; architect, operator, governance practitioner</p>
+        <h1>Who<span class="dot">.</span></h1>
+        <p class="pull">I don&rsquo;t make AI sound magical.<br />I make it operational.</p>
+        <p class="dek">
+          Architect by training. Global AI &amp; Data Governance Lead at dsm-firmenich. Still
+          curious about what systems mean for people.
+        </p>
+        <a class="scroll" href="#throughline">&darr; Follow the throughline</a>
+
+        <div class="hero-art">
+          <img
+            src="/concepts/annotated-brain-cutout.png"
+            alt="A sculptural brain inscribed with data, curiosity, responsibility, reflection, AI and growth"
+          />
+        </div>
+      </header>
+
+      <section class="section" id="throughline">
+        <p class="label">01 &middot; The throughline</p>
+        <h2>More than twenty years.<br />One recurring question.</h2>
+        <p class="lead">
+          How do we make complex systems work for people&mdash;and keep responsibility human?
+        </p>
+        <p>
+          For more than twenty years, I&rsquo;ve worked across solution architecture, global
+          customer experience, technology operations, data quality, and governance. Different
+          roles; one pattern: connect the technical system to the people who depend on it.
+        </p>
+        <p>
+          My work has taken me from Barcelona to Tokyo, from Lima to New York. Across markets and
+          disciplines, I keep returning to the same things: clear meaning, accountable systems,
+          and trust earned in practice.
+        </p>
+      </section>
+
+      <section class="section thread-section">
+        <p class="label">Global experience &middot; Barcelona / Tokyo / Lima / New York</p>
+        <h2>Networks. Architecture. AI. Governance.</h2>
+        <ol class="threadline">
+          <li>
+            <b>Networks &amp; people</b>
+            <p>
+              I started in technical data analysis and incident operations for enterprise
+              networks, working between customers and engineers across Europe and Asia, where
+              reliability had to hold under pressure.
+            </p>
+          </li>
+          <li>
+            <b>Architecture</b>
+            <p>
+              A different kind of systems thinking: how parts fit, how people move through
+              spaces, and how a plan meets real constraints.
+            </p>
+          </li>
+          <li>
+            <b>Trust &amp; AI quality</b>
+            <p>
+              Trust &amp; Safety, process optimization, and human-in-the-loop AI across
+              multilingual teams. The work made feedback matter: a quality initiative raised KPIs
+              by 15 points.
+            </p>
+          </li>
+          <li>
+            <b>Governance</b>
+            <p>
+              Today, as D&amp;T Global Data Governance Lead at dsm-firmenich, I help turn
+              policies into daily practice: clear ownership, trusted data, accountable AI.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <p class="label">02 &middot; Things I keep returning to</p>
+        <h2>Some beliefs are less like answers than useful instruments.</h2>
+        <div class="thought-list">
+          <article class="thought">
+            <small>01 &middot; Enable</small>
+            <p>Good governance should enable, not merely mandate.</p>
+          </article>
+          <article class="thought">
+            <small>02 &middot; Meaning</small>
+            <p>People negotiate meaning. Systems should make that meaning usable.</p>
+          </article>
+          <article class="thought">
+            <small>03 &middot; Accountability</small>
+            <p>AI can assist a decision. It cannot take responsibility for its consequences.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section human">
+        <div class="human-copy">
+          <p class="label">
+            03 &middot; Outside the title &middot; Still learning. That part doesn&rsquo;t stop.
+          </p>
+          <h2>People are the point.<br />Curiosity is the method.</h2>
+          <p>
+            I&rsquo;ve spent years close to the operational reality of technology: the customer
+            waiting for a fix, the team interpreting a policy, the person expected to trust an AI
+            system. That is why the work has to make sense to people, not only on paper.
+          </p>
+          <p>
+            I contribute to DAMA Espa&ntilde;a&rsquo;s AI and Data Governance Working Group, write
+            about the questions I meet in practice, and keep learning by building&mdash;most
+            recently, exploring agentic AI from the inside.
+          </p>
+          <p class="pull-small">
+            &ldquo;Data is our greatest asset.&rdquo;<br />
+            <em>It&rsquo;s a good line. It&rsquo;s also wrong.<br />What&rsquo;s actually greatest: people.</em>
+          </p>
+        </div>
+        <figure class="fish" aria-label="A floating jellyfish specimen in motion">
+          <video autoplay muted loop playsinline preload="none" poster={jellyfishPoster} aria-hidden="true">
+            <source src={jellyfishVideo} type="video/quicktime" />
+          </video>
+          <figcaption>Pelagic specimen &middot; data in motion</figcaption>
+        </figure>
+      </section>
+
+      <section class="section end">
+        <p class="label">A little more context</p>
+        <h2>From architecture to AI governance.<br />Still asking what it means for people.</h2>
+        <p>
+          If you&rsquo;re here for the thinking, follow the Context. If you&rsquo;re here for the
+          work, step into the Field.
+        </p>
+        <a class="cta" href="/context">Follow the Context &rarr;</a>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  html {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100svh;
+  }
+
+  main {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 7rem;
+    color: var(--bone);
+  }
+
+  .back a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--bone);
+    text-decoration: none;
+  }
+
+  .back a:hover,
+  .back a:focus-visible {
+    color: var(--gold);
+  }
+
+  .back a:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .nerve-rest {
+    position: fixed;
+    top: calc(38px + env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(247, 197, 106, 0.55) 12%,
+      rgba(247, 197, 106, 0.55) 88%,
+      transparent
+    );
+    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.4));
+    opacity: 0.75;
+    pointer-events: none;
+    z-index: 5;
+    animation: nerve-rest-breathe 6.5s ease-in-out infinite;
+  }
+
+  @keyframes nerve-rest-breathe {
+    0%, 100% {
+      opacity: 0.55;
+      filter: drop-shadow(0 0 3px rgba(247, 197, 106, 0.3));
+    }
+    50% {
+      opacity: 0.9;
+      filter: drop-shadow(0 0 8px rgba(247, 197, 106, 0.55));
+    }
+  }
+
+  .label {
+    margin: 3rem 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(227, 175, 149, 0.6);
+  }
+
+  .hero {
+    padding-top: 2.5rem;
+  }
+
+  .hero .label {
+    margin-top: 0;
+  }
+
+  h1 {
+    margin: 0.5rem 0 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 16vw, 6.5rem);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+  }
+
+  h1 .dot {
+    color: var(--flesh);
+  }
+
+  .pull {
+    margin: 0 0 1rem;
+    max-width: 30rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    color: var(--bone);
+  }
+
+  .dek {
+    margin: 0 0 2rem;
+    max-width: 30rem;
+    font-family: var(--font-reading);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(243, 235, 224, 0.7);
+  }
+
+  .scroll {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .scroll:hover,
+  .scroll:focus-visible {
+    text-decoration: underline;
+  }
+
+  .hero-art {
+    margin: 3rem 0 0;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+    background: radial-gradient(ellipse at 50% 40%, rgba(170, 104, 66, 0.14), transparent 70%);
+    border: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .hero-art img {
+    max-width: 100%;
+    max-height: 48vh;
+    width: auto;
+    filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.55));
+  }
+
+  .section {
+    padding-top: 4rem;
+    margin-top: 4rem;
+    border-top: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .section h2 {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .section .lead {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--oxide-lit);
+    max-width: 34rem;
+  }
+
+  .section p {
+    font-family: var(--font-reading);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(243, 235, 224, 0.82);
+    max-width: 34rem;
+  }
+
+  .threadline {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .threadline li {
+    position: relative;
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(210, 180, 111, 0.4);
+  }
+
+  .threadline li::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0.3rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--void);
+    border: 1px solid var(--gold);
+  }
+
+  .threadline b {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--bone);
+  }
+
+  .threadline p {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    max-width: 30rem;
+  }
+
+  .thought-list {
+    margin-top: 2rem;
+    display: grid;
+    gap: 1px;
+    background: rgba(243, 235, 224, 0.12);
+    border: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .thought {
+    background: var(--void);
+    padding: 1.5rem 1.4rem;
+  }
+
+  .thought small {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+
+  .thought p {
+    margin: 0.75rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--champagne);
+    max-width: none;
+  }
+
+  .human {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .pull-small {
+    margin-top: 1.75rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--gold);
+    max-width: 28rem;
+  }
+
+  .pull-small em {
+    color: rgba(243, 235, 224, 0.75);
+    font-size: 0.95rem;
+  }
+
+  .fish {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    gap: 0.75rem;
+  }
+
+  .fish video {
+    width: 100%;
+    max-width: 22rem;
+    filter: drop-shadow(0 10px 22px rgba(210, 180, 111, 0.35));
+  }
+
+  .fish figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(227, 175, 149, 0.55);
+  }
+
+  .end {
+    text-align: left;
+  }
+
+  .end p {
+    max-width: 30rem;
+  }
+
+  .cta {
+    display: inline-block;
+    margin-top: 1.5rem;
+    border: 1px solid rgba(210, 180, 111, 0.5);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .cta:hover,
+  .cta:focus-visible {
+    background: rgba(210, 180, 111, 0.1);
+  }
+
+  @media (min-width: 48rem) {
+    .human {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nerve-rest {
+      animation: none;
+      opacity: 0.75;
+    }
+  }
+</style>

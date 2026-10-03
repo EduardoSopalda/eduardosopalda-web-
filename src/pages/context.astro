@@ -1,10 +1,527 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/context')!;
+// Context, built from Eduardo's own concept mockup (context-mockup.html,
+// pushed to the repo root and relocated into this page -- see
+// public/concepts/ and the removed root files in this same change). The
+// copy below is transcribed verbatim from that mockup, not invented
+// here: it is Eduardo's own voice, supplied directly (CLAUDE.md
+// non-negotiable 1 is about never writing copy IN his voice -- this
+// isn't that).
+//
+// Deliberately NOT carrying over the mockup's own top nav/sticky
+// beamnav -- CLAUDE.md non-negotiable 2: the field is the only
+// navigation. Same single "back to the field" convention and static
+// .nerve-rest illusion every other room already uses.
+import '../styles/global.css';
+
+// umbrella-elephant-cutout.png is named throughout context-mockup.html
+// (the hero image and the first specimen card) but, like
+// live-specimen.mov on the Who page, was never actually present in any
+// of the three "Add files via upload" commits that delivered this
+// bundle -- confirmed directly against the repo tree, not assumed.
+// Rather than substitute a different image and quietly imply it's the
+// real one, the hero and specimen grid below leave a visible gap for
+// it, same spirit as EmptyStop's own visible TODO.
+const elephantMissing = true;
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="the Context text. Not drafted by anyone else -- see CLAUDE.md non-negotiable 1."
-/>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Context · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <div class="nerve-rest" aria-hidden="true"></div>
+    <main>
+      <p class="back"><a href="/">Back to the field</a></p>
+
+      <header class="hero">
+        <p class="sideword" aria-hidden="true">A small history of wonder</p>
+        <p class="eyebrow">Context &middot; an opening specimen</p>
+        <h1>Con<span class="dot">text</span></h1>
+        <p class="dek">
+          Before knowledge had departments, the world could still sit in one room.
+        </p>
+        <a class="scroll" href="#history">&darr; Enter the cabinet</a>
+
+        <div class="hero-art">
+          <div class="orbit" aria-hidden="true"></div>
+          <div class="sun" aria-hidden="true"></div>
+          {elephantMissing && (
+            <p class="pending-note">
+              TODO (Eduardo): the umbrella/elephant cutout named in the concept bundle wasn&rsquo;t
+              actually uploaded &mdash; this frame is holding its place, not standing in for it.
+            </p>
+          )}
+        </div>
+      </header>
+
+      <section class="section" id="history">
+        <p class="label">01 &middot; Before the departments</p>
+        <h2>A room for the almost unbelievable.</h2>
+        <p>
+          In early modern Europe, a <em>Wunderkammer</em>&mdash;a chamber of wonder&mdash;or
+          <em>Kunstkammer</em> gathered natural things, human-made marvels and instruments under
+          one roof.
+        </p>
+        <p>
+          Shell beside astrolabe. Fossil beside carved ivory. Not a catalogue of the strange: a
+          small, imperfect world assembled to be looked at, argued with, and understood.
+        </p>
+        <div class="labels">
+          <span>Naturalia</span>
+          <span>Artificialia</span>
+          <span>Scientifica</span>
+        </div>
+      </section>
+
+      <blockquote class="quote">
+        <p class="label">Not a neutral room</p>
+        <p class="line">&ldquo;A collection was also a portrait of the person who <em>made it.</em>&rdquo;</p>
+        <p class="caption">Taste &middot; reach &middot; curiosity &middot; the limits of what one could know</p>
+      </blockquote>
+
+      <section class="section">
+        <p class="label">02 &middot; When the shelves divided</p>
+        <h2>Then the world got labelled.</h2>
+        <p>
+          Over time, collections became museums; inquiry acquired disciplines, departments and
+          names. The sorting made knowledge more exact&mdash;and easier to share.
+        </p>
+        <p>
+          But a label can arrive too soon. Sometimes the most useful thing is to leave two unlike
+          objects together long enough for a third idea to appear.
+        </p>
+      </section>
+
+      <section class="section" id="collector">
+        <p class="label">03 &middot; The collector, now</p>
+        <h2>I collect <em>ideas.</em><br />I collect <em>experience.</em></h2>
+        <p>
+          I collect questions, places, stories, contradictions, people. Things that have no
+          obvious reason to be beside one another&mdash;until they do.
+        </p>
+      </section>
+
+      <section class="specimens">
+        <p class="label">Loose specimens</p>
+        <h3>Curiosities, for now.</h3>
+        <div class="specimen-grid">
+          <article class="specimen-card pending">
+            <p class="pending-note">
+              TODO (Eduardo): specimen pending &mdash; the elephant/umbrella asset referenced in
+              the concept wasn&rsquo;t actually uploaded with the rest of the bundle.
+            </p>
+            <div class="meta">
+              <b>The weather keeper</b>
+              <small>Elephant &middot; umbrella &middot; impossible poise</small>
+            </div>
+          </article>
+          <article class="specimen-card goldfish">
+            <img src="/concepts/goldfish-source.png" alt="A goldfish rendered as a glass specimen holding scraps of memory" />
+            <div class="meta">
+              <b>A thought in suspension</b>
+              <small>Goldfish &middot; memory &middot; interior worlds</small>
+            </div>
+          </article>
+          <article class="specimen-card brain">
+            <img src="/concepts/keepsake-brain-cutout.png" alt="A brain built from stitched-together keepsakes and tools" />
+            <div class="meta">
+              <b>The portable cabinet</b>
+              <small>Brain &middot; keepsakes &middot; collected matter</small>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section meaning" id="meaning">
+        <p class="label">04 &middot; What the cabinet is for</p>
+        <h2>The meaning is in the <em>between.</em></h2>
+        <p>
+          My work moves across architecture and data, technology and people, systems and stories.
+          I&rsquo;m interested in what happens when unlike things meet&mdash;and in the meaning we
+          make there, together.
+        </p>
+        <p>
+          Not every connection is a solution. Some are questions you can live with. Some change
+          shape when another person enters the room.
+        </p>
+        <p class="endline">
+          A collection is never the whole world.<br />It is one way of seeing it.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  html {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100svh;
+  }
+
+  main {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 7rem;
+    color: var(--bone);
+  }
+
+  .back a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--bone);
+    text-decoration: none;
+  }
+
+  .back a:hover,
+  .back a:focus-visible {
+    color: var(--gold);
+  }
+
+  .back a:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .nerve-rest {
+    position: fixed;
+    top: calc(38px + env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(247, 197, 106, 0.55) 12%,
+      rgba(247, 197, 106, 0.55) 88%,
+      transparent
+    );
+    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.4));
+    opacity: 0.75;
+    pointer-events: none;
+    z-index: 5;
+    animation: nerve-rest-breathe 6.5s ease-in-out infinite;
+  }
+
+  @keyframes nerve-rest-breathe {
+    0%, 100% {
+      opacity: 0.55;
+      filter: drop-shadow(0 0 3px rgba(247, 197, 106, 0.3));
+    }
+    50% {
+      opacity: 0.9;
+      filter: drop-shadow(0 0 8px rgba(247, 197, 106, 0.55));
+    }
+  }
+
+  .sideword {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(243, 235, 224, 0.35);
+  }
+
+  .eyebrow {
+    margin: 2.5rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(227, 175, 149, 0.6);
+  }
+
+  h1 {
+    margin: 0.5rem 0 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 16vw, 6.5rem);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+  }
+
+  h1 .dot {
+    color: var(--flesh);
+  }
+
+  .dek {
+    margin: 0 0 1.75rem;
+    max-width: 28rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: rgba(243, 235, 224, 0.75);
+  }
+
+  .scroll {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .scroll:hover,
+  .scroll:focus-visible {
+    text-decoration: underline;
+  }
+
+  .hero-art {
+    position: relative;
+    margin: 3rem 0 0;
+    height: 14rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(243, 235, 224, 0.12);
+    background: radial-gradient(ellipse at 50% 43%, rgba(170, 104, 66, 0.18), transparent 70%);
+  }
+
+  .orbit {
+    position: absolute;
+    width: 50%;
+    aspect-ratio: 1;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+    border-radius: 50%;
+    transform: rotate(-20deg);
+  }
+
+  .sun {
+    position: absolute;
+    width: 22%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e2ba73, #a24e2e 55%, transparent 80%);
+    box-shadow: 0 0 40px rgba(203, 117, 51, 0.3);
+  }
+
+  .pending-note {
+    position: relative;
+    z-index: 1;
+    max-width: 22rem;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: rgba(243, 235, 224, 0.45);
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .label {
+    margin: 3rem 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(227, 175, 149, 0.6);
+  }
+
+  .section {
+    padding-top: 4rem;
+    margin-top: 4rem;
+    border-top: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .section .label {
+    margin-top: 0;
+  }
+
+  .section h2,
+  .section h3 {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .section h2 em {
+    font-style: italic;
+    color: var(--bronze);
+  }
+
+  .section p {
+    font-family: var(--font-reading);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(243, 235, 224, 0.82);
+    max-width: 34rem;
+  }
+
+  .section p em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--bone);
+  }
+
+  .labels {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .labels span {
+    border: 1px solid rgba(243, 235, 224, 0.25);
+    color: var(--champagne);
+    padding: 0.5rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .quote {
+    margin: 4rem -1.5rem 0;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: var(--oxide);
+    color: var(--champagne);
+  }
+
+  .quote .label {
+    margin: 0;
+    color: rgba(243, 235, 224, 0.75);
+  }
+
+  .quote .line {
+    margin: 1rem auto;
+    max-width: 30rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .quote .line em {
+    font-style: italic;
+    color: var(--void);
+  }
+
+  .quote .caption {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(230, 203, 155, 0.8);
+  }
+
+  .specimens {
+    padding-top: 4rem;
+    margin-top: 4rem;
+    border-top: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .specimens h3 {
+    margin: 0.5rem 0 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .specimen-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .specimen-card {
+    position: relative;
+    min-height: 16rem;
+    border: 1px solid rgba(243, 235, 224, 0.18);
+    background: #0d0b09;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .specimen-card.pending {
+    align-items: center;
+    justify-content: center;
+    border-style: dashed;
+    gap: 1.25rem;
+  }
+
+  .specimen-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1.25rem;
+  }
+
+  .specimen-card.goldfish {
+    background: #030303;
+  }
+
+  .specimen-card .meta {
+    position: relative;
+    z-index: 1;
+    padding: 1.1rem;
+    background: linear-gradient(transparent, rgba(8, 7, 6, 0.92) 55%);
+  }
+
+  .specimen-card .meta b {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--bone);
+  }
+
+  .specimen-card .meta small {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .meaning {
+    text-align: left;
+  }
+
+  .endline {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--bronze);
+  }
+
+  @media (min-width: 42rem) {
+    .specimen-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nerve-rest {
+      animation: none;
+      opacity: 0.75;
+    }
+  }
+</style>
