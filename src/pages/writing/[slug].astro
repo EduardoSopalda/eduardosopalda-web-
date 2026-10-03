@@ -23,6 +23,7 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { parseArticleBody, headingsOf } from '../../lib/parseArticleBody';
 import { catalogNoForTitle, leadFragmentFor } from '../../data/articleIndex';
+import RoomNerve from '../../components/RoomNerve.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('articles');
@@ -55,6 +56,7 @@ const lead = leadFragmentFor(title);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body data-family={family}>
+    <RoomNerve current="/writing" heading={false} />
     <p class="back"><a href="/writing">All writing</a></p>
 
     <header class="plate" id="plate">
@@ -215,7 +217,7 @@ const lead = leadFragmentFor(title);
 
       .back {
         position: absolute;
-        top: 1.5rem;
+        top: calc(var(--nerve-dock) + 1.6rem);
         left: 1.5rem;
         margin: 0;
         z-index: 2;
@@ -256,7 +258,7 @@ const lead = leadFragmentFor(title);
         align-items: center;
         text-align: center;
         gap: 1.25rem;
-        padding: 6rem 1.5rem 4rem;
+        padding: calc(var(--nerve-dock) + 4.5rem) 1.5rem 4rem;
         background: radial-gradient(ellipse at 50% 30%, rgba(227, 175, 149, 0.08), transparent 70%);
       }
 

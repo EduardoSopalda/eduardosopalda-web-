@@ -48,6 +48,11 @@ import { STOPS } from '../data/stops';
      stop links themselves. -->
 <section class="field" id="field-root">
   <canvas class="nerve" id="nerve" aria-hidden="true"></canvas>
+  <!-- Probe and rail share --nerve-dock with RoomNerve. The probe is
+       what the departure measures; the rail is the named element the
+       cross-document view transition hands to the room. -->
+  <div id="nerve-dock-probe" aria-hidden="true"></div>
+  <div class="nerve-rail" id="nerve-rail" aria-hidden="true"></div>
   <div class="world" id="world"></div>
 </section>
 
@@ -148,6 +153,35 @@ import { STOPS } from '../data/stops';
        stops and specimens now underneath it. */
     z-index: 250;
     pointer-events: none;
+  }
+
+  #nerve-dock-probe {
+    position: fixed;
+    top: var(--nerve-dock);
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .nerve-rail {
+    view-transition-name: nerve-rail;
+    position: fixed;
+    top: var(--nerve-dock);
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 260;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(247, 197, 106, 0.7) 8%,
+      rgba(247, 197, 106, 0.7) 92%,
+      transparent
+    );
+    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.45));
   }
 
   .world {
@@ -574,6 +608,13 @@ import { STOPS } from '../data/stops';
     letter-spacing: 0.52em;
   }
 
+  /* Hit slop. Padding would shift the label; a pseudo doesn't. */
+  .stop::before {
+    content: '';
+    position: absolute;
+    inset: -22px -36px;
+  }
+
   /* Same ring as .cue:focus-visible in sopalda-landing.css -- the one
      other keyboard-focusable interactive element on the page -- so
      the focus style is consistent site-wide, not invented fresh here. */
@@ -951,7 +992,10 @@ import { STOPS } from '../data/stops';
     // exactly that reason: something has to trigger the actual
     // navigation at a definite moment. departEl (not the whole node) is
     // enough to let the stops loop recognise which stop is departing.
-    const DEPART_MS = 620;
+    const DEPART_FLATTEN_MS = 700;
+    const DEPART_RISE_MS = 1300;
+    const DEPART_SETTLE_MS = 400;
+    const DEPART_MS = DEPART_FLATTEN_MS + DEPART_RISE_MS + DEPART_SETTLE_MS;
     let departing = false;
     let departStartT = 0;
     let departFromX = 0;
@@ -973,6 +1017,12 @@ import { STOPS } from '../data/stops';
     // already claimed on the way into the field, not a new resting
     // place invented for this.
     let straightenAmt = 1;
+    // 1 while the field is drifting, eased toward ~0.28 while a stop
+    // is held. Multiplies nerveBaseY's amplitude only — breath and the
+    // pulses stay. A full freeze reads as a crash.
+    let calmAmt = 1;
+    let holdAmt = 0;
+    const railEl = document.getElementById('nerve-rail');
     let departNerveFromMin = 0;
     let departNerveFromMax = 0;
     let departNerveToMin = 0;
@@ -1269,7 +1319,7 @@ import { STOPS } from '../data/stops';
       // channel itself toward the wordmark's tight corner band (see
       // frame()'s departure branch), not because this function knows
       // anything about departing.
-      const amp = channel * (0.14 + 0.12 * breath) * straightenAmt;
+      const amp = channel * (0.14 + 0.12 * breath) * straightenAmt * calmAmt;
       return (
         mid +
         Math.sin(warp * Math.PI * 1.05 + t * 0.48) * amp +
@@ -1313,7 +1363,7 @@ import { STOPS } from '../data/stops';
         // same way a mouse does -- it only stops reacting once the
         // finger actually lifts (pointerleave-equivalent), not because
         // touch is excluded outright.
-        if (hasPointer) {
+        if (hasPointer && !anyStopNear && !departing) {
           const baseY = nerveBaseY(x);
           const dist = Math.hypot(x - px, baseY - py);
           if (dist < RADIUS) {
@@ -2131,40 +2181,19 @@ import { STOPS } from '../data/stops';
         departEl = el;
         departHref = el.href;
         departFromX = worldX;
-        // Same formula the stops loop below uses to place this stop
-        // (X = wrap(xn*WORLD_W - worldX, WORLD_W) - OFFSET), solved
-        // backwards for the worldX that puts X at screen center, then
-        // taken to whichever representative (mod WORLD_W) is nearest
-        // the current worldX -- a short glide in whatever direction is
-        // already closest, never a full lap of the wrapped world.
-        const OFFSET = Math.min(520, W * 0.4);
-        const rawTarget = xn * WORLD_W - (W / 2 + OFFSET);
-        const delta = wrap(rawTarget - worldX + WORLD_W / 2, WORLD_W) - WORLD_W / 2;
-        departToX = worldX + delta;
-        // Where the flattened line settles: the wordmark's own docked
-        // position (body.is-docked .mark, position:fixed, top-right
-        // corner), measured directly rather than reconstructed from
-        // its CSS by hand -- if that element isn't there or hasn't
-        // laid out for some reason, fall back to the same near-top
-        // fraction the nerve's own entrance pose already uses
-        // (resize()'s nerveMin = nerveMax = H * 0.1) rather than
-        // inventing a second guess at the same spot. .mark itself is
-        // height:0/overflow:visible once docked (a deliberate layout
-        // trick so it doesn't reserve grid space -- see
-        // sopalda-landing.css's own comment on body.is-docked .mark),
-        // so its own rect always reports zero height; .mark h1 is the
-        // element that actually paints the visible text and reports
-        // the real, non-zero box.
-        const markRect = document.querySelector('.mark h1')?.getBoundingClientRect();
+        // Flatten where the click happened. Panning the bead to center
+        // made the line leave the hand that chose it. Horizontal hold;
+        // the rise is vertical.
+        departToX = worldX;
+        // Dock under the room plate, not under the wordmark. The probe
+        // is the same --nerve-dock RoomNerve paints, measured rather
+        // than copied, so a safe-area inset can't split the two.
+        const probe = document.getElementById('nerve-dock-probe');
+        const dockY = probe ? probe.getBoundingClientRect().top : 78;
         departNerveFromMin = nerveMin;
         departNerveFromMax = nerveMax;
-        if (markRect && markRect.height > 0) {
-          departNerveToMin = markRect.top;
-          departNerveToMax = markRect.bottom;
-        } else {
-          departNerveToMin = H * 0.08;
-          departNerveToMax = H * 0.12;
-        }
+        departNerveToMin = dockY - 0.5;
+        departNerveToMax = dockY + 0.5;
         departStartT = performance.now();
       });
       return { el, name: s.label, xn, near: 0, nearAmt: 0, smoothY: NaN, sw: 90, sh: 22, lastMeasure: -Infinity };
@@ -2253,40 +2282,31 @@ import { STOPS } from '../data/stops';
       // 20s idle; modest and gradual on purpose, not a jump, since a
       // sudden speed change would read as a glitch, not a mood.
       if (departing) {
-        // A fixed-duration cosine ease, the same shape the nerve's own
-        // entrance uses (see entranceSettled above) and for the same
-        // reason: an exponential chase only ever asymptotically arrives,
-        // and something here has to reach an exact, known moment to
-        // actually trigger the navigation. targetX is kept in lockstep
-        // so idle drift doesn't reappear mid-glide or fight the very
-        // next frame if this ever somehow didn't reach p>=1.
-        const p = Math.min(1, (performance.now() - departStartT) / DEPART_MS);
-        const eased = 0.5 - 0.5 * Math.cos(p * Math.PI);
-        worldX = departFromX + (departToX - departFromX) * eased;
+        // Three beats, one clock. Flatten in place, rise to the plate
+        // rail, settle, then navigate. Cosine ease, same shape as the
+        // entrance, so the line arrives rather than snapping.
+        const elapsed = performance.now() - departStartT;
+        const ease = (p: number) => 0.5 - 0.5 * Math.cos(Math.min(1, Math.max(0, p)) * Math.PI);
+        const flatE = ease(elapsed / DEPART_FLATTEN_MS);
+        const riseE = ease((elapsed - DEPART_FLATTEN_MS) / DEPART_RISE_MS);
+        worldX = departFromX + (departToX - departFromX) * riseE;
         targetX = worldX;
-        // The straighten and the rise, same progress, same window --
-        // see nerveBaseY's own comment for what straightenAmt actually
-        // does to the curve. This replaces the ordinary channel-chase
-        // below entirely for the duration (that block is now gated on
-        // !departing) rather than fighting it every frame.
-        straightenAmt = 1 - eased;
-        nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * eased;
-        nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * eased;
-        // "The rest of the specimens move out of the screen" -- direct
-        // spec. Before this, departing only ever straightened the nerve
-        // and panned the world; specimens, fragments and the other six
-        // stop links just sat there unchanged until the hard navigate
-        // cut them away mid-frame. #world is a sibling of the #nerve
-        // canvas, not a parent (see the markup above), so fading ITS
-        // opacity clears everything the eye shouldn't keep tracking
-        // while leaving the nerve canvas untouched. Eased faster than
-        // the straighten (squared) so the screen is already reading as
-        // clear well before the flattened line finishes arriving at
-        // the corner, rather than the two finishing in a dead heat.
-        world.style.opacity = String(Math.max(0, 1 - eased * eased * 1.4));
-        if (p >= 1 && departHref) {
+        straightenAmt = 1 - flatE;
+        nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * riseE;
+        nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * riseE;
+        // Specimens and the other beads leave during the rise. The
+        // canvas nerve stays. The named rail fades in over the last
+        // of the rise so the view transition hands off a line, not
+        // the whole painted field.
+        const fade = Math.min(1, Math.max(0, (elapsed - 500) / 900));
+        world.style.opacity = String(Math.max(0, 1 - fade));
+        if (railEl) railEl.style.opacity = String(riseE);
+        if (elapsed >= DEPART_MS && departHref) {
           const href = departHref;
           departHref = '';
+          try {
+            sessionStorage.setItem('sopalda-arrive', new URL(href, location.href).pathname);
+          } catch { /* private mode: the room simply doesn't play the settle */ }
           location.href = href;
         }
       } else {
@@ -2301,8 +2321,17 @@ import { STOPS } from '../data/stops';
         // the click handler, never has a stray inline opacity to worry
         // about in the first place.
         if (world.style.opacity) world.style.opacity = '';
+        if (railEl && railEl.style.opacity) railEl.style.opacity = '';
       }
-      worldYoff = dragY + (reduced ? 0 : Math.sin(t * 0.0817) * H * 0.16);
+      // Hold: a stop under the pointer eases the vertical breath out
+      // and calms the wave. Drift is already paused via anyStopNear
+      // above. Pulses are drawn later and are not gated on this.
+      const wantHold = anyStopNear && !departing ? 1 : 0;
+      holdAmt += (wantHold - holdAmt) * approachFactor(0.1, dt);
+      calmAmt = 1 - holdAmt * 0.72;
+      const sineY = reduced ? 0 : Math.sin(t * 0.0817) * H * 0.16;
+      const liveYoff = dragY + sineY * (1 - holdAmt);
+      worldYoff += (liveYoff - worldYoff) * (departing ? 1 : approachFactor(0.18, dt));
 
       // Every ~20 frames (~3/sec), not every frame -- getBoundingClientRect
       // forces a layout read, and the channel only needs to track real
@@ -2559,7 +2588,7 @@ import { STOPS } from '../data/stops';
         const [lo, hi] = BAND_RANGE[n.s.band];
         const mag = (lo + n.bandT * (hi - lo)) * channel;
         const side = n.s.band === 'alta' ? -1 : n.s.band === 'baja' ? 1 : n.bandT < 0.5 ? -1 : 1;
-        const orbit = Math.sin(t * 0.09 + n.pulsePhase) * channel * 0.015;
+        const orbit = Math.sin(t * 0.09 + n.pulsePhase) * channel * 0.015 * (1 - holdAmt);
         const baseY = nerveYHere + side * mag + orbit - w * 0.3;
         const bsx = baseX + w * 0.5, bsy = baseY + w * 0.28;
 
@@ -2571,7 +2600,7 @@ import { STOPS } from '../data/stops';
         // it doesn't swim toward the pointer the way goldfish does.
         const leanMul = n.s.witness ? 0 : 1;
         let wantLeanX = 0, wantLeanY = 0;
-        if (!isTouch && hasPointer) {
+        if (!isTouch && hasPointer && !anyStopNear && !departing) {
           const d = Math.hypot(px - bsx, py - bsy);
           // Was w*1.2 (proportional to the specimen's own rendered
           // width) -- FIELD-SPEC gives lean as a flat "within roughly
@@ -3576,7 +3605,7 @@ import { STOPS } from '../data/stops';
           near = 1;
         } else if (hasPointer) {
           const d = Math.hypot(px - X, py - y);
-          near = d < 140 ? 1 : 0;
+          near = d < 180 ? 1 : 0;
           // Deliberately NOT the isTouch branch above: that one is
           // permanently "near" for every on-screen stop regardless of
           // real proximity (see its own comment), so feeding it into
@@ -3621,9 +3650,14 @@ import { STOPS } from '../data/stops';
         // not an instant snap, and baked directly into the Y this same
         // line already computes.
         s.nearAmt += (near - s.nearAmt) * approachFactor(0.12, dt);
-        const lift = s.nearAmt * 4;
+        const lift = s.nearAmt * 10;
         const labelY = y - 22 - lift;
-        s.el.style.transform = `translate3d(${X}px, ${labelY}px, 0)`;
+        // 1.5× at full hold. Touch stays at 1 — every on-screen stop
+        // is already "near" there, and scaling all seven would just
+        // be noise. The chosen bead still grows on the way out.
+        const grow = isTouch && !(departing && s.el === departEl) ? 0 : s.nearAmt;
+        const scale = 1 + grow * 0.5;
+        s.el.style.transform = `translate3d(${X}px, ${labelY}px, 0) scale(${scale})`;
 
         // The filament and the suture: the same museum-tag-on-a-wire
         // drawing already built for specimens (drawConnector, defined

@@ -1,0 +1,207 @@
+---
+// The arrived nerve. Same filament that left the field: edge to edge,
+// just under the room plate (upper right), still carrying light.
+// The seven stops stay on it. The room you are in is the awake bead.
+// "Eduardo" at the left end is the way back to the field — not a
+// second menu. Contact remains the last stop, where it already was.
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import { STOPS } from '../data/stops';
+
+interface Props {
+  current: string;
+  // Empty rooms have no other title, so the plate is the h1. Archive
+  // and reader pages already have their own heading; there the plate
+  // is a landmark, not a second h1.
+  heading?: boolean;
+}
+
+const { current, heading = true } = Astro.props;
+const here = STOPS.find((s) => s.href === current);
+---
+
+<header class="room-nerve" data-arrive="0">
+  <a class="room-home" href="/">Eduardo</a>
+  {here && (heading
+    ? <h1 class="room-plate"><span class="room-plate-sub">{here.subtitle}</span><span class="room-plate-name">{here.label}</span></h1>
+    : <p class="room-plate"><span class="room-plate-sub">{here.subtitle}</span><span class="room-plate-name">{here.label}</span></p>
+  )}
+  <div class="room-line" aria-hidden="true"><span class="room-pulse"></span></div>
+  <nav class="room-stops" aria-label="Site">
+    {STOPS.map((s) => (
+      <a href={s.href} aria-current={s.href === current ? 'page' : undefined}>{s.label}</a>
+    ))}
+  </nav>
+</header>
+
+<script>
+  // Field.astro sets this on the way out. A direct visit has no flag,
+  // so the rail is simply already there — no fake entrance.
+  const rail = document.querySelector('.room-nerve');
+  if (rail && sessionStorage.getItem('sopalda-arrive') === location.pathname) {
+    rail.setAttribute('data-arrive', '1');
+    sessionStorage.removeItem('sopalda-arrive');
+  }
+</script>
+
+<style>
+  .room-nerve {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    height: calc(var(--nerve-dock) + 2.6rem);
+    pointer-events: none;
+    font-family: var(--font-mono);
+  }
+
+  .room-home,
+  .room-stops a {
+    pointer-events: auto;
+  }
+
+  .room-home {
+    position: absolute;
+    top: calc(18px + env(safe-area-inset-top));
+    left: 22px;
+    color: var(--bone);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .room-home:hover,
+  .room-home:focus-visible,
+  .room-stops a:hover,
+  .room-stops a:focus-visible {
+    color: var(--gold);
+  }
+
+  .room-home:focus-visible,
+  .room-stops a:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .room-plate {
+    position: absolute;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 28px;
+    margin: 0;
+    text-align: right;
+    font-weight: 400;
+  }
+
+  .room-plate-sub {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: rgba(243, 235, 224, 0.55);
+  }
+
+  .room-plate-name {
+    display: block;
+    margin-top: 0.15rem;
+    font-family: var(--font-display, 'Fraunces', serif);
+    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--bone);
+  }
+
+  /* Same Y Field.astro eases the flattened nerve toward. Named so the
+     cross-document view transition (global.css) can hand this line
+     off instead of crossfading the whole scene into a bar. */
+  .room-line {
+    view-transition-name: nerve-rail;
+    position: absolute;
+    top: var(--nerve-dock);
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(247, 197, 106, 0.55) 8%,
+      rgba(247, 197, 106, 0.7) 50%,
+      rgba(247, 197, 106, 0.55) 92%,
+      transparent
+    );
+    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.4));
+    overflow: hidden;
+  }
+
+  .room-pulse {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 18%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(255, 248, 230, 0.95), transparent);
+    filter: blur(0.4px);
+    animation: nerve-run 7.5s linear infinite;
+  }
+
+  @keyframes nerve-run {
+    from { transform: translateX(-120%); }
+    to { transform: translateX(640%); }
+  }
+
+  .room-stops {
+    position: absolute;
+    top: calc(var(--nerve-dock) + 8px);
+    left: 1.25rem;
+    right: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4rem;
+  }
+
+  .room-stops a {
+    color: rgba(247, 197, 106, 0.45);
+    text-decoration: none;
+    font-size: clamp(0.52rem, 1.5vw, 0.68rem);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .room-stops a[aria-current='page'] {
+    color: var(--gold);
+    letter-spacing: 0.18em;
+  }
+
+  .room-nerve[data-arrive='1'] .room-stops a,
+  .room-nerve[data-arrive='1'] .room-plate {
+    animation: rail-settle 0.7s var(--ease) both;
+  }
+
+  @keyframes rail-settle {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 720px) {
+    .room-stops {
+      left: 0.6rem;
+      right: 0.6rem;
+      overflow-x: auto;
+      justify-content: flex-start;
+      gap: 0.85rem;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .room-pulse,
+    .room-nerve[data-arrive='1'] .room-stops a,
+    .room-nerve[data-arrive='1'] .room-plate {
+      animation: none;
+    }
+  }
+</style>

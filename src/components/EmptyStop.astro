@@ -7,6 +7,9 @@
 // focus, see .stop-sub) -- both this page and the field pull from that
 // one source, so this really is reused, not new copy.
 import '../styles/global.css';
+import RoomNerve from './RoomNerve.astro';
+
+import { STOPS } from '../data/stops';
 
 interface Props {
   title: string;
@@ -14,6 +17,7 @@ interface Props {
   todo: string;
 }
 const { title, subtitle, todo } = Astro.props;
+const current = STOPS.find((s) => s.label === title)?.href ?? '/';
 ---
 
 <!doctype html>
@@ -25,11 +29,9 @@ const { title, subtitle, todo } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <RoomNerve current={current} />
     <main>
-      <p class="label">{subtitle}</p>
-      <h1>{title}</h1>
       <p class="todo">TODO (Eduardo): {todo}</p>
-      <p class="back"><a href="/">Back to the field</a></p>
     </main>
   </body>
 </html>
@@ -52,6 +54,7 @@ const { title, subtitle, todo } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: calc(var(--nerve-dock) + 3rem);
   }
 
   main {

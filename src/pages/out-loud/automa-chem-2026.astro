@@ -2,6 +2,7 @@
 import '../../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../../styles/global.css';
+import RoomNerve from '../../components/RoomNerve.astro';
 
 const chapters = [
   { id: 'open', t: 0, still: '00', kicker: 'OPEN', title: 'Two distances' },
@@ -98,6 +99,7 @@ const script = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <RoomNerve current="/out-loud" heading={false} />
     <header class="door">
       <a class="door-mark" href="/"><span>EDUARDO</span> sopalda</a>
       <a class="door-stop" href="/out-loud">Out Loud</a>
@@ -334,6 +336,7 @@ const script = [
     grid-template-columns: 1fr auto;
     gap: 0.35rem 1.1rem;
     align-items: baseline;
+    margin-top: calc(var(--nerve-dock) + 2.4rem);
     padding: 0.85rem 1.4rem 0.7rem;
     background: #000;
     color: #f3ebe0;

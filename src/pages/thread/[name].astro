@@ -15,6 +15,7 @@ import { toArticleRow } from '../../data/articleIndex';
 import { THREADS, threadForSlug } from '../../data/threads';
 import ThreadNerve from '../../components/ThreadNerve.astro';
 import ArticleList from '../../components/ArticleList.astro';
+import RoomNerve from '../../components/RoomNerve.astro';
 
 export async function getStaticPaths() {
   return THREADS.map((t) => ({ params: { name: t.toLowerCase() } }));
@@ -37,6 +38,7 @@ const bySource = entries
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <RoomNerve current="/writing" heading={false} />
     <main>
       <p class="back"><a href="/writing">All writing</a></p>
       <h1>{thread}</h1>
@@ -68,7 +70,7 @@ const bySource = entries
   main {
     max-width: 42rem;
     margin: 0 auto;
-    padding: 4rem 1.5rem 6rem;
+    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 6rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }

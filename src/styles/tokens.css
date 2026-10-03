@@ -66,4 +66,9 @@
        that rather than fighting it. */
   --font-wordmark-given: 'Italiana', serif;
   --font-wordmark: 'Glacial Indifference', sans-serif;
+
+  /* Where a departing nerve settles, and where every room rail paints.
+     One number so the field's last frame and the room's first frame
+     are the same line. 78px clears the upper-right plate. */
+  --nerve-dock: calc(78px + env(safe-area-inset-top));
 }

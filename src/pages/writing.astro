@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import { toArticleRow } from '../data/articleIndex';
 import ThreadNerve from '../components/ThreadNerve.astro';
 import ArticleList from '../components/ArticleList.astro';
+import RoomNerve from '../components/RoomNerve.astro';
 
 const entries = await getCollection('articles');
 const bySource = entries.map(toArticleRow).sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -42,26 +43,8 @@ const masthead: { image: string; alt: string } | null = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <!-- The destination the departing nerve arrives at: Field.astro's
-         click handler straightens and lifts the nerve toward the
-         wordmark's own docked corner over the same window it already
-         eases the horizontal pan in, then navigates -- a hard document
-         cut, since this project uses no cross-document view
-         transitions. This static line is the illusion half of that:
-         present in the same corner from the instant this page loads,
-         so nothing the eye was tracking changes shape across the cut,
-         even though it's a different element on a different document.
-         Gold here is the nerve itself, relocated and simplified, not a
-         fourth gold thing invented for this page (CLAUDE.md
-         non-negotiable 6). Breathes on its own via CSS -- no canvas,
-         no JS timing loop, just a slow opacity/glow oscillation, so
-         the "still pulsating" feeling the request asked for carries
-         into a page that has no per-frame loop of its own. -->
-    <div class="nerve-rest" aria-hidden="true"></div>
+    <RoomNerve current="/writing" />
     <main>
-      <p class="back"><a href="/">Back to the field</a></p>
-      <h1>Writing</h1>
-
       <ThreadNerve />
 
       {masthead && (
@@ -101,7 +84,7 @@ const masthead: { image: string; alt: string } | null = {
   main {
     max-width: 42rem;
     margin: 0 auto;
-    padding: 4rem 1.5rem 6rem;
+    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 6rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }
@@ -134,60 +117,6 @@ const masthead: { image: string; alt: string } | null = {
     font-size: 1.6rem;
   }
 
-  /* The nerve's own resting line, arrived at -- see the markup
-     comment above for why this exists as static CSS rather than a
-     shared, animated element. Full width (the departing nerve itself
-     stays edge to edge even once flattened, only its vertical channel
-     collapses -- see Field.astro's straightenAmt), faded at both ends
-     rather than hard-cut, so it reads as a line running past the
-     frame, not a bar sized to it. top/height approximate where
-     Field.astro's own departure actually measures body.is-docked
-     .mark h1's real rect and eases toward -- necessarily
-     approximate, since this is a static illusion on a different
-     document, not the same element, but close enough that nothing
-     visibly jumps across the cut. */
-  .nerve-rest {
-    position: fixed;
-    top: calc(38px + env(safe-area-inset-top));
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(247, 197, 106, 0.55) 12%,
-      rgba(247, 197, 106, 0.55) 88%,
-      transparent
-    );
-    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.4));
-    opacity: 0.75;
-    pointer-events: none;
-    z-index: 5;
-    animation: nerve-rest-breathe 6.5s ease-in-out infinite;
-  }
-
-  /* breath, on Field.astro's own canvas, is a continuous sine read
-     fresh every frame -- there's no equivalent loop here, so a plain
-     CSS keyframe animation is the cheapest way to keep the same slow
-     swell-and-ease feeling without inventing a JS timer for one static
-     line. */
-  @keyframes nerve-rest-breathe {
-    0%, 100% {
-      opacity: 0.55;
-      filter: drop-shadow(0 0 3px rgba(247, 197, 106, 0.3));
-    }
-    50% {
-      opacity: 0.9;
-      filter: drop-shadow(0 0 8px rgba(247, 197, 106, 0.55));
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nerve-rest {
-      animation: none;
-      opacity: 0.75;
-    }
-  }
 
   /* The section's masthead -- substitution and scale-shift, per direct
      critique: one real image standing in for a cover, held generously,

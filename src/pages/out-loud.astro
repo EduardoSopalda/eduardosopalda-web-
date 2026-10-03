@@ -2,6 +2,7 @@
 import '../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
+import RoomNerve from '../components/RoomNerve.astro';
 
 const talks = [
   {
@@ -22,11 +23,8 @@ const talks = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <div class="nerve-rest" aria-hidden="true"></div>
+    <RoomNerve current="/out-loud" />
     <main>
-      <p class="back"><a href="/">Back to the field</a></p>
-      <p class="label">talks, panels, DAMA, the white paper</p>
-      <h1>Out Loud</h1>
       <a class="cover" href="/out-loud/automa-chem-2026" tabindex="-1" aria-hidden="true">
         <img src="/out-loud/automa-chem-2026/00.jpg" alt="" />
       </a>
@@ -63,7 +61,7 @@ const talks = [
   main {
     max-width: 42rem;
     margin: 0 auto;
-    padding: 4rem 1.5rem 6rem;
+    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 6rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }
@@ -162,23 +160,5 @@ const talks = [
     font-size: 0.75rem;
     line-height: 1.6;
     color: rgba(243, 235, 224, 0.4);
-  }
-
-  .nerve-rest {
-    position: fixed;
-    top: calc(38px + env(safe-area-inset-top));
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(247, 197, 106, 0.55) 12%,
-      rgba(247, 197, 106, 0.55) 88%,
-      transparent
-    );
-    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.4));
-    pointer-events: none;
-    z-index: 5;
   }
 </style>
