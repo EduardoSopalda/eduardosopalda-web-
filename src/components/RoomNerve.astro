@@ -179,7 +179,7 @@ const here = STOPS.find((s) => s.href === current);
   /* Same lockup as the docked field wordmark: given name tall,
      surname round, tagline in mono. Upper right, above the nerve. */
   .mark {
-    position: absolute;
+    position: fixed;
     top: calc(42px + env(safe-area-inset-top));
     right: 28px;
     display: flex;
@@ -188,7 +188,7 @@ const here = STOPS.find((s) => s.href === current);
     text-align: right;
     text-decoration: none;
     line-height: 0.9;
-    z-index: 5;
+    z-index: 30;
   }
 
   .given {
