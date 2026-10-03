@@ -1,14 +1,4 @@
 ---
-// One thread, held; the rest simply not here rather than dimmed
-// metadata under every row -- per direct critique's own phrase,
-// "sorting under mess (hold MEMORY, the rest dim)." Six of these,
-// statically generated (not a client-side filter over /writing's own
-// DOM), so each is a real, linkable, JS-off room exactly like every
-// other page on this site -- CLAUDE.md's "reader pages must work with
-// JavaScript off" doesn't carve out an exception for a filtered list.
-// Was already named in CLAUDE.md's own "Repo layout to produce"
-// (thread/[name], listed alongside writing/[slug] from the start) but
-// never actually built until now.
 import '../../styles/global.css';
 import { getCollection } from 'astro:content';
 import { toArticleRow } from '../../data/articleIndex';
@@ -40,45 +30,137 @@ const bySource = entries
   <body>
     <RoomNerve current="/writing" heading={false} />
     <main>
-      <p class="back"><a href="/writing">All writing</a></p>
-      <h1>{thread}</h1>
-      <ThreadNerve active={thread} />
-      {bySource.length > 0 ? (
-        <ArticleList entries={bySource} />
-      ) : (
-        <p class="none">Nothing under {thread} yet.</p>
-      )}
+      <header class="room-title">
+        <p class="room-kicker">Field notes</p>
+        <h1>Writing<em>in circulation.</em></h1>
+      </header>
+      <div class="room">
+        <p class="back"><a href="/writing">All writing</a></p>
+        <ThreadNerve active={thread} />
+        {bySource.length > 0 ? (
+          <ArticleList entries={bySource} />
+        ) : (
+          <p class="none">Nothing under {thread} yet.</p>
+        )}
+      </div>
     </main>
   </body>
 </html>
 
 <style>
-  /* Same fix as /writing and the reader -- see either one's own
-     comment for how this was confirmed (html, not just body, is what
-     actually governs real page scroll). */
   html {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     min-height: 100svh;
   }
 
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nerve-dock);
+    background: var(--void);
+    z-index: 15;
+    pointer-events: none;
+  }
+
   main {
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 8rem;
+    --rail: 17rem;
+    --inset: 1.75rem;
+    --gutter: 3rem;
+    display: grid;
+    grid-template-columns: var(--rail) var(--gutter) minmax(0, 1fr);
+    align-items: start;
+    margin: 0;
+    max-width: none;
+    padding: calc(var(--nerve-dock) + 2.75rem) 2.5rem 9rem var(--inset);
     font-family: var(--font-mono);
     color: var(--bone);
   }
 
-  .back a {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+  .room-title {
+    grid-column: 1;
+    position: fixed;
+    top: calc(var(--nerve-dock) + 2.2rem);
+    left: var(--inset);
+    z-index: 12;
+    width: var(--rail);
+    margin: 0;
+  }
+
+  .room {
+    grid-column: 3;
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: start;
+    min-width: 0;
+  }
+
+  .back,
+  .none,
+  .room > :global(.thread-nerve),
+  .room > :global(.year) {
+    grid-column: 1 / -1;
+  }
+
+  .room > :global(.year) {
+    grid-template-columns: subgrid;
+  }
+
+  .room-kicker {
+    margin: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .room-kicker::after {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    height: 1px;
+    margin-left: 0.65rem;
+    vertical-align: middle;
+    background: rgba(170, 104, 66, 0.7);
+  }
+
+  .room-title h1 {
+    margin: 0.7rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.1rem, 4.4vw, 4.4rem);
+    line-height: 0.86;
+    letter-spacing: -0.03em;
     color: var(--bone);
+  }
+
+  .room-title em {
+    display: block;
+    margin: 0.28em 0 0 2.4em;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.38em;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: var(--bronze);
+  }
+
+  .back {
+    margin: 0 0 1.4rem;
+  }
+
+  .back a {
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--champagne);
     text-decoration: none;
   }
 
@@ -87,24 +169,27 @@ const bySource = entries
     color: var(--gold);
   }
 
-  .back a:focus-visible {
-    outline: 1.5px solid var(--gold);
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
-
-  h1 {
-    margin: 3rem 0 0;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 1.6rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
   .none {
     margin: 2rem 0 0;
     font-size: 0.8rem;
     color: rgba(243, 235, 224, 0.4);
+  }
+
+  @media (max-width: 900px) {
+    main {
+      display: block;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .room-title {
+      position: static;
+      width: auto;
+      margin: 0 0 2.4rem;
+    }
+
+    .room {
+      display: block;
+    }
   }
 </style>

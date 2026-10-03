@@ -33,12 +33,12 @@ const { active = null } = Astro.props;
 <style>
   .thread-nerve {
     position: fixed;
-    left: 0;
-    right: 0;
+    left: calc(1.75rem + 17rem + 3rem);
+    right: 2.5rem;
     bottom: 0;
     z-index: 16;
     margin: 0;
-    padding: 0.4rem 2.5rem 0.8rem;
+    padding: 0.4rem 0 0.8rem;
     background: linear-gradient(to top, var(--void) 70%, transparent);
     pointer-events: none;
   }
@@ -119,6 +119,13 @@ const { active = null } = Astro.props;
     outline: 1.5px solid var(--gold);
     outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .thread-nerve {
+      left: 1.5rem;
+      right: 1.5rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
