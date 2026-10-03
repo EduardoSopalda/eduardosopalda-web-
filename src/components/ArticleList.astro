@@ -30,7 +30,7 @@ function stamp(d: Date) {
   years.map((year) => {
     const rows = entries.filter((a) => a.date.getFullYear() === year);
     return (
-      <section class="year">
+      <section class="archive">
         <h2>{year}</h2>
         <ol class="list">
           {rows.map((a) => (
@@ -59,11 +59,11 @@ function stamp(d: Date) {
 }
 
 <style>
-  .year {
+  .archive {
     margin-top: 3.4rem;
   }
 
-  .year h2 {
+  .archive h2 {
     margin: 0 0 0.35rem;
     font-family: var(--font-display);
     font-style: italic;

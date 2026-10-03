@@ -77,3 +77,194 @@ video {
   display: block;
   max-width: 100%;
 }
+
+/* The archive and the thread row. These live here, not only in their
+   components, so a navigation cannot drop them and leave a raw list. */
+.thread-nerve {
+  position: fixed;
+  left: calc(1.75rem + 17rem + 3rem);
+  right: 2.5rem;
+  bottom: 0;
+  z-index: 16;
+  margin: 0;
+  padding: 1.2rem 0 1rem;
+  background: var(--void);
+  pointer-events: none;
+}
+
+.thread-nerve ol {
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
+  border-top: 1px solid rgba(227, 175, 149, 0.28);
+  pointer-events: auto;
+}
+
+.thread-nerve li {
+  display: flex;
+  align-items: center;
+}
+
+.thread-nerve li + li::before {
+  content: "|";
+  margin: 0 0.7rem;
+  color: rgba(227, 175, 149, 0.45);
+}
+
+.thread-nerve a {
+  display: block;
+  padding: 0.4em 0.3em;
+  margin: -0.4em -0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(227, 175, 149, 0.55);
+}
+
+.thread-nerve a:hover,
+.thread-nerve a:focus-visible,
+.thread-nerve a[aria-current='page'] {
+  color: var(--gold);
+}
+
+.archive {
+  margin-top: 3.4rem;
+}
+
+.archive h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.45rem;
+  letter-spacing: 0.04em;
+  color: var(--bronze);
+}
+
+.archive ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archive li {
+  border-top: 1px solid rgba(243, 235, 224, 0.14);
+}
+
+.archive li:last-child {
+  border-bottom: 1px solid rgba(243, 235, 224, 0.14);
+}
+
+.archive .row {
+  display: grid;
+  grid-template-columns: 4.2rem 4.6rem minmax(0, 1fr) auto;
+  column-gap: 1.6rem;
+  align-items: center;
+  padding: 1.05rem 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.archive .row:hover .title,
+.archive .row:focus-visible .title {
+  color: var(--gold);
+}
+
+.archive .meta {
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  color: var(--champagne);
+}
+
+.archive .plate {
+  width: 4.6rem;
+  height: 5.8rem;
+  display: grid;
+  place-items: center;
+  background: #070707;
+  border: 1px solid rgba(170, 104, 66, 0.4);
+  overflow: hidden;
+}
+
+.archive .plate img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+}
+
+.archive .index {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--bronze);
+}
+
+.archive .copy {
+  min-width: 0;
+  padding-right: 2rem;
+}
+
+.archive .title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 1.8vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--bone);
+}
+
+.archive .lead {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.4;
+  color: var(--flesh);
+}
+
+.archive .thread {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .thread-nerve {
+    left: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .archive .row {
+    grid-template-columns: 3.4rem 1fr auto;
+    row-gap: 0.35rem;
+  }
+
+  .archive .plate {
+    grid-row: 1 / span 2;
+    width: 3.4rem;
+    height: 4.4rem;
+  }
+
+  .archive .meta {
+    grid-column: 2 / -1;
+  }
+
+  .archive .copy {
+    grid-column: 2;
+    padding-right: 0;
+  }
+}
