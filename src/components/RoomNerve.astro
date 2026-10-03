@@ -28,7 +28,7 @@ const here = STOPS.find((s) => s.href === current);
     <span class="family">sopalda</span>
     <span class="tagline">DATA &nbsp;|&nbsp; AI & THE HUMAN EXPERIENCE</span>
   </a>
-  <button type="button" class="menu-toggle" aria-expanded="true" aria-controls="room-stops">Menu</button>
+  <button type="button" class="menu-toggle" aria-expanded="true" aria-controls="room-stops">Main</button>
   <nav class="room-stops" id="room-stops" aria-label="Site">
     {STOPS.map((s) => (
       <a href={s.href} aria-current={s.href === current ? 'page' : undefined}>{s.label}</a>
@@ -323,7 +323,7 @@ const here = STOPS.find((s) => s.href === current);
   .room-stops a:hover,
   .room-stops a:focus-visible,
   .room-stops a[aria-current='page'] {
-    color: var(--gold);
+    color: var(--bronze);
   }
 
   @media (max-width: 720px) {

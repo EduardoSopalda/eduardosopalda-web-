@@ -79,10 +79,6 @@ const ogImageUrl = new URL('/og-image.png', Astro.site);
       if (sessionStorage.getItem('sopalda-return') === '1') {
         document.body.classList.add('is-returning');
         sessionStorage.removeItem('sopalda-return');
-        const nerve = document.getElementById('nerve');
-        const rail = document.getElementById('nerve-rail');
-        if (nerve) nerve.style.opacity = '0';
-        if (rail) rail.style.opacity = '0';
       }
     </script>
     <Field />

@@ -247,18 +247,18 @@ import { STOPS } from '../data/stops';
     opacity: 0;
   }
 
-  body.is-returning.is-arrived .world,
-  body.is-returning.is-arrived .stop {
+  body.is-returning.is-arrived .world {
     opacity: 1;
     transition: opacity 2.6s var(--ease);
   }
 
-  body.is-returning #nerve {
-    opacity: 0 !important;
+  body.is-returning.is-arrived .stop {
+    opacity: 1;
+    transition: opacity 3.2s ease 0.8s;
   }
 
   body.is-returning.is-nerve #nerve {
-    opacity: 1 !important;
+    opacity: 1;
   }
 
   /* ---- specimens ---- */
@@ -657,8 +657,10 @@ import { STOPS } from '../data/stops';
       0 0 10px rgba(247, 197, 106, var(--stopglow, 0));
   }
 
-  .stop[data-near='1'] {
-    color: var(--gold);
+  .stop:hover,
+  .stop[data-near='1'],
+  .stop:focus-visible {
+    color: var(--bronze);
     letter-spacing: 0.52em;
   }
 
@@ -1008,13 +1010,7 @@ import { STOPS } from '../data/stops';
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
     if (document.body.classList.contains('is-returning')) {
       requestAnimationFrame(() => document.body.classList.add('is-arrived'));
-      const nerve = document.getElementById('nerve');
-      const rail = document.getElementById('nerve-rail');
-      const reveal = () => {
-        if (rail) rail.style.opacity = '0';
-        document.body.classList.add('is-nerve');
-      };
-      window.setTimeout(reveal, 500);
+      document.body.classList.add('is-nerve');
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
