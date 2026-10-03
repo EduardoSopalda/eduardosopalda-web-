@@ -108,7 +108,7 @@
   font-weight: 400;
   font-size: clamp(.95rem, 3.1vw, 1.2rem);
   letter-spacing: .1em;
-  color: var(--bronze);
+  color: var(--flesh);
 }
 
 .family {
