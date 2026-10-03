@@ -66,7 +66,7 @@ const here = STOPS.find((s) => s.href === current);
   let rest = 0;
   let running = false;
   let last = 0;
-  const OMEGA = 5;
+  const OMEGA = 2.6;
 
   function travel() {
     const dropPx = window.innerHeight * 0.28;
@@ -85,17 +85,19 @@ const here = STOPS.find((s) => s.href === current);
   }
 
   function step(now) {
-    const dt = Math.min(0.032, (now - last) / 1000 || 0.016);
+    const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
-    const acc = -OMEGA * OMEGA * (y - rest) - 2 * OMEGA * v;
-    v += acc * dt;
-    y += v * dt;
-    if (line) line.style.transform = `translateY(${y}px)`;
-    if (Math.abs(y - rest) < 0.4 && Math.abs(v) < 0.4) {
+    const A = y - rest;
+    const B = v + OMEGA * A;
+    const decay = Math.exp(-OMEGA * dt);
+    y = rest + (A + B * dt) * decay;
+    v = (B - OMEGA * (A + B * dt)) * decay;
+    if (line) line.style.transform = `translate3d(0, ${y}px, 0)`;
+    if (Math.abs(y - rest) < 0.2 && Math.abs(v) < 0.2) {
       y = rest;
       v = 0;
       running = false;
-      if (line) line.style.transform = `translateY(${y}px)`;
+      if (line) line.style.transform = `translate3d(0, ${y}px, 0)`;
       if (rest === 0 && stops) stops.style.opacity = '1';
       return;
     }
