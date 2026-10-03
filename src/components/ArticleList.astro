@@ -77,11 +77,12 @@ function stamp(d: Date) {
   }
 
   .year h2 {
-    margin: 0.35rem 0 0;
-    font-family: var(--font-mono);
+    margin: 0.2rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
     font-weight: 400;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
+    font-size: 1.7rem;
+    letter-spacing: 0;
     color: var(--bronze);
   }
 
@@ -189,20 +190,21 @@ function stamp(d: Date) {
   }
 
   .title {
-    font-family: var(--font-mono);
-    font-size: 1rem;
+    max-width: 46rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.2vw, 1.85rem);
     font-weight: 400;
-    line-height: 1.35;
-    letter-spacing: 0.01em;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
     color: var(--bone);
     transition: color 0.4s var(--ease);
   }
 
   .lead {
-    max-width: 38rem;
+    max-width: 40rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     line-height: 1.4;
     color: var(--flesh);
   }
