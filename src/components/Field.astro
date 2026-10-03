@@ -254,12 +254,12 @@ import { STOPS } from '../data/stops';
 
   body.is-returning.is-arrived .stop {
     opacity: 1;
-    transition: opacity 5.6s ease 1.8s;
+    transition: opacity 6.4s cubic-bezier(.22, .7, .2, 1) 1.6s;
   }
 
   body.is-leaving .stop {
     opacity: 0;
-    transition: opacity 1.6s ease;
+    transition: opacity 2.4s cubic-bezier(.22, .7, .2, 1);
   }
 
   body.is-returning.is-nerve #nerve {
