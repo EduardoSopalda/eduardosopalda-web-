@@ -1257,10 +1257,10 @@ import { STOPS } from '../data/stops';
         haveRealChannel = true;
         return;
       }
-      const name = document.querySelector('.mark');
+      const tagline = document.querySelector('.tagline');
       const purpose = document.getElementById('frag-a');
-      if (!name || !purpose) return;
-      const tBottom = name.getBoundingClientRect().bottom;
+      if (!tagline || !purpose) return;
+      const tBottom = tagline.getBoundingClientRect().bottom;
       const pTop = purpose.getBoundingClientRect().top;
       const margin = 26;
       // Sanity floor before trusting the measurement -- a layout
@@ -1287,11 +1287,9 @@ import { STOPS } from '../data/stops';
       // from producing a degenerate sliver of a channel, not to gate
       // out real short viewports the way 120 accidentally did.
       if (fontsReady && tBottom > 0 && pTop - tBottom > margin * 2 + 40) {
-        // Name, then the nerve, then the phrase. The channel is the
-        // band between those two, and the trough stays above the line.
-        realNerveMin = tBottom + 18;
-        realNerveMax = pTop - 28;
-        landingCap = pTop - 20;
+        realNerveMin = tBottom + margin;
+        realNerveMax = pTop - margin;
+        landingCap = 0;
         haveRealChannel = true;
       }
     }
