@@ -35,8 +35,20 @@ const months = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <RoomNerve current="/writing" />
+    <RoomNerve current="/writing" heading={false} />
     <main>
+      <header class="page-head">
+        <div>
+          <p class="eyebrow">Writing archive</p>
+          <h1>Writing</h1>
+          <p class="standfirst">Twenty five signals, from the space between systems and people.</p>
+        </div>
+        <aside>
+          <p class="aside-kicker">A field notebook</p>
+          <p>The questions that stayed long enough to be written down.</p>
+          <p class="aside-meta">Meaning · trust · responsibility</p>
+        </aside>
+      </header>
       {ahead.length > 0 && (
         <ol class="ahead">
           {ahead.map((a) => (
@@ -102,9 +114,64 @@ const months = [
   main {
     max-width: 68rem;
     margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 3.2rem) 1.5rem 6rem;
+    padding: calc(var(--nerve-dock) + 2.4rem) 1.5rem 6rem;
     font-family: var(--font-mono);
     color: var(--bone);
+  }
+
+  .page-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(12rem, 0.45fr);
+    gap: 2.5rem;
+    align-items: end;
+    margin: 0 0 3.2rem;
+  }
+
+  .eyebrow,
+  .aside-kicker,
+  .aside-meta {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(230, 203, 155, 0.75);
+  }
+
+  .page-head h1 {
+    margin: 0.3rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(4.4rem, 10vw, 7.6rem);
+    line-height: 0.84;
+    letter-spacing: -0.035em;
+    color: var(--bone);
+  }
+
+  .standfirst {
+    margin: 0.85rem 0 0;
+    max-width: 14em;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    line-height: 1.15;
+    color: var(--bronze, #AA6842);
+  }
+
+  aside {
+    border-left: 1px solid rgba(243, 235, 224, 0.16);
+    padding-left: 1.1rem;
+  }
+
+  aside p {
+    margin: 0.55rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--bone);
+  }
+
+  .aside-kicker,
+  .aside-meta {
+    font-family: var(--font-mono);
   }
 
   .featured {
@@ -256,6 +323,7 @@ const months = [
   }
 
   @media (max-width: 800px) {
+    .page-head,
     .featured {
       grid-template-columns: 1fr;
     }

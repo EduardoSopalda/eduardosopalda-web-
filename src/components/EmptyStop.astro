@@ -29,8 +29,10 @@ const current = STOPS.find((s) => s.label === title)?.href ?? '/';
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <RoomNerve current={current} />
+    <RoomNerve current={current} heading={false} />
     <main>
+      <h1>{title}</h1>
+      <p class="label">{subtitle}</p>
       <p class="todo">TODO (Eduardo): {todo}</p>
     </main>
   </body>
@@ -76,8 +78,10 @@ const current = STOPS.find((s) => s.label === title)?.href ?? '/';
   h1 {
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 1.8rem;
-    margin: 0 0 2rem;
+    font-size: clamp(3.2rem, 8vw, 5.5rem);
+    line-height: 0.9;
+    margin: 0 0 0.8rem;
+    color: var(--bone);
   }
 
   .todo {
