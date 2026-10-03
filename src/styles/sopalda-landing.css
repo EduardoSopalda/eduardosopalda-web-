@@ -185,17 +185,12 @@ body.is-docked .family {
 
 body.is-docked .tagline {
   margin-top: 4px;
-  font-size: clamp(.42rem, 1.7vw, .52rem);
+  font-size: .52rem;
   letter-spacing: .16em;
   text-align: right;
-  max-width: 16rem;
-  /* Overrides .tagline's own base opacity:0 + delayed fade-in keyframe
-     (above) -- that fade is Act I's own entrance drama, timed from page
-     load. A tab that lands already docked (see index.astro's own
-     before-paint script and Field.astro's `returning` flag) never runs
-     dock()'s FLIP, which is the only other thing that otherwise ever
-     sets this to visible, so without this override the corner tagline
-     would just never appear at all. */
+  white-space: nowrap;
+  text-wrap: nowrap;
+  max-width: none;
   animation: none;
   opacity: 1;
 }

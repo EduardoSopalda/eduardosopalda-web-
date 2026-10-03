@@ -229,16 +229,14 @@ const here = STOPS.find((s) => s.href === current);
   .tagline {
     display: inline-block;
     margin-top: 4px;
-    max-width: 16rem;
     font-family: var(--font-mono);
-    font-size: clamp(.42rem, 1.7vw, .52rem);
+    font-size: .52rem;
     letter-spacing: .16em;
     line-height: normal;
     text-transform: uppercase;
     text-align: right;
-    text-wrap: balance;
+    white-space: nowrap;
     color: var(--champagne);
-    white-space: normal;
   }
 
   .tagline .amp {
