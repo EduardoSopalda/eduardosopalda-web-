@@ -12,6 +12,7 @@
 // navigation. Same single "back to the field" convention and static
 // .nerve-rest illusion every other room already uses.
 import '../styles/global.css';
+import Nameplate from '../components/Nameplate.astro';
 
 // umbrella-elephant-cutout.png is named throughout context-mockup.html
 // (the hero image and the first specimen card) but, like
@@ -34,6 +35,7 @@ const elephantMissing = true;
   </head>
   <body>
     <div class="nerve-rest" aria-hidden="true"></div>
+    <Nameplate />
     <main>
       <p class="back"><a href="/">Back to the field</a></p>
 
@@ -151,6 +153,7 @@ const elephantMissing = true;
         <p class="endline">
           A collection is never the whole world.<br />It is one way of seeing it.
         </p>
+        <a class="cta" href="/who">Meet the collector &rarr;</a>
       </section>
     </main>
   </body>
@@ -510,6 +513,24 @@ const elephantMissing = true;
     font-size: 1.2rem;
     line-height: 1.5;
     color: var(--bronze);
+  }
+
+  .cta {
+    display: inline-block;
+    margin-top: 1.75rem;
+    border: 1px solid rgba(210, 180, 111, 0.5);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .cta:hover,
+  .cta:focus-visible {
+    background: rgba(210, 180, 111, 0.1);
   }
 
   @media (min-width: 42rem) {

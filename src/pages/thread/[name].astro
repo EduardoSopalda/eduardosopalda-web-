@@ -15,6 +15,7 @@ import { toArticleRow } from '../../data/articleIndex';
 import { THREADS, threadForSlug } from '../../data/threads';
 import ThreadNerve from '../../components/ThreadNerve.astro';
 import ArticleList from '../../components/ArticleList.astro';
+import Nameplate from '../../components/Nameplate.astro';
 
 export async function getStaticPaths() {
   return THREADS.map((t) => ({ params: { name: t.toLowerCase() } }));
@@ -37,6 +38,7 @@ const bySource = entries
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <Nameplate />
     <main>
       <p class="back"><a href="/writing">All writing</a></p>
       <h1>{thread}</h1>

@@ -943,26 +943,40 @@ import { STOPS } from '../data/stops';
     let drag = false, lastX = 0, lastY = 0;
     // Act II -> Act III departure: clicking a stop used to navigate the
     // instant the <a> fired, a hard cut with no acknowledgment that the
-    // nerve itself heard the choice. Now the click is caught, the world
-    // pans so the chosen stop settles at screen center -- "the nerve
-    // looking for its new position" -- and only once that eased glide
-    // finishes does the real navigation happen. DEPART_MS is a fixed,
-    // known duration (not a chase that only asymptotically arrives) for
-    // exactly that reason: something has to trigger the actual
-    // navigation at a definite moment. departEl (not the whole node) is
-    // enough to let the stops loop recognise which stop is departing.
-    const DEPART_MS = 620;
+    // nerve itself heard the choice. Now the click is caught and the
+    // departure plays as two sequential beats, not one blended one --
+    // direct frame-by-frame feedback on the original single-phase
+    // version ("the transition is abrupt... 1, you click. 2, the nerve
+    // slowly gets flat where ever you clicked, everything else keeps
+    // moving away. 3, no new specimens or frags appear. the nerve moves
+    // up the screen") named the exact problem: flatten and rise used to
+    // share one eased value, so the line straightened AND lifted toward
+    // the corner at once while the rest of the scene faded out under
+    // it -- three things reading as one lurch instead of a sequence.
+    // DEPART_FLATTEN_MS is phase one (the world pans to center the
+    // chosen stop while the nerve straightens where it was clicked --
+    // nothing fades, nothing new spawns, everything already drifting
+    // keeps drifting); DEPART_RISE_MS is phase two (the flat line rises
+    // to the wordmark's corner, and only now does the rest of the scene
+    // clear). Both are fixed, known durations (not a chase that only
+    // asymptotically arrives) because something has to trigger the
+    // actual navigation at a definite moment. departEl (not the whole
+    // node) is enough to let the stops loop recognise which stop is
+    // departing.
+    const DEPART_FLATTEN_MS = 480;
+    const DEPART_RISE_MS = 420;
+    const DEPART_MS = DEPART_FLATTEN_MS + DEPART_RISE_MS;
     let departing = false;
     let departStartT = 0;
     let departFromX = 0;
     let departToX = 0;
     let departHref = '';
     let departEl: HTMLAnchorElement | null = null;
-    // The nerve straightening on the way out, in the same window --
-    // not a second animation system next to the pan above, the same
-    // eased progress drives both. straightenAmt is nerveBaseY's own
+    // The nerve straightening on the way out, phase one's own job (see
+    // the phase comment above) -- straightenAmt is nerveBaseY's own
     // amplitude/spring multiplier: 1 at the click (full wave, nothing
-    // changes yet), eased to 0 by the time DEPART_MS is up (dead flat).
+    // changes yet), eased to 0 by the end of DEPART_FLATTEN_MS (dead
+    // flat), then held at 0 through all of phase two.
     // departNerveFrom/To are captured once, at the click, the same way
     // departFromX/departToX are -- not recomputed every frame, so a
     // resize or a stray layout thrash mid-glide can't retarget where
@@ -2253,41 +2267,58 @@ import { STOPS } from '../data/stops';
       // 20s idle; modest and gradual on purpose, not a jump, since a
       // sudden speed change would read as a glitch, not a mood.
       if (departing) {
-        // A fixed-duration cosine ease, the same shape the nerve's own
-        // entrance uses (see entranceSettled above) and for the same
-        // reason: an exponential chase only ever asymptotically arrives,
-        // and something here has to reach an exact, known moment to
-        // actually trigger the navigation. targetX is kept in lockstep
-        // so idle drift doesn't reappear mid-glide or fight the very
-        // next frame if this ever somehow didn't reach p>=1.
-        const p = Math.min(1, (performance.now() - departStartT) / DEPART_MS);
-        const eased = 0.5 - 0.5 * Math.cos(p * Math.PI);
-        worldX = departFromX + (departToX - departFromX) * eased;
-        targetX = worldX;
-        // The straighten and the rise, same progress, same window --
-        // see nerveBaseY's own comment for what straightenAmt actually
-        // does to the curve. This replaces the ordinary channel-chase
-        // below entirely for the duration (that block is now gated on
-        // !departing) rather than fighting it every frame.
-        straightenAmt = 1 - eased;
-        nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * eased;
-        nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * eased;
-        // "The rest of the specimens move out of the screen" -- direct
-        // spec. Before this, departing only ever straightened the nerve
-        // and panned the world; specimens, fragments and the other six
-        // stop links just sat there unchanged until the hard navigate
-        // cut them away mid-frame. #world is a sibling of the #nerve
-        // canvas, not a parent (see the markup above), so fading ITS
-        // opacity clears everything the eye shouldn't keep tracking
-        // while leaving the nerve canvas untouched. Eased faster than
-        // the straighten (squared) so the screen is already reading as
-        // clear well before the flattened line finishes arriving at
-        // the corner, rather than the two finishing in a dead heat.
-        world.style.opacity = String(Math.max(0, 1 - eased * eased * 1.4));
-        if (p >= 1 && departHref) {
-          const href = departHref;
-          departHref = '';
-          location.href = href;
+        const elapsed = performance.now() - departStartT;
+        if (elapsed < DEPART_FLATTEN_MS) {
+          // Phase one -- flatten in place. The world still pans toward
+          // the chosen stop (same fixed-duration cosine ease the
+          // nerve's own entrance uses, for the same reason: something
+          // has to reach an exact, known moment, not just asymptote
+          // toward one) and everything already drifting -- specimens,
+          // fragments, the other six stop labels -- keeps drifting
+          // exactly as it always does, since none of that reads worldX
+          // any differently during a departure. Nothing fades here and
+          // the channel doesn't move yet; straightening is the only
+          // new thing happening this phase, which is the point -- one
+          // clearly readable beat, not three at once.
+          const p = Math.min(1, elapsed / DEPART_FLATTEN_MS);
+          const eased = 0.5 - 0.5 * Math.cos(p * Math.PI);
+          worldX = departFromX + (departToX - departFromX) * eased;
+          targetX = worldX;
+          straightenAmt = 1 - eased;
+          nerveMin = departNerveFromMin;
+          nerveMax = departNerveFromMax;
+          // Only relevant on a session that somehow re-enters this
+          // phase after phase two already set it (can't happen today,
+          // departing only ever moves forward to navigation, but costs
+          // nothing to leave correct).
+          if (world.style.opacity) world.style.opacity = '';
+        } else {
+          // Phase two -- rise. The pan already finished in phase one,
+          // so worldX just holds at departToX here rather than being
+          // re-eased, and the flat line travels from wherever phase one
+          // left it up to the wordmark's own corner. "The rest of the
+          // specimens move out of the screen" -- direct spec, but only
+          // now, in the rise, not blended into the flatten above: #world
+          // is a sibling of the #nerve canvas, not a parent (see the
+          // markup above), so fading ITS opacity clears everything the
+          // eye shouldn't keep tracking while leaving the nerve canvas
+          // untouched. Eased faster than the rise itself (squared) so
+          // the screen is already reading as clear well before the line
+          // finishes arriving at the corner, rather than the two
+          // finishing in a dead heat.
+          const p2 = Math.min(1, (elapsed - DEPART_FLATTEN_MS) / DEPART_RISE_MS);
+          const eased2 = 0.5 - 0.5 * Math.cos(p2 * Math.PI);
+          worldX = departToX;
+          targetX = worldX;
+          straightenAmt = 0;
+          nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * eased2;
+          nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * eased2;
+          world.style.opacity = String(Math.max(0, 1 - eased2 * eased2 * 1.4));
+          if (p2 >= 1 && departHref) {
+            const href = departHref;
+            departHref = '';
+            location.href = href;
+          }
         }
       } else {
         const idleFor = t - lastActiveT;
@@ -2941,7 +2972,12 @@ import { STOPS } from '../data/stops';
         if (slot.state === 'pending') {
           slot.pendingT -= dt;
           slot.el.style.visibility = 'hidden';
-          if (slot.pendingT <= 0) assignFragment(slot);
+          // "No new specimens or frags appear" during a departure --
+          // direct spec. pendingT still counts down (so nothing jumps
+          // the instant the field is back, on the rare case a visitor
+          // returns via back/forward before navigation lands), it just
+          // can't actually spawn a new fragment while departing.
+          if (slot.pendingT <= 0 && !departing) assignFragment(slot);
           continue;
         }
 
@@ -3013,7 +3049,11 @@ import { STOPS } from '../data/stops';
         // see any of it, defeating the whole point of this fix. Skips
         // straight to a fresh assignFragment instead.
         slot.offscreenTime = on ? 0 : slot.offscreenTime + dt;
-        if (slot.offscreenTime >= 3.5) {
+        // Same departure freeze as the pending branch above -- a
+        // fragment that drifts off-screen mid-departure just stays
+        // off-screen rather than being replaced by a new one nobody's
+        // about to see anyway.
+        if (slot.offscreenTime >= 3.5 && !departing) {
           assignFragment(slot);
           continue;
         }
@@ -3354,7 +3394,9 @@ import { STOPS } from '../data/stops';
           // dead -- waiting to respawn as a different fragment
           slot.el.style.opacity = '0';
           slot.respawnDelay -= dt;
-          if (slot.respawnDelay <= 0) assignFragment(slot);
+          // Same departure freeze as above -- see the pending branch's
+          // own comment.
+          if (slot.respawnDelay <= 0 && !departing) assignFragment(slot);
         }
       }
       // ---- stops ----

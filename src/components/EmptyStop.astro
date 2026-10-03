@@ -7,6 +7,7 @@
 // focus, see .stop-sub) -- both this page and the field pull from that
 // one source, so this really is reused, not new copy.
 import '../styles/global.css';
+import Nameplate from './Nameplate.astro';
 
 interface Props {
   title: string;
@@ -25,6 +26,7 @@ const { title, subtitle, todo } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <Nameplate />
     <main>
       <p class="label">{subtitle}</p>
       <h1>{title}</h1>

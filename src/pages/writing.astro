@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import { toArticleRow } from '../data/articleIndex';
 import ThreadNerve from '../components/ThreadNerve.astro';
 import ArticleList from '../components/ArticleList.astro';
+import Nameplate from '../components/Nameplate.astro';
 
 const entries = await getCollection('articles');
 const bySource = entries.map(toArticleRow).sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -67,6 +68,7 @@ const masthead: { image: string; alt: string } | null = {
          the "still pulsating" feeling the request asked for carries
          into a page that has no per-frame loop of its own. -->
     <div class="nerve-rest" aria-hidden="true"></div>
+    <Nameplate />
     <main>
       <p class="back"><a href="/">Back to the field</a></p>
 

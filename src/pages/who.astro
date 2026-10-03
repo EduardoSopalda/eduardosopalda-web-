@@ -14,6 +14,7 @@
 // illusion at the top of the document (see writing.astro's own comment
 // on why that exists as CSS, not a shared animated component).
 import '../styles/global.css';
+import Nameplate from '../components/Nameplate.astro';
 
 // live-specimen.mov, named in the mockup bundle's own README.txt as the
 // Who page's jellyfish footage, was never actually present in any of
@@ -38,6 +39,7 @@ const jellyfishPoster = '/concepts/data-jellyfish-cutout.png';
   </head>
   <body>
     <div class="nerve-rest" aria-hidden="true"></div>
+    <Nameplate />
     <main>
       <p class="back"><a href="/">Back to the field</a></p>
 

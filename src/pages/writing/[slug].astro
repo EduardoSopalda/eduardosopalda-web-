@@ -23,6 +23,7 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { parseArticleBody, headingsOf } from '../../lib/parseArticleBody';
 import { catalogNoForTitle, leadFragmentFor } from '../../data/articleIndex';
+import Nameplate from '../../components/Nameplate.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('articles');
@@ -55,6 +56,7 @@ const lead = leadFragmentFor(title);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body data-family={family}>
+    <Nameplate />
     <p class="back"><a href="/writing">All writing</a></p>
 
     <header class="plate" id="plate">

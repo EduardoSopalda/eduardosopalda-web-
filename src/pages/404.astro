@@ -6,6 +6,7 @@
 // don't have rooms built yet) land somewhere instead of a raw framework
 // error.
 import '../styles/global.css';
+import Nameplate from '../components/Nameplate.astro';
 ---
 
 <!doctype html>
@@ -18,6 +19,7 @@ import '../styles/global.css';
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
+    <Nameplate />
     <main>
       <p class="code">404</p>
       <p class="msg">This page does not exist yet.</p>
