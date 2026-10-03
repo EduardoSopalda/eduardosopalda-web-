@@ -81,7 +81,7 @@ const here = STOPS.find((s) => s.href === current);
      surname round, tagline in mono. Upper right, above the nerve. */
   .mark {
     position: absolute;
-    top: calc(14px + env(safe-area-inset-top));
+    top: calc(42px + env(safe-area-inset-top));
     right: 28px;
     display: flex;
     flex-direction: column;
@@ -158,7 +158,7 @@ const here = STOPS.find((s) => s.href === current);
      off instead of crossfading the whole scene into a bar. */
   .room-line {
     view-transition-name: nerve-rail;
-    position: absolute;
+    position: fixed;
     top: calc(var(--nerve-dock) - 6px);
     left: 0;
     right: 0;
@@ -208,7 +208,7 @@ const here = STOPS.find((s) => s.href === current);
 
   .room-stops {
     position: absolute;
-    top: calc(62px + env(safe-area-inset-top));
+    top: calc(86px + env(safe-area-inset-top));
     left: 1.4rem;
     right: 13rem;
     display: flex;
