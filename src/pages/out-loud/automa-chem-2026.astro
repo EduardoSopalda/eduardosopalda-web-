@@ -1,17 +1,26 @@
 ---
+// Berlin, restyled as a room. The film, the stills, and the script
+// stay closed until the day after the talk: 27 October 2026, Berlin time.
 import '../../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../../styles/global.css';
 import RoomNerve from '../../components/RoomNerve.astro';
+import RoomShell from '../../components/RoomShell.astro';
+import { berlinOpen } from '../../data/berlin';
+
+export const prerender = false;
+
+const open = berlinOpen();
+const media = '/api/berlin';
 
 const chapters = [
-  { id: 'open', t: 0, still: '00', kicker: 'OPEN', title: 'Two distances' },
-  { id: 'architect', t: 58, still: '01', kicker: 'ACT 01', title: 'The Architect' },
-  { id: 'brasilia', t: 128, still: '02', kicker: 'ACT 02', title: 'Brasília' },
-  { id: 'evidence', t: 232, still: '03', kicker: 'ACT 03', title: 'When ambition becomes evidence' },
-  { id: 'scales', t: 312, still: '04', kicker: 'ACT 04', title: 'AI scales what is there' },
-  { id: 'twins', t: 404, still: '05', kicker: 'ACT 05', title: 'AI digital twins' },
-  { id: 'close', t: 504, still: '06', kicker: 'ACT 06', title: 'Close' },
+  { id: 'open', t: 0, still: '00', kicker: 'Open', title: 'Two distances' },
+  { id: 'architect', t: 58, still: '01', kicker: 'Act 01', title: 'The architect' },
+  { id: 'brasilia', t: 128, still: '02', kicker: 'Act 02', title: 'Brasília' },
+  { id: 'evidence', t: 232, still: '03', kicker: 'Act 03', title: 'When ambition becomes evidence' },
+  { id: 'scales', t: 312, still: '04', kicker: 'Act 04', title: 'AI scales what is there' },
+  { id: 'twins', t: 404, still: '05', kicker: 'Act 05', title: 'AI digital twins' },
+  { id: 'close', t: 504, still: '06', kicker: 'Act 06', title: 'Close' },
 ];
 
 const script = [
@@ -95,597 +104,348 @@ const script = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Data and AI in Sustainable Digital Transformation · EDUARDO sopalda</title>
+    <title>Berlin · EDUARDO sopalda</title>
+    {!open && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
     <RoomNerve current="/out-loud" heading={false} />
-    <header class="door">
-      <a class="door-mark" href="/"><span>EDUARDO</span> sopalda</a>
-      <a class="door-stop" href="/out-loud">Out Loud</a>
-      <nav class="door-nav" aria-label="This talk">
-        <a href="#film">Film</a>
-        <a href="#script">Script</a>
-        <a href="#roadmap">Roadmap</a>
-      </nav>
-      <a class="door-back" href="/">Back to the field</a>
-    </header>
-    <div class="nerve" aria-hidden="true"></div>
+    <RoomShell title="Out loud" italic="Berlin.">
+      <p class="kicker">AUTOMA Chem · Estrel Berlin · 26 October · 9:40</p>
+      <h2>Data and AI in Sustainable Digital Transformation</h2>
+      <p class="deck">From Brasília to the plant floor.</p>
 
-    <main class="desk">
-      <header class="mast">
-        <div>
-          <h1>Data and AI in Sustainable Digital Transformation</h1>
-          <p class="deck">From Brasília to the Plant Floor</p>
-          <p class="event">AUTOMA Chem 2026 · Estrel Berlin · 26 October · 9:40</p>
-          <div class="downloads" id="roadmap">
-            <a href="/out-loud/automa-chem-2026/roadmap.pdf" download="AUTOMA-Chem-2026-Roadmap.pdf">Download the roadmap (PDF)</a>
-            <a href="/out-loud/automa-chem-2026/film.mp4" download="AUTOMA-Chem-2026-Eduardo-Sopalda-10min.mp4">Download the film (MP4)</a>
-          </div>
-        </div>
-        <p class="who"><strong>Eduardo Sopalda</strong><span>D&T · Global Data Governance Lead</span></p>
-      </header>
+      {open ? (
+        <div class="open">
+          <p class="downloads" id="roadmap">
+            <a href={`${media}/roadmap.pdf`} download="AUTOMA-Chem-2026-Roadmap.pdf">Roadmap</a>
+            <a href={`${media}/film.mp4`} download="AUTOMA-Chem-2026-Eduardo-Sopalda.mp4">Film</a>
+          </p>
 
-      <div class="desk-body">
-        <section class="stage" id="film" aria-label="Film">
-          <div class="frame">
-            <video
-              id="talk-film"
-              src="/out-loud/automa-chem-2026/film.mp4"
-              poster="/out-loud/automa-chem-2026/00.jpg"
-              playsinline
-              muted
-              preload="metadata"
-            ></video>
-          </div>
-          <div class="transport">
-            <button class="pp" id="talk-play" type="button" aria-label="Play">Play</button>
-            <input class="scrub" id="talk-scrub" type="range" min="0" max="600" step="0.1" value="0" aria-label="Film position" />
-            <div class="times" id="talk-time">0:00 / 10:00</div>
-          </div>
-          <div class="strip" id="talk-strip">
-            {
-              chapters.map((c) => (
+          <section class="stage" id="film" aria-label="Film">
+            <div class="frame">
+              <video id="talk-film" src={`${media}/film.mp4`} poster={`${media}/00.jpg`} playsinline preload="metadata"></video>
+            </div>
+            <div class="transport">
+              <button class="pp" id="talk-play" type="button" aria-label="Play">Play</button>
+              <input class="scrub" id="talk-scrub" type="range" min="0" max="600" step="0.1" value="0" aria-label="Film position" />
+              <div class="times" id="talk-time">0:00 / 10:00</div>
+            </div>
+            <div class="strip" id="talk-strip">
+              {chapters.map((c) => (
                 <button type="button" data-t={c.t} data-id={c.id} data-kicker={c.kicker} data-title={c.title} aria-label={c.title}>
-                  <img src={`/out-loud/automa-chem-2026/${c.still}.jpg`} alt="" />
+                  <img src={`${media}/${c.still}.jpg`} alt="" />
                 </button>
-              ))
-            }
-          </div>
-        </section>
-        <aside class="rail" aria-label="Acts">
-          <div class="act-kicker" id="talk-kicker">OPEN</div>
-          <h2 class="act-title" id="talk-act">Two distances</h2>
-          <div class="copper-rule"></div>
-          <p class="line" id="talk-line">Data and AI in sustainable digital transformation. From Brasília to the plant floor.</p>
-          <ol class="chapters">
-            {
-              chapters.map((c, i) => (
+              ))}
+            </div>
+          </section>
+
+          <aside class="rail" aria-label="Acts">
+            <p class="act-kicker" id="talk-kicker">Open</p>
+            <p class="act-title" id="talk-act">Two distances</p>
+            <p class="line" id="talk-line">Data and AI in sustainable digital transformation. From Brasília to the plant floor.</p>
+            <ol class="chapters">
+              {chapters.map((c, i) => (
                 <li>
                   <button type="button" data-t={c.t} data-id={c.id} data-kicker={c.kicker} data-title={c.title}>
                     <small>{String(i).padStart(2, '0')}</small>
                     <strong>{c.title}</strong>
                   </button>
                 </li>
-              ))
-            }
-          </ol>
-        </aside>
-      </div>
+              ))}
+            </ol>
+          </aside>
 
-      <section class="script" id="script" aria-label="Speaking script">
-        <div class="script-head">
-          <h2>Speaking script</h2>
+          <section class="script" id="script" aria-label="Speaking script">
+            <h3>Speaking script</h3>
+            <div class="script-body">
+              {script.map((s) => (
+                <article id={`act-${s.id}`} data-id={s.id}>
+                  <button type="button" data-t={s.t} data-id={s.id}>
+                    <small>{s.n}</small>
+                    <span>{s.title}</span>
+                  </button>
+                  {s.paras.map((para) => <p>{para}</p>)}
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
-        <div class="script-body">
-          {
-            script.map((s) => (
-              <article id={`act-${s.id}`} data-id={s.id}>
-                <button type="button" data-t={s.t} data-id={s.id}>
-                  <small>{s.n}</small>
-                  <span>{s.title}</span>
-                </button>
-                {s.paras.map((para) => (
-                  <p>{para}</p>
-                ))}
-              </article>
-            ))
+      ) : (
+        <p class="sealed">The film and the script stay closed until after the talk.</p>
+      )}
+    </RoomShell>
+
+    {open && (
+      <script is:inline>
+        (function () {
+          var video = document.getElementById('talk-film');
+          var play = document.getElementById('talk-play');
+          var scrub = document.getElementById('talk-scrub');
+          var timeEl = document.getElementById('talk-time');
+          var kicker = document.getElementById('talk-kicker');
+          var act = document.getElementById('talk-act');
+          var line = document.getElementById('talk-line');
+          var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-t]'));
+          var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapters [data-t]'));
+          var cues = [
+            [0, 'Data and AI in sustainable digital transformation. From Brasília to the plant floor.'],
+            [58, '…not as a metaphor.'],
+            [112, 'We design from above. Not always for the person who has to live with the result.'],
+            [128, 'From above, every line found its place.'],
+            [168, 'Below, every line met a person.'],
+            [210, 'I built a plaza nobody wanted to stand in.'],
+            [240, '11,001.8 kt CO₂e. It is a data product.'],
+            [276, 'The number is ours. Much of the evidence is elsewhere.'],
+            [312, 'AI scales what is there.'],
+            [372, 'Sometimes AI is the answer. Sometimes the answer is better data. Sometimes it is a better process.'],
+            [404, 'AI digital twins and smarter decisions.'],
+            [468, 'Helping people find better ways to run the systems they already have, with less waste built in.'],
+            [504, 'Agents do not own risk. They do not carry accountability. Humans do. Always.'],
+            [540, 'Agents do not own risk. They do not carry accountability.'],
+            [572, 'Humans do. Always.']
+          ];
+          if (!video || !play || !scrub) return;
+
+          function fmt(s) {
+            if (!isFinite(s) || s < 0) s = 0;
+            var m = Math.floor(s / 60);
+            var r = Math.floor(s % 60);
+            return m + ':' + String(r).padStart(2, '0');
           }
-        </div>
-      </section>
-    </main>
 
-    <script is:inline>
-      (function () {
-        var video = document.getElementById('talk-film');
-        var play = document.getElementById('talk-play');
-        var scrub = document.getElementById('talk-scrub');
-        var timeEl = document.getElementById('talk-time');
-        var kicker = document.getElementById('talk-kicker');
-        var act = document.getElementById('talk-act');
-        var line = document.getElementById('talk-line');
-        var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-t]'));
-        var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapters [data-t]'));
-        var cues = [
-          [0, 'Data and AI in sustainable digital transformation. From Brasília to the plant floor.'],
-          [58, '…not as a metaphor.'],
-          [112, 'We design from above. Not always for the person who has to live with the result.'],
-          [128, 'From above, every line found its place.'],
-          [168, 'Below, every line met a person.'],
-          [210, 'I built a plaza nobody wanted to stand in.'],
-          [240, '11,001.8 kt CO₂e. It is a data product.'],
-          [276, 'The number is ours. Much of the evidence is elsewhere.'],
-          [312, 'AI scales what is there.'],
-          [372, 'Sometimes AI is the answer. Sometimes the answer is better data. Sometimes it is a better process.'],
-          [404, 'AI digital twins and smarter decisions.'],
-          [468, 'Helping people find better ways to run the systems they already have, with less waste built in.'],
-          [504, 'Agents do not own risk. They do not carry accountability. Humans do. Always.'],
-          [540, 'Agents do not own risk. They do not carry accountability.'],
-          [572, 'Humans do. Always.']
-        ];
-        if (!video || !play || !scrub) return;
+          function mark(t) {
+            var current = chapters[0];
+            chapters.forEach(function (b) {
+              if (Number(b.getAttribute('data-t')) <= t + 0.15) current = b;
+            });
+            if (!current) return;
+            var id = current.getAttribute('data-id');
+            chapters.forEach(function (b) {
+              b.classList.toggle('on', b === current);
+            });
+            document.querySelectorAll('.script-body article').forEach(function (article) {
+              article.classList.toggle('on', article.getAttribute('data-id') === id);
+            });
+            if (kicker) kicker.textContent = current.getAttribute('data-kicker') || '';
+            if (act) act.textContent = current.getAttribute('data-title') || '';
+            var spoken = cues[0][1];
+            cues.forEach(function (c) {
+              if (c[0] <= t + 0.15) spoken = c[1];
+            });
+            if (line) line.textContent = spoken;
+            document.querySelectorAll('.strip [data-t]').forEach(function (b) {
+              var on = b.getAttribute('data-id') === id;
+              b.classList.toggle('on', on);
+              if (on) b.setAttribute('aria-current', 'true');
+              else b.removeAttribute('aria-current');
+            });
+          }
 
-        function fmt(s) {
-          if (!isFinite(s) || s < 0) s = 0;
-          var m = Math.floor(s / 60);
-          var r = Math.floor(s % 60);
-          return m + ':' + String(r).padStart(2, '0');
-        }
+          function paint() {
+            var d = video.duration || 600;
+            scrub.max = String(d);
+            scrub.value = String(video.currentTime || 0);
+            if (timeEl) timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(d);
+            mark(video.currentTime || 0);
+            play.textContent = video.paused ? 'Play' : 'Pause';
+            play.setAttribute('aria-label', video.paused ? 'Play' : 'Pause');
+          }
 
-        function mark(t) {
-          var current = chapters[0];
-          chapters.forEach(function (b) {
-            if (Number(b.getAttribute('data-t')) <= t + 0.15) current = b;
-          });
-          if (!current) return;
-          var id = current.getAttribute('data-id');
-          chapters.forEach(function (b) {
-            b.classList.toggle('on', b === current);
-          });
-          document.querySelectorAll('.script-body article').forEach(function (article) {
-            article.classList.toggle('on', article.getAttribute('data-id') === id);
-          });
-          if (kicker) kicker.textContent = current.getAttribute('data-kicker') || '';
-          if (act) act.textContent = current.getAttribute('data-title') || '';
-          var spoken = cues[0][1];
-          cues.forEach(function (c) {
-            if (c[0] <= t + 0.15) spoken = c[1];
-          });
-          if (line) line.textContent = spoken;
-          document.querySelectorAll('.strip [data-t]').forEach(function (b) {
-            var on = b.getAttribute('data-id') === id;
-            b.classList.toggle('on', on);
-            if (on) b.setAttribute('aria-current', 'true');
-            else b.removeAttribute('aria-current');
-          });
-        }
-
-        function paint() {
-          var d = video.duration || 600;
-          scrub.max = String(d);
-          scrub.value = String(video.currentTime || 0);
-          scrub.style.setProperty('--p', (video.currentTime / d) * 100 + '%');
-          if (timeEl) timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(d);
-          mark(video.currentTime || 0);
-          play.textContent = video.paused ? 'Play' : 'Pause';
-          play.setAttribute('aria-label', video.paused ? 'Play' : 'Pause');
-        }
-
-        function go(t) {
-          video.currentTime = t;
-          var pending = video.play();
-          if (pending && pending.catch) pending.catch(function () {});
-        }
-
-        play.addEventListener('click', function () {
-          if (video.paused) {
+          function go(t) {
+            video.currentTime = t;
             var pending = video.play();
             if (pending && pending.catch) pending.catch(function () {});
-          } else video.pause();
-        });
-        scrub.addEventListener('input', function () {
-          video.currentTime = Number(scrub.value);
-          paint();
-        });
-        buttons.forEach(function (b) {
-          if (b === scrub) return;
-          b.addEventListener('click', function () {
-            go(Number(b.getAttribute('data-t')));
-          });
-        });
-        video.addEventListener('timeupdate', paint);
-        video.addEventListener('loadedmetadata', paint);
-        video.addEventListener('play', paint);
-        video.addEventListener('pause', paint);
-        document.addEventListener('keydown', function (e) {
-          var tag = e.target && e.target.tagName;
-          if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-          if (e.key === ' ' || e.key === 'k') {
-            e.preventDefault();
-            play.click();
           }
-        });
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!reduce) {
-          var pending = video.play();
-          if (pending && pending.catch) pending.catch(function () {});
-        }
-        mark(0);
-      })();
-    </script>
+
+          play.addEventListener('click', function () {
+            if (video.paused) {
+              var pending = video.play();
+              if (pending && pending.catch) pending.catch(function () {});
+            } else video.pause();
+          });
+          scrub.addEventListener('input', function () {
+            video.currentTime = Number(scrub.value);
+            paint();
+          });
+          buttons.forEach(function (b) {
+            if (b === scrub) return;
+            b.addEventListener('click', function () {
+              go(Number(b.getAttribute('data-t')));
+            });
+          });
+          video.addEventListener('timeupdate', paint);
+          video.addEventListener('loadedmetadata', paint);
+          video.addEventListener('play', paint);
+          video.addEventListener('pause', paint);
+          document.addEventListener('keydown', function (e) {
+            var tag = e.target && e.target.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            if (e.key === ' ' || e.key === 'k') {
+              e.preventDefault();
+              play.click();
+            }
+          });
+          mark(0);
+        })();
+      </script>
+    )}
   </body>
 </html>
 
 <style>
-  html {
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #e9d4ba;
-  }
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); background: var(--void); }
 
-  body {
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin: 0;
-    background: #e9d4ba;
-    color: #0f0f11;
-  }
-
-  .door {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.35rem 1.1rem;
-    align-items: baseline;
-    margin-top: calc(var(--nerve-dock) + 2.4rem);
-    padding: 0.85rem 1.4rem 0.7rem;
-    background: #000;
-    color: #f3ebe0;
+  .kicker, .downloads a, .times, .act-kicker, .chapters button, .pp {
     font-family: var(--font-mono);
-  }
-
-  .door a {
-    color: #f3ebe0;
-    text-decoration: none;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
   }
 
-  .door-mark {
-    font-family: var(--font-display);
-    letter-spacing: 0.16em;
+  .kicker {
+    margin: 0;
+    font-size: 0.66rem;
+    color: var(--champagne);
   }
 
-  .door-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.15rem;
-  }
-
-  .door-back {
-    justify-self: end;
-  }
-
-  .door a:hover,
-  .door a:focus-visible {
-    color: var(--gold);
-  }
-
-  .door a:focus-visible,
-  button:focus-visible {
-    outline: 1.5px solid var(--gold);
-    outline-offset: 3px;
-  }
-
-  .nerve {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(247, 197, 106, 0.55) 12%, rgba(247, 197, 106, 0.55) 88%, transparent);
-  }
-
-  .desk {
-    background: #e9d4ba;
-    color: #0f0f11;
-  }
-
-  .mast {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: flex-end;
-    padding: 1.1rem 1.4rem 0.85rem;
-    border-bottom: 1px solid #c4a888;
-  }
-
-  h1,
-  .deck,
-  .act-title,
-  .script-head h2,
-  .script-body button {
+  h2, .deck, .act-title, .script h3, .script-body button span {
     font-family: var(--font-display);
     font-weight: 400;
   }
 
-  .mast h1 {
-    margin: 0;
-    max-width: 18ch;
-    font-size: clamp(1.45rem, 2.4vw, 2.15rem);
-    line-height: 0.98;
+  h2 {
+    margin: 0.8rem 0 0;
+    max-width: 16em;
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
   }
 
-  .deck {
-    margin: 0.35rem 0 0;
+  .deck, .sealed, .line, .script-body p {
+    font-family: var(--font-display);
     font-style: italic;
-    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    color: var(--flesh);
   }
 
-  .event,
-  .who,
-  .downloads a,
-  .times,
-  .act-kicker,
-  .chapters button,
-  .hint {
-    font-family: var(--font-mono);
-  }
+  .deck { margin: 0.7rem 0 0; font-size: 1.25rem; }
+  .sealed { margin: 2rem 0 0; max-width: 28rem; font-size: 1.2rem; }
 
-  .event {
-    margin: 0.45rem 0 0;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #365f7c;
-  }
-
-  .downloads {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.25rem;
-    margin-top: 0.65rem;
-  }
-
+  .downloads { display: flex; gap: 1.4rem; margin: 1.4rem 0 0; }
   .downloads a {
-    color: #762f0b;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    color: var(--bronze);
+    font-size: 0.66rem;
     text-decoration: none;
-    border-bottom: 1px solid #762f0b;
-    min-height: 2.75rem;
-    display: inline-flex;
-    align-items: center;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.7);
   }
+  .downloads a:hover { color: var(--gold); }
 
-  .who {
-    margin: 0;
-    text-align: right;
-    font-size: 0.78rem;
-    line-height: 1.35;
+  .stage { margin-top: 2rem; }
+  .frame {
+    background: #070707;
+    border: 1px solid rgba(170, 104, 66, 0.4);
   }
-
-  .who strong,
-  .who span {
-    display: block;
-  }
-
-  .who span {
-    color: #48565f;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-  }
-
-  .desk-body {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
-  }
-
-  .stage {
-    border-right: 1px solid #c4a888;
-  }
-
-  .frame video {
-    width: 100%;
-    max-height: calc(100dvh - 9.5rem);
-    background: #dcc4a6;
-    object-fit: contain;
-  }
+  video { display: block; width: 100%; height: auto; background: #070707; }
 
   .transport {
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 0.75rem;
+    gap: 0.8rem;
     align-items: center;
-    padding: 0.7rem 1rem 0.9rem;
+    margin-top: 0.7rem;
   }
-
   .pp {
-    min-width: 4.5rem;
-    min-height: 2.75rem;
-    border-radius: 999px;
-    border: 1px solid #762f0b;
-    background: transparent;
-    color: #762f0b;
-    font-family: var(--font-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-size: 0.68rem;
-  }
-
-  .times {
-    font-variant-numeric: tabular-nums;
-    font-size: 0.75rem;
-    color: #48565f;
-  }
-
-  .strip {
-    display: flex;
-    gap: 0.45rem;
-    overflow-x: auto;
-    padding: 0 1rem 0.85rem;
-  }
-
-  .strip button {
-    flex: 0 0 8.5rem;
     padding: 0;
     border: 0;
-    border-bottom: 2px solid transparent;
-    background: transparent;
+    background: none;
+    color: var(--champagne);
+    font-size: 0.66rem;
+    cursor: pointer;
   }
+  .pp:hover { color: var(--gold); }
+  .scrub { width: 100%; accent-color: var(--bronze); }
+  .times { font-size: 0.62rem; color: var(--champagne); }
 
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: 0.8rem;
+  }
+  .strip button {
+    padding: 0;
+    border: 1px solid rgba(170, 104, 66, 0.35);
+    background: #070707;
+    cursor: pointer;
+  }
   .strip img {
     display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+    height: 4.2rem;
+    object-fit: contain;
   }
+  .strip button.on { border-color: var(--gold); }
 
-  .strip button.on {
-    border-bottom-color: #762f0b;
-  }
+  .rail { margin-top: 2.2rem; }
+  .act-kicker { margin: 0; font-size: 0.62rem; color: var(--champagne); }
+  .act-title { margin: 0.35rem 0 0; font-size: 1.7rem; letter-spacing: -0.03em; }
+  .line { margin: 0.7rem 0 0; max-width: 36rem; font-size: 1.15rem; }
 
-  .line {
-    margin: 0 0 0.8rem;
-    min-height: 4.4rem;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.02rem;
-    line-height: 1.35;
-  }
-
-  .scrub {
+  .chapters { list-style: none; margin: 1.2rem 0 0; padding: 0; }
+  .chapters button {
+    display: flex;
+    gap: 0.8rem;
     width: 100%;
-    accent-color: #762f0b;
-  }
-
-  .rail {
-    padding: 1.1rem;
-  }
-
-  .act-kicker {
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    color: #365f7c;
-  }
-
-  .act-title {
-    margin: 0.45rem 0 0;
-    font-size: 1.65rem;
-    line-height: 1.05;
-  }
-
-  .copper-rule {
-    height: 2px;
-    margin: 0.8rem 0 0.9rem;
-    background: #762f0b;
-  }
-
-  .chapters {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .chapters button,
-  .script-body button {
-    width: 100%;
-    text-align: left;
+    padding: 0.55rem 0;
     border: 0;
-    background: transparent;
-    color: inherit;
+    border-top: 1px solid rgba(243, 235, 224, 0.14);
+    background: none;
+    color: var(--champagne);
+    font-size: 0.66rem;
+    text-align: left;
     cursor: pointer;
   }
-
-  .chapters button {
-    display: grid;
-    grid-template-columns: 2.4rem 1fr;
-    gap: 0.35rem;
-    padding: 0.55rem 0.4rem;
-    border-left: 2px solid transparent;
-    font-size: 0.92rem;
-  }
-
-  .chapters button.on,
-  .script-body article.on {
-    border-left-color: #762f0b;
-    background: rgba(220, 196, 166, 0.55);
-  }
-
-  .chapters small,
-  .script-body small {
-    color: #365f7c;
-    letter-spacing: 0.12em;
-    font-size: 0.68rem;
-  }
-
-  .script {
-    display: grid;
-    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
-    border-top: 1px solid #c4a888;
-  }
-
-  .script-head {
-    padding: 1.35rem 1.4rem 1.6rem;
-  }
-
-  .script-head h2 {
-    margin: 0;
-    font-size: 1.7rem;
-  }
-
-  .script-body {
-    border-left: 1px solid #c4a888;
-  }
-
-  .script-body article {
-    padding: 1rem 1.6rem 1.15rem 1.15rem;
-    border-left: 2px solid transparent;
-  }
-
-  .script-body button {
-    display: grid;
-    grid-template-columns: 2.6rem 1fr;
-    font-size: 1.35rem;
-    line-height: 1.15;
-  }
-
-  .script-body p {
-    margin: 0.55rem 0 0 2.95rem;
-    max-width: 68ch;
+  .chapters strong {
     font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
     font-size: 1.05rem;
-    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--bone);
   }
+  .chapters button.on strong { color: var(--gold); }
 
-  @media (min-width: 720px) {
-    .door {
-      grid-template-columns: auto auto 1fr auto;
-      align-items: center;
-    }
+  .script { margin-top: 3.2rem; }
+  .script h3 {
+    margin: 0;
+    font-size: 0.66rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--champagne);
   }
+  .script-body article {
+    padding: 1.2rem 0;
+    border-top: 1px solid rgba(243, 235, 224, 0.14);
+  }
+  .script-body button {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--champagne);
+    cursor: pointer;
+  }
+  .script-body button small { font-family: var(--font-mono); letter-spacing: 0.14em; }
+  .script-body button span { font-style: italic; font-size: 1.35rem; color: var(--bone); }
+  .script-body p { margin: 0.7rem 0 0; max-width: 40rem; font-size: 1.08rem; line-height: 1.5; }
+  .script-body article.on button span { color: var(--gold); }
 
-  @media (max-width: 860px) {
-    .mast,
-    .desk-body,
-    .script {
-      display: block;
-    }
-
-    .who {
-      text-align: left;
-      margin-top: 0.8rem;
-    }
-
-    .stage {
-      border-right: 0;
-    }
-
-    .script-body {
-      border-left: 0;
-      border-top: 1px solid #c4a888;
-    }
-
-    .script-body p {
-      margin-left: 0;
-    }
+  @media (max-width: 800px) {
+    .strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .transport { grid-template-columns: auto 1fr; }
+    .times { grid-column: 1 / -1; }
   }
 </style>
