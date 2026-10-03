@@ -13,11 +13,10 @@ import RoomNerve from '../components/RoomNerve.astro';
 
 const entries = await getCollection('articles');
 const bySource = entries.map(toArticleRow).sort((a, b) => (a.date < b.date ? 1 : -1));
-// The plate belongs to a piece that has one. A newer note with no
-// illustration still leads the archive; it does not borrow a picture.
-const featured = bySource.find((a) => a.image) ?? bySource[0];
-const ahead = featured ? bySource.filter((a) => a.date > featured.date) : [];
-const rest = featured ? bySource.filter((a) => a.id !== featured.id && !ahead.some((n) => n.id === a.id)) : bySource;
+// The current note is the newest piece. It changes when a new one is
+// published. The plate appears only if that piece has one.
+const featured = bySource[0];
+const rest = featured ? bySource.filter((a) => a.id !== featured.id) : bySource;
 const context = STOPS.find((s) => s.href === '/context');
 
 const months = [
@@ -37,7 +36,10 @@ const months = [
   <body>
     <RoomNerve current="/writing" heading={false} />
     <main>
-      <p class="room-kicker">Writing</p>
+      <header class="room-title">
+        <p class="room-kicker">Field notes</p>
+        <h1>Writing <em>in circulation.</em></h1>
+      </header>
       {featured && (
         <article class="featured">
           <div class="featured-copy">
@@ -56,18 +58,6 @@ const months = [
             </a>
           )}
         </article>
-      )}
-      {ahead.length > 0 && (
-        <ol class="ahead">
-          {ahead.map((a) => (
-            <li>
-              <a href={`/writing/${a.id}`}>
-                <span>{a.date.getDate()} {months[a.date.getMonth()]} · {a.kind}</span>
-                {a.title}
-              </a>
-            </li>
-          ))}
-        </ol>
       )}
 
       <ThreadNerve />
@@ -115,12 +105,25 @@ const months = [
     color: var(--bone);
   }
 
-  .room-kicker {
-    margin: 0 0 2.2rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--champagne);
+  .room-title {
+    margin: 0 0 3.2rem;
+  }
+
+  .room-title h1 {
+    margin: 0.35rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.4rem, 7vw, 5.6rem);
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    color: var(--bone);
+  }
+
+  .room-title em {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--bronze);
   }
 
   .featured {

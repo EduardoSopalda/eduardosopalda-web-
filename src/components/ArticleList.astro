@@ -121,10 +121,10 @@ function stamp(d: Date) {
 
   .row {
     display: grid;
-    grid-template-columns: 11.5rem 4.2rem 1fr;
-    gap: 1.4rem;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.6rem;
     align-items: start;
-    padding: 1.8rem 0;
+    padding: 1.4rem 0;
     text-decoration: none;
     color: inherit;
   }
@@ -144,12 +144,12 @@ function stamp(d: Date) {
      without a plate keep the catalogue number in the same slot, so
      the column doesn't collapse. */
   .plate {
-    width: 11.5rem;
-    height: 7.2rem;
+    width: 8.5rem;
+    height: 5.6rem;
     display: grid;
     place-items: center;
     background: #070707;
-    border: 1px solid rgba(227, 175, 149, 0.28);
+    border: 1px solid rgba(170, 104, 66, 0.4);
     overflow: hidden;
   }
 
@@ -190,8 +190,8 @@ function stamp(d: Date) {
 
   .title {
     font-family: var(--font-display);
-    font-size: clamp(1.45rem, 2.4vw, 1.9rem);
-    line-height: 1.12;
+    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+    line-height: 1.2;
     color: var(--bone);
     transition: color 0.4s var(--ease);
   }
