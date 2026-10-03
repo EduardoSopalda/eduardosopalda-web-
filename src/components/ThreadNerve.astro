@@ -33,8 +33,9 @@ const { active = null } = Astro.props;
 <style>
   .thread-nerve {
     position: fixed;
-    left: calc(1.75rem + 17rem + 3rem);
-    right: 2.5rem;
+    left: calc(1.75rem + 17rem + 6.5rem);
+    width: min(54rem, calc(100vw - 1.75rem - 17rem - 6.5rem - 7rem));
+    right: auto;
     bottom: 0;
     z-index: 16;
     margin: 0;
@@ -125,6 +126,7 @@ const { active = null } = Astro.props;
     .thread-nerve {
       left: 1.5rem;
       right: 1.5rem;
+      width: auto;
     }
   }
 

@@ -101,13 +101,14 @@ const months = [
   main {
     --rail: 17rem;
     --inset: 1.75rem;
-    --gutter: 3rem;
+    --gutter: 6.5rem;
+    --measure: 54rem;
     display: grid;
     grid-template-columns: var(--rail) var(--gutter) minmax(0, 1fr);
     align-items: start;
     margin: 0;
     max-width: none;
-    padding: calc(var(--nerve-dock) + 2.75rem) 2.5rem 9rem var(--inset);
+    padding: calc(var(--nerve-dock) + 2.75rem) 7rem 9rem var(--inset);
     font-family: var(--font-mono);
     color: var(--bone);
   }
@@ -126,6 +127,7 @@ const months = [
     grid-column: 3;
     grid-row: 1;
     min-width: 0;
+    max-width: var(--measure);
   }
 
   .room-kicker {
