@@ -61,31 +61,59 @@ const here = STOPS.find((s) => s.href === current);
   const stops = document.getElementById('room-stops');
   const line = document.querySelector('.room-line');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let drop = null;
+  let y = 0;
+  let v = 0;
+  let rest = 0;
+  let running = false;
+  let last = 0;
+  const OMEGA = 5;
+
+  function travel() {
+    const dropPx = window.innerHeight * 0.28;
+    rest = document.querySelector('.room-nerve')?.classList.contains('is-dropped') ? dropPx : 0;
+    if (reduced) {
+      y = rest;
+      v = 0;
+      if (line) line.style.transform = `translateY(${y}px)`;
+      return;
+    }
+    if (!running) {
+      running = true;
+      last = performance.now();
+      requestAnimationFrame(step);
+    }
+  }
+
+  function step(now) {
+    const dt = Math.min(0.032, (now - last) / 1000 || 0.016);
+    last = now;
+    const acc = -OMEGA * OMEGA * (y - rest) - 2 * OMEGA * v;
+    v += acc * dt;
+    y += v * dt;
+    if (line) line.style.transform = `translateY(${y}px)`;
+    if (Math.abs(y - rest) < 0.4 && Math.abs(v) < 0.4) {
+      y = rest;
+      v = 0;
+      running = false;
+      if (line) line.style.transform = `translateY(${y}px)`;
+      if (rest === 0 && stops) stops.style.opacity = '1';
+      return;
+    }
+    requestAnimationFrame(step);
+  }
+
   toggle?.addEventListener('click', () => {
     const rail = document.querySelector('.room-nerve');
     if (!rail || !toggle || !line) return;
     const dropping = !rail.classList.contains('is-dropped');
-    const travel = reduced ? 1 : 2400;
-    drop?.cancel();
     if (stops) {
       stops.style.transition = 'opacity 0.45s ease';
       stops.style.opacity = '0';
     }
-    drop = line.animate(
-      [
-        { transform: dropping ? 'translateY(0)' : 'translateY(28vh)' },
-        { transform: dropping ? 'translateY(28vh)' : 'translateY(0)' },
-      ],
-      { duration: travel, easing: 'cubic-bezier(.22,.7,.2,1)', fill: 'forwards' }
-    );
     rail.classList.toggle('is-dropped', dropping);
     toggle.setAttribute('aria-expanded', dropping ? 'true' : 'false');
     toggle.textContent = dropping ? 'Close' : 'Menu';
-    drop.onfinish = () => {
-      if (dropping || !stops) return;
-      stops.style.opacity = '1';
-    };
+    travel();
   });
 </script>
 
