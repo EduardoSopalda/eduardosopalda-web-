@@ -394,6 +394,15 @@ const elephantMissing = true;
     margin: 4rem -1.5rem 0;
     padding: 3rem 1.5rem;
     text-align: center;
+    /* tokens.css documents --oxide/--oxide-lit as tuned for foreground
+       text on --void black, not as a background -- this is the one
+       place on the site that uses --oxide the other way round, paired
+       with --champagne text. Measured independently (WCAG relative-
+       luminance formula) rather than assumed: 5.68:1, comfortably past
+       the 4.5:1 AA floor for normal text. Noted here so a future retune
+       of either token (both have their own documented history of
+       exactly that) doesn't silently break a pairing nothing else on
+       the site is protecting. */
     background: var(--oxide);
     color: var(--champagne);
   }

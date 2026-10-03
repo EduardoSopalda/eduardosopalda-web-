@@ -328,8 +328,23 @@ import '../styles/sopalda-landing.css';
       }
     }
 
+    // Audit finding: this used to call requestAnimationFrame(stepPhys)
+    // unconditionally, every frame, forever -- once any decay cycle
+    // ever started (automatic ~12s after load, see beginReveal below),
+    // this loop never stopped on its own, even long after every letter
+    // had fully decayed to life<=0 and visually vanished (opacity
+    // clamped by Math.max(0, p.life), so a further-negative life
+    // changes nothing on screen). alive tracks whether anything in
+    // this pass still has real life left; stopPhys() below ends the
+    // loop the first frame nothing does, instead of recursing forever
+    // on dead particles nobody can see.
+    let alive = false;
     phys.forEach((p) => {
-      if (physT < p.wake) return;
+      // Still waiting to wake (a per-letter stagger, not every mode's
+      // particles start together) -- it hasn't touched its own life
+      // yet, so the life<=0 check below never sees it this frame. Still
+      // counts as alive: there's a real future frame coming for it.
+      if (physT < p.wake) { alive = true; return; }
       let ax = 0, ay = 0;
       if (physMode === 'fall') ay = 380;
       if (physMode === 'float') { ay = -28; ax = wind * 0.7; }
@@ -343,6 +358,7 @@ import '../styles/sopalda-landing.css';
       p.x = nx; p.y = ny;
       p.rot += p.rotv * dt * 60;
       p.life -= p.fade * dt * 60;
+      if (p.life > 0) alive = true;
       if (physMode === 'explode') p.scale = 1 + Math.min(0.55, physT * 0.35);
       p.el.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.rot}deg) scale(${p.scale || 1})`;
       p.el.style.opacity = String(Math.max(0, p.life));
@@ -352,7 +368,8 @@ import '../styles/sopalda-landing.css';
         (p.el.style as any).color = rust > 0.35 ? '#2a160e' : '';
       }
     });
-    requestAnimationFrame(stepPhys);
+    if (alive) requestAnimationFrame(stepPhys);
+    else stopPhys();
   }
 
   function decay() {
@@ -430,6 +447,17 @@ import '../styles/sopalda-landing.css';
     if (docked) return;
     docked = true;
     held = false;
+    // Audit finding: docking never stopped an in-flight decay cycle --
+    // a visitor who docked right as a quote happened to be mid-decay
+    // left stepPhys's own rAF loop running in the background for the
+    // rest of the page's life, animating now-invisible letters (.frag
+    // fades to opacity:0 the moment data-landing becomes 'field', see
+    // that CSS rule) nobody can see. The quote cycle's own setTimeout
+    // chain already checks `docked` before scheduling its next decay
+    // (see decay()'s own `if (docked) return;`), so this just closes
+    // the matching gap for physics already running at the exact
+    // moment someone docks.
+    stopPhys();
     // Read by Field.astro's own `returning` flag and by index.astro's
     // before-paint script -- the only thing that survives the hard
     // navigation back to this document from a room, so a later visit

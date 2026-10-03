@@ -204,6 +204,12 @@ const script = [
         var line = document.getElementById('talk-line');
         var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-t]'));
         var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapters [data-t]'));
+        // Cached once -- mark() (below) used to re-run both of these on
+        // every single 'timeupdate' tick (many times a second during
+        // playback) for a DOM that never changes after load. Audit
+        // finding; no visual behavior changes, same elements either way.
+        var scriptArticles = Array.prototype.slice.call(document.querySelectorAll('.script-body article'));
+        var stripButtons = Array.prototype.slice.call(document.querySelectorAll('.strip [data-t]'));
         var cues = [
           [0, 'Data and AI in sustainable digital transformation. From Brasília to the plant floor.'],
           [58, '…not as a metaphor.'],
@@ -240,7 +246,7 @@ const script = [
           chapters.forEach(function (b) {
             b.classList.toggle('on', b === current);
           });
-          document.querySelectorAll('.script-body article').forEach(function (article) {
+          scriptArticles.forEach(function (article) {
             article.classList.toggle('on', article.getAttribute('data-id') === id);
           });
           if (kicker) kicker.textContent = current.getAttribute('data-kicker') || '';
@@ -250,7 +256,7 @@ const script = [
             if (c[0] <= t + 0.15) spoken = c[1];
           });
           if (line) line.textContent = spoken;
-          document.querySelectorAll('.strip [data-t]').forEach(function (b) {
+          stripButtons.forEach(function (b) {
             var on = b.getAttribute('data-id') === id;
             b.classList.toggle('on', on);
             if (on) b.setAttribute('aria-current', 'true');
@@ -303,11 +309,13 @@ const script = [
             play.click();
           }
         });
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!reduce) {
-          var pending = video.play();
-          if (pending && pending.catch) pending.catch(function () {});
-        }
+        // Audit finding: this used to autoplay the full 10-minute film
+        // the instant the page loaded (muted, so browsers allowed it,
+        // but nobody asked for 10 minutes of video to start downloading
+        // on page load, mobile data included). Starts paused on its
+        // poster frame instead -- play(), the chapter strip/rail, and
+        // the script-body jump buttons (go(), above) are all still the
+        // real way to start it, untouched.
         mark(0);
       })();
     </script>

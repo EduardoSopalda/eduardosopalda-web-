@@ -132,8 +132,8 @@ const masthead: { image: string; alt: string } | null = {
       // filters by thread (ThreadNerve's real links already do that
       // with JS off, via /thread/[name] -- this only adds text search
       // on top, scoped to whichever page you're already on).
-      const input = document.getElementById('archive-search');
-      const rows = Array.from(document.querySelectorAll('.list li'));
+      const input = document.getElementById('archive-search') as HTMLInputElement | null;
+      const rows = Array.from(document.querySelectorAll<HTMLLIElement>('.list li'));
       const empty = document.getElementById('nothing');
       if (input && rows.length) {
         input.addEventListener('input', () => {
