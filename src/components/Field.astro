@@ -1211,6 +1211,7 @@ import { STOPS } from '../data/stops';
     let nerveMin = 0, nerveMax = 0;
     let realNerveMin = 0, realNerveMax = 0;
     let haveRealChannel = false;
+    let landingCap = 0;
     let entranceInited = false;
     let entranceSettled = false;
     // Fixed-duration eased tween, not a continuous chase -- an
@@ -1290,8 +1291,11 @@ import { STOPS } from '../data/stops';
       // from producing a degenerate sliver of a channel, not to gate
       // out real short viewports the way 120 accidentally did.
       if (fontsReady && tBottom > 0 && pTop - tBottom > margin * 2 + 40) {
+        // The drop stops above the message. The trough used to fill
+        // the whole gap and land under the line.
         realNerveMin = tBottom + margin;
-        realNerveMax = pTop - margin;
+        realNerveMax = tBottom + margin + (pTop - tBottom - margin * 2) * 0.62;
+        landingCap = pTop - 36;
         haveRealChannel = true;
       }
     }
@@ -1406,16 +1410,8 @@ import { STOPS } from '../data/stops';
       // curve would still visibly kink. Relaxed along with everything
       // else, not left to persist into an otherwise straight line.
       const y = nerveBaseY(x) + springAt(x) * straightenAmt;
-      // The corner mark, top bar, tagline, purpose line, and meta live
-      // in Landing.astro's own stacking context, which paints above
-      // this whole canvas regardless of the nerve's z-index -- that
-      // only wins comparisons against other things inside Field.astro
-      // (specimens, fragments, stops), not against a sibling section
-      // entirely. Clamping keeps the curve's actual geometry out of
-      // both text zones so it can't happen, rather than trying to
-      // out-stack a separate section. nerveMin/nerveMax are the
-      // measured channel above, recomputed regularly in frame().
-      return Math.max(nerveMin, Math.min(nerveMax, y));
+      const cap = document.body.dataset.landing === 'field' || !landingCap ? nerveMax : Math.min(nerveMax, landingCap);
+      return Math.max(nerveMin, Math.min(cap, y));
     }
 
     function stepChain(dt: number) {
