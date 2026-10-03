@@ -679,25 +679,7 @@ import '../styles/sopalda-landing.css';
     });
   });
 
-  // Deliberate only -- nothing times out and forces this on its own,
-  // and plain pointer movement doesn't count. Scroll/touch are the
-  // low-friction fallback, since both are already an act of trying to
-  // move past this screen.
-  //
-  // Used to call dock() outright under reduced motion instead of
-  // registering these -- skipping past Act I's own content, not just
-  // its animation. A reduced-motion visitor never saw the manifesto
-  // line, the wordmark, or the tagline at all: dock() ran synchronously
-  // at script load, before a single frame had a chance to paint the
-  // hero. CLAUDE.md's whole premise for this screen ("stand inside his
-  // way of thinking for a few minutes") doesn't survive that -- reduced
-  // motion should mean no motion, not no Act I. beginReveal() above
-  // already shows everything instantly, without animating it, when
-  // reduced is true; the fix is to let a reduced-motion visitor sit on
-  // that calm, static screen and choose when to move on, the same as
-  // anyone else, rather than deciding for them.
+  // The only way into the field. Scroll and a tap on the name used
+  // to dock as well, which skipped the choice.
   document.getElementById('cue')?.addEventListener('click', dock);
-  document.getElementById('mark')?.addEventListener('click', dock);
-  addEventListener('wheel', dock, { once: true, passive: true });
-  addEventListener('touchstart', dock, { once: true, passive: true });
 </script>
