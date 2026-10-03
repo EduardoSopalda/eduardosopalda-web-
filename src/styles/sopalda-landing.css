@@ -187,6 +187,7 @@ body.is-docked .tagline {
   margin-top: 4px;
   font-size: .52rem;
   letter-spacing: .16em;
+  line-height: 1.5;
   text-align: right;
   white-space: nowrap;
   text-wrap: nowrap;
