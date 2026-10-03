@@ -40,6 +40,7 @@ const months = [
         <p class="room-kicker">Field notes</p>
         <h1>Writing<em>in circulation.</em></h1>
       </header>
+      <div class="room">
       {featured && (
         <article class="featured">
           <div class="featured-copy">
@@ -69,6 +70,7 @@ const months = [
           <span>{context.subtitle}</span>
         </p>
       )}
+      </div>
     </main>
   </body>
 </html>
@@ -80,8 +82,7 @@ const months = [
   }
 
   body {
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     min-height: 100svh;
   }
 
@@ -101,21 +102,44 @@ const months = [
     --rail: 17rem;
     --inset: 1.75rem;
     --gutter: 3rem;
+    display: grid;
+    grid-template-columns: var(--rail) var(--gutter) minmax(0, 1fr);
+    align-items: start;
     margin: 0;
     max-width: none;
-    padding: calc(var(--nerve-dock) + 2.75rem) 2.5rem 8rem calc(var(--inset) + var(--rail) + var(--gutter));
+    padding: calc(var(--nerve-dock) + 2.75rem) 2.5rem 8rem var(--inset);
     font-family: var(--font-mono);
     color: var(--bone);
   }
 
   .room-title {
-    position: fixed;
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    position: sticky;
     top: calc(var(--nerve-dock) + 2.2rem);
-    left: var(--inset);
-    z-index: 12;
+    align-self: start;
     width: var(--rail);
     margin: 0;
-    pointer-events: none;
+  }
+
+  .room {
+    grid-column: 3;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: start;
+    min-width: 0;
+  }
+
+  .featured,
+  .room > :global(.thread-nerve),
+  .next,
+  .room > :global(.year) {
+    grid-column: 1 / -1;
+  }
+
+  .room > :global(.year) {
+    grid-template-columns: subgrid;
   }
 
   .room-kicker {
@@ -325,15 +349,20 @@ const months = [
 
   @media (max-width: 900px) {
     main {
+      display: block;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
 
     .room-title {
       position: static;
+      grid-row: auto;
       width: auto;
       margin: 0 0 2.4rem;
-      pointer-events: auto;
+    }
+
+    .room {
+      display: block;
     }
 
     .featured {
