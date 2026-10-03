@@ -887,6 +887,9 @@ import { STOPS } from '../data/stops';
     // refreshed each frame in frame() itself, same pattern as every
     // other collision rect below.
     const cueEl = document.getElementById('cue');
+    // Landing.astro's own wordmark -- see markRect's own comment, below
+    // in frame(), for why this needs the same treatment.
+    const markEl = document.getElementById('mark');
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // "The transition to go back to the main page is the same as the
@@ -2213,6 +2216,22 @@ import { STOPS } from '../data/stops';
       // spawn check and the runtime forced-decay check below -- same
       // rect either way, no reason to force the layout read twice.
       const cueRect = cueEl ? cueEl.getBoundingClientRect() : null;
+      // Direct feedback, watching a departure: "the name of the
+      // section vibrates... the whole thing vibrates." Confirmed via a
+      // frame-by-frame recording -- LEXICON (a stop with no business
+      // being involved in a Writing departure at all) had drifted into
+      // the exact corner the docked wordmark lives in, and nothing ever
+      // dodged a stop away from THAT specific obstacle, only fragments
+      // and specimens (see the stops loop's own dodge checks, below).
+      // The two labels sat fully overlapping, illegibly, for as long as
+      // the stop's drift kept it there -- and because the stop's own Y
+      // easing kept re-solving a dodge against its OTHER neighbors
+      // every frame while still inside the mark's box, its target flipped
+      // side to side repeatedly, reading as a shake rather than a single
+      // bad frame. Only meaningful once actually docked -- pre-dock the
+      // wordmark is centered in the hero, nowhere near where a stop
+      // could be, and stops aren't even visible yet besides.
+      const markRect = docked && markEl ? markEl.getBoundingClientRect() : null;
 
       // Both constants below are the exact same tuned feel as before
       // (0.34px added per assumed-60fps frame, 0.06 convergence per
@@ -3456,7 +3475,41 @@ import { STOPS } from '../data/stops';
             break;
           }
         }
-        // y up to here is a target, not a position -- both dodge
+        // The docked wordmark's own corner -- a stop's X comes from
+        // the same unbounded horizontal drift that already carries it
+        // under fragments and specimens, and nothing stopped that same
+        // drift from carrying one directly under the mark too. Was
+        // never checked at all until direct feedback caught it live
+        // ("the whole thing vibrates"): LEXICON drifted into the
+        // mark's exact box, the two labels overlapped illegibly, and
+        // because this stop's Y kept re-solving against ITS other
+        // neighbors every frame while still inside the mark, the
+        // result read as a shake, not one bad frame. Same dodge shape
+        // as the two checks above, for the same reason -- one more
+        // obstacle in an existing list, not a new mechanism.
+        if (markRect && markRect.width >= 10) {
+          const sy = y - 22;
+          // Padded well past markRect's own real edges, both for the
+          // trigger test and the push-clear distance below -- sw/sh
+          // are a throttled read (re-measured at most every 0.2s, see
+          // that cache's own comment above), and a stop entering near-
+          // state right as it crosses this check opens its subtitle
+          // and widens its own letter-spacing within that same window.
+          // Measured directly: a 16px clearance (matching the fragment
+          // and specimen dodges above, both bounded, already-settled
+          // boxes) still wasn't enough for a size that was still
+          // growing out from under it -- the pad needs room for the
+          // stale measurement to be wrong, not just room for a static
+          // label.
+          const PAD = 70;
+          if (X < markRect.right + PAD && X + sw > markRect.left - PAD && sy < markRect.bottom + PAD && sy + sh > markRect.top - PAD) {
+            const below = markRect.bottom + PAD + sh / 2 + 16;
+            const above = markRect.top - PAD - sh / 2 - 16;
+            y = Math.abs(below - y) < Math.abs(above - y) ? below : above;
+            y = Math.max(nerveMin + 14, Math.min(nerveMax - 14, y));
+          }
+        }
+        // y up to here is a target, not a position -- all three dodge
         // checks above are a hard boolean test run fresh every frame,
         // so the instant a fragment or specimen starts or stops
         // overlapping, y can jump straight from the nerve-relative
@@ -3480,7 +3533,19 @@ import { STOPS } from '../data/stops';
         // for this identical reason -- trades a longer glide for a
         // small first-frame delta regardless of how big the
         // underlying target swing was.
-        s.smoothY += (y - s.smoothY) * approachFactor(0.06, dt);
+        // Departure is a one-shot, ~620ms window (DEPART_MS) -- far
+        // too short for 0.06's own multi-second settle time to resolve
+        // a dodge target that only became necessary once the pan
+        // itself started moving things fast. Measured directly, not
+        // assumed: re-ran the exact departure that first showed the
+        // mark-overlap bug (LEXICON drifting into the wordmark's own
+        // corner, see markRect's comment above) after adding that
+        // dodge check, and it still overlapped for several frames --
+        // the TARGET had already moved clear, but smoothY was still
+        // most of the way through its old, multi-second glide toward
+        // it. A one-off transition doesn't need the silky catch-up
+        // idle drift does; it needs to already be right.
+        s.smoothY = departing ? y : s.smoothY + (y - s.smoothY) * approachFactor(0.06, dt);
         y = s.smoothY;
         const glow = stopGlowAt(s.xn);
         s.el.style.setProperty('--stopglow', glow.toFixed(3));
