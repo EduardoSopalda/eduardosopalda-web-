@@ -1009,9 +1009,9 @@ import { STOPS } from '../data/stops';
     // exactly that reason: something has to trigger the actual
     // navigation at a definite moment. departEl (not the whole node) is
     // enough to let the stops loop recognise which stop is departing.
-    const DEPART_FLATTEN_MS = 700;
-    const DEPART_RISE_MS = 1300;
-    const DEPART_SETTLE_MS = 400;
+    const DEPART_FLATTEN_MS = 900;
+    const DEPART_RISE_MS = 2400;
+    const DEPART_SETTLE_MS = 500;
     const DEPART_MS = DEPART_FLATTEN_MS + DEPART_RISE_MS + DEPART_SETTLE_MS;
     let departing = false;
     let departStartT = 0;
@@ -2311,13 +2311,14 @@ import { STOPS } from '../data/stops';
         straightenAmt = 1 - flatE;
         nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * riseE;
         nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * riseE;
-        const fade = Math.min(1, Math.max(0, (elapsed - 500) / 900));
-        // One filament. The curve rises onto the rail, then the canvas
-        // stops painting so the cut has only that rail to carry.
-        const settled = elapsed >= DEPART_MS - 280;
+        const fade = Math.min(1, Math.max(0, (elapsed - 400) / 2600));
+        // Same idea as the landing dock: the nerve is already there.
+        // The rail sits under the curve and is fully present before
+        // the canvas stops, so nothing has to appear.
+        const cover = elapsed >= DEPART_FLATTEN_MS + DEPART_RISE_MS;
         world.style.opacity = String(Math.max(0, 1 - fade));
-        canvas.style.opacity = settled ? '0' : '1';
-        if (railEl) railEl.style.opacity = settled ? '1' : String(riseE);
+        if (railEl) railEl.style.opacity = cover ? '1' : '0';
+        canvas.style.opacity = cover ? '0' : '1';
         if (elapsed >= DEPART_MS && departHref) {
           const href = departHref;
           departHref = '';
