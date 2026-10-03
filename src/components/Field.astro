@@ -1011,15 +1011,9 @@ import { STOPS } from '../data/stops';
       const nerve = document.getElementById('nerve');
       const rail = document.getElementById('nerve-rail');
       window.setTimeout(() => {
-        if (nerve) {
-          nerve.style.transition = 'opacity 0.8s ease';
-          nerve.style.opacity = '1';
-        }
-        if (rail) {
-          rail.style.transition = 'opacity 0.8s ease';
-          rail.style.opacity = '0';
-        }
-      }, 80);
+        if (rail) rail.style.opacity = '0';
+        if (nerve) nerve.style.opacity = '1';
+      }, 40);
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
