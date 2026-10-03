@@ -58,12 +58,17 @@ const here = STOPS.find((s) => s.href === current);
     sessionStorage.removeItem('sopalda-arrive');
   }
   const stops = document.getElementById('room-stops');
-  if (stops) {
-    window.setTimeout(() => {
-      stops.style.transition = 'opacity 2.8s cubic-bezier(.22, .7, .2, 1)';
-      stops.style.opacity = '1';
-    }, 700);
+  function riseMenu() {
+    if (!stops) return;
+    stops.style.transition = 'opacity 2.8s cubic-bezier(.22, .7, .2, 1)';
+    requestAnimationFrame(() => { stops.style.opacity = '1'; });
   }
+  window.addEventListener('pagereveal', (event) => {
+    const transition = event.viewTransition;
+    if (transition) transition.finished.then(() => window.setTimeout(riseMenu, 400));
+    else window.setTimeout(riseMenu, 400);
+  });
+  window.setTimeout(riseMenu, 1200);
   const toggle = document.querySelector('.menu-toggle');
   const line = document.querySelector('.room-line');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;

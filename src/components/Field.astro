@@ -1015,13 +1015,19 @@ import { STOPS } from '../data/stops';
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
     if (document.body.classList.contains('is-returning')) {
       document.body.classList.add('is-nerve');
-      window.setTimeout(() => {
+      const rise = () => {
         document.querySelectorAll('.stop').forEach((el) => {
           const node = el as HTMLElement;
           node.style.transition = 'opacity 6.4s cubic-bezier(.22, .7, .2, 1)';
           node.style.opacity = '1';
         });
-      }, 1600);
+      };
+      window.addEventListener('pagereveal', (event) => {
+        const transition = (event as PageRevealEvent).viewTransition;
+        if (transition) transition.finished.then(() => window.setTimeout(rise, 900));
+        else window.setTimeout(rise, 900);
+      });
+      window.setTimeout(rise, 1800);
       requestAnimationFrame(() => requestAnimationFrame(() => {
         document.body.classList.add('is-arrived');
       }));
