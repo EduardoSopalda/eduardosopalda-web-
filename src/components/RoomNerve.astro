@@ -59,25 +59,33 @@ const here = STOPS.find((s) => s.href === current);
   }
   const toggle = document.querySelector('.menu-toggle');
   const stops = document.getElementById('room-stops');
+  const line = document.querySelector('.room-line');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let drop = null;
   toggle?.addEventListener('click', () => {
     const rail = document.querySelector('.room-nerve');
-    if (!rail || !toggle) return;
+    if (!rail || !toggle || !line) return;
     const dropping = !rail.classList.contains('is-dropped');
-    if (dropping) {
-      if (stops) stops.hidden = true;
-      rail.classList.add('is-dropped');
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.textContent = 'Close';
-      return;
+    const travel = reduced ? 1 : 2400;
+    drop?.cancel();
+    if (stops) {
+      stops.style.transition = 'opacity 0.45s ease';
+      stops.style.opacity = '0';
     }
-    rail.classList.add('is-closing');
-    rail.classList.remove('is-dropped');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = 'Menu';
-    window.setTimeout(() => {
-      rail.classList.remove('is-closing');
-      if (stops) stops.hidden = false;
-    }, 1600);
+    drop = line.animate(
+      [
+        { transform: dropping ? 'translateY(0)' : 'translateY(28vh)' },
+        { transform: dropping ? 'translateY(28vh)' : 'translateY(0)' },
+      ],
+      { duration: travel, easing: 'cubic-bezier(.22,.7,.2,1)', fill: 'forwards' }
+    );
+    rail.classList.toggle('is-dropped', dropping);
+    toggle.setAttribute('aria-expanded', dropping ? 'true' : 'false');
+    toggle.textContent = dropping ? 'Close' : 'Menu';
+    drop.onfinish = () => {
+      if (dropping || !stops) return;
+      stops.style.opacity = '1';
+    };
   });
 </script>
 
@@ -212,15 +220,7 @@ const here = STOPS.find((s) => s.href === current);
     pointer-events: none;
     background: linear-gradient(rgba(247, 197, 106, 0.9), rgba(247, 197, 106, 0.9)) center / 100% 1px no-repeat;
     box-shadow: 0 7px 6px -6px rgba(247, 197, 106, 0.45);
-    transition: top 1.6s cubic-bezier(.22, .7, .2, 1);
-  }
-
-  .room-nerve.is-closing .room-line {
-    transition: top 1.6s cubic-bezier(.4, 0, .2, 1);
-  }
-
-  .room-nerve.is-dropped .room-line {
-    top: 42vh;
+    will-change: transform;
   }
 
   .comet {
@@ -272,7 +272,7 @@ const here = STOPS.find((s) => s.href === current);
   }
 
   .room-nerve.is-dropped .room-stops {
-    visibility: hidden;
+    pointer-events: none;
   }
 
   .room-stops a {
