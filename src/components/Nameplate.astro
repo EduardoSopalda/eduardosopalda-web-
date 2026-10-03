@@ -19,13 +19,21 @@
 // them before.
 import '@fontsource/italiana';
 import 'typeface-glacial-indifference';
+
+// Audit finding: this used to be an <h2>, rendered before <main> on
+// every page it appears on -- so the DOM heading order was h2 (this)
+// then h1 (the page's own title), an inverted hierarchy. A repeated
+// site-identity mark isn't page content structure (automa-chem-2026's
+// own .door-mark already gets this right, as a plain link with no
+// heading at all) -- a <p> keeps the exact same look with nothing in
+// the heading outline to invert.
 ---
 
 <a class="nameplate" href="/" aria-label="Eduardo Sopalda -- back to the field">
-  <h2>
+  <p class="name">
     <span class="given">EDUARDO</span>
     <span class="family">sopalda</span>
-  </h2>
+  </p>
   <p class="tagline">DATA | AI <span class="amp">&amp;</span> the human experience</p>
 </a>
 
@@ -44,7 +52,7 @@ import 'typeface-glacial-indifference';
     color: inherit;
   }
 
-  .nameplate h2 {
+  .nameplate .name {
     margin: 0;
     line-height: 0.88;
     display: flex;

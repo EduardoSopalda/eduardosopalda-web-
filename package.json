@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "typecheck": "astro check",
     "astro": "astro"
   },
   "dependencies": {
@@ -17,5 +18,9 @@
     "@fontsource/italiana": "^5.3.0",
     "astro": "^7.0.6",
     "typeface-glacial-indifference": "^1.1.14"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3"
   }
 }
