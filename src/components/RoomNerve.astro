@@ -61,16 +61,23 @@ const here = STOPS.find((s) => s.href === current);
   const stops = document.getElementById('room-stops');
   toggle?.addEventListener('click', () => {
     const rail = document.querySelector('.room-nerve');
-    const dropping = !rail?.classList.contains('is-dropped');
-    rail?.classList.toggle('is-dropped', dropping);
-    toggle.setAttribute('aria-expanded', dropping ? 'true' : 'false');
-    toggle.textContent = dropping ? 'Close' : 'Menu';
-    if (!stops) return;
-    stops.hidden = true;
+    if (!rail || !toggle) return;
+    const dropping = !rail.classList.contains('is-dropped');
+    if (dropping) {
+      if (stops) stops.hidden = true;
+      rail.classList.add('is-dropped');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.textContent = 'Close';
+      return;
+    }
+    rail.classList.add('is-closing');
+    rail.classList.remove('is-dropped');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'Menu';
     window.setTimeout(() => {
-      if (!stops) return;
-      stops.hidden = !dropping;
-    }, dropping ? 1400 : 200);
+      rail.classList.remove('is-closing');
+      if (stops) stops.hidden = false;
+    }, 1600);
   });
 </script>
 
@@ -208,6 +215,10 @@ const here = STOPS.find((s) => s.href === current);
     transition: top 1.6s cubic-bezier(.22, .7, .2, 1);
   }
 
+  .room-nerve.is-closing .room-line {
+    transition: top 1.6s cubic-bezier(.4, 0, .2, 1);
+  }
+
   .room-nerve.is-dropped .room-line {
     top: 42vh;
   }
@@ -258,12 +269,10 @@ const here = STOPS.find((s) => s.href === current);
     justify-content: flex-start;
     flex-wrap: nowrap;
     gap: 1.35rem;
-    transition: top 1.6s cubic-bezier(.22, .7, .2, 1), opacity 0.6s ease;
   }
 
   .room-nerve.is-dropped .room-stops {
-    top: calc(42vh - 2.4rem);
-    left: 1.4rem;
+    visibility: hidden;
   }
 
   .room-stops a {
