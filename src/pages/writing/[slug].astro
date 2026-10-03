@@ -57,7 +57,10 @@ const lead = leadFragmentFor(title);
   </head>
   <body data-family={family}>
     <RoomNerve current="/writing" heading={false} />
-    <p class="back"><a href="/writing">All writing</a></p>
+    <a class="room-title" href="/writing">
+      <p class="room-kicker">Field notes</p>
+      <span class="room-name">Writing<em>in circulation.</em></span>
+    </a>
 
     <header class="plate" id="plate">
       {/* image is null for all 25 articles today (family: void,
@@ -205,44 +208,85 @@ const lead = leadFragmentFor(title);
          same override body already has, not just body alone. */
       html {
         overflow-y: auto;
-        overflow-x: hidden;
+        overflow-x: clip;
       }
 
       body {
         overflow-y: auto;
-        overflow-x: hidden;
+        overflow-x: clip;
         min-height: 100svh;
         color: var(--bone);
       }
 
-      .back {
-        position: absolute;
-        top: calc(var(--nerve-dock) + 1.6rem);
-        left: 1.5rem;
+      .room-title {
+        position: fixed;
+        top: calc(var(--nerve-dock) + 2.2rem);
+        left: 1.75rem;
+        z-index: 12;
+        width: 17rem;
         margin: 0;
-        z-index: 2;
-      }
-
-      /* Bone at rest, not gold -- gold is for the nerve, its beads, and
-         whatever is awake (CLAUDE.md non-negotiable 6), not a resting
-         link color. Hover/focus is the awake moment instead. */
-      .back a {
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        letter-spacing: 0.1em;
-        color: var(--bone);
         text-decoration: none;
+        color: inherit;
       }
 
-      .back a:hover,
-      .back a:focus-visible {
+      .room-kicker {
+        margin: 0;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--champagne);
+      }
+
+      .room-kicker::after {
+        content: '';
+        display: inline-block;
+        width: 1.6rem;
+        height: 1px;
+        margin-left: 0.65rem;
+        vertical-align: middle;
+        background: rgba(170, 104, 66, 0.7);
+      }
+
+      .room-name {
+        display: block;
+        margin: 0.7rem 0 0;
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-size: clamp(3.1rem, 4.4vw, 4.4rem);
+        line-height: 0.86;
+        letter-spacing: -0.03em;
+        color: var(--bone);
+      }
+
+      .room-name em {
+        display: block;
+        margin: 0.28em 0 0 2.4em;
+        font-style: italic;
+        font-weight: 400;
+        font-size: 0.38em;
+        letter-spacing: 0.01em;
+        line-height: 1;
+        color: var(--bronze);
+      }
+
+      .room-title:hover .room-name,
+      .room-title:focus-visible .room-name {
         color: var(--gold);
       }
 
-      .back a:focus-visible {
+      .room-title:focus-visible {
         outline: 1.5px solid var(--gold);
         outline-offset: 4px;
         border-radius: 2px;
+      }
+
+      @media (max-width: 900px) {
+        .room-title {
+          position: static;
+          width: auto;
+          padding: calc(var(--nerve-dock) + 1.4rem) 1.5rem 0;
+        }
       }
 
       /* The plate: full bleed with the title over it. It has no image
