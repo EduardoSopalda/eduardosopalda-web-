@@ -4,7 +4,7 @@ date:     2025-12-30
 kind:     article
 threads:  [MEANING, GOVERNANCE]
 dek:      'Some time ago, someone told me something that didn’t sound particularly profound at first:'
-image:
+image:    /illustrations/universal.jpg
 family:   void
 people:   []
 question: Is your governance program creating trust in data, or just governance theatre — a lot of meetings, policies and committees with no impact on how metrics and models actually behave?

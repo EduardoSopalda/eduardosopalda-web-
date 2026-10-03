@@ -4,7 +4,7 @@ date:     2025-06-19
 kind:     article
 threads:  [PROXIMITY, GOVERNANCE]
 dek:
-image:
+image:    /illustrations/predicts.jpg
 family:   void
 people:   []
 question: The answer?

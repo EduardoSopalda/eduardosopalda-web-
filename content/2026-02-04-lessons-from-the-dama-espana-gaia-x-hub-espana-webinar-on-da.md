@@ -4,7 +4,7 @@ date:     2026-02-04
 kind:     article
 threads:  [MEANING, GOVERNANCE]
 dek:
-image:
+image:    /illustrations/spaces.jpg
 family:   void
 people:   []
 question:

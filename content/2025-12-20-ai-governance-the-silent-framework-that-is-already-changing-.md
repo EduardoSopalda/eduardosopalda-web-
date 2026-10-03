@@ -4,7 +4,7 @@ date:     2025-12-20
 kind:     article
 threads:  [GOVERNANCE, TRUST]
 dek:
-image:
+image:    /illustrations/silent.jpg
 family:   void
 people:   []
 question: 'So maybe the big question isn’t whether regulation will slow innovation. Maybe the real question is: will governance finally help more AI projects actually cross the bridge into reality and stay there?'
