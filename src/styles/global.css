@@ -82,7 +82,7 @@ video {
    components, so a navigation cannot drop them and leave a raw list. */
 .thread-nerve {
   position: fixed;
-  left: calc(1.75rem + 17rem + 6.5rem);
+  left: calc(1.75rem + 17rem + 6.5rem + max(0px, (100vw - 1.75rem - 17rem - 6.5rem - 7rem - 54rem) / 2));
   width: min(54rem, calc(100vw - 1.75rem - 17rem - 6.5rem - 7rem));
   right: auto;
   bottom: 0;
