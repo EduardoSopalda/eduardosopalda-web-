@@ -29,7 +29,7 @@ const here = STOPS.find((s) => s.href === current);
     <span class="tagline">DATA &nbsp;|&nbsp; AI & THE HUMAN EXPERIENCE</span>
   </a>
   <button type="button" class="menu-toggle" aria-expanded="true" aria-controls="room-stops">Main</button>
-  <nav class="room-stops" id="room-stops" aria-label="Site">
+  <nav class="room-stops" id="room-stops" aria-label="Site" style="opacity:0">
     {STOPS.map((s) => (
       <a href={s.href} aria-current={s.href === current ? 'page' : undefined}>{s.label}</a>
     ))}
@@ -57,8 +57,14 @@ const here = STOPS.find((s) => s.href === current);
     rail.setAttribute('data-arrive', '1');
     sessionStorage.removeItem('sopalda-arrive');
   }
-  const toggle = document.querySelector('.menu-toggle');
   const stops = document.getElementById('room-stops');
+  if (stops) {
+    window.setTimeout(() => {
+      stops.style.transition = 'opacity 2.8s cubic-bezier(.22, .7, .2, 1)';
+      stops.style.opacity = '1';
+    }, 700);
+  }
+  const toggle = document.querySelector('.menu-toggle');
   const line = document.querySelector('.room-line');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let y = 0;
