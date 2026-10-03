@@ -182,7 +182,8 @@ import { STOPS } from '../data/stops';
     opacity: 0;
     background: rgba(247, 197, 106, 0.9);
     box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
-    overflow: hidden;
+    overflow: visible;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
 
   .comet {
@@ -215,8 +216,8 @@ import { STOPS } from '../data/stops';
   .comet:nth-child(5) { animation-duration: 21.7s; animation-delay: -10.9s; }
 
   @keyframes comet-run {
-    from { left: -140px; }
-    to { left: 100%; }
+    from { transform: translateX(-140px); }
+    to { transform: translateX(100vw); }
   }
 
   .world {

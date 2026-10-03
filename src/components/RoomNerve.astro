@@ -66,6 +66,7 @@ const here = STOPS.find((s) => s.href === current);
     right: 0;
     z-index: 20;
     height: calc(var(--nerve-dock) + 2.6rem);
+    overflow: visible;
     pointer-events: none;
     font-family: var(--font-mono);
   }
@@ -162,8 +163,10 @@ const here = STOPS.find((s) => s.href === current);
     left: 0;
     right: 0;
     height: 1px;
+    overflow: visible;
     background: rgba(247, 197, 106, 0.9);
     box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
 
   .comet {
@@ -175,6 +178,7 @@ const here = STOPS.find((s) => s.href === current);
     background: linear-gradient(90deg, rgba(255, 255, 240, 0), rgba(255, 250, 220, 0.5) 60%, rgba(255, 255, 245, 1));
     filter: drop-shadow(0 0 6px rgba(255, 255, 235, 0.9));
     animation: comet-run linear infinite;
+    pointer-events: none;
   }
 
   .comet::after {
@@ -198,8 +202,8 @@ const here = STOPS.find((s) => s.href === current);
   .comet:nth-child(5) { animation-duration: 21.7s; animation-delay: -10.9s; }
 
   @keyframes comet-run {
-    from { left: -140px; }
-    to { left: 100%; }
+    from { transform: translateX(-140px); }
+    to { transform: translateX(100vw); }
   }
 
   .room-stops {
@@ -255,7 +259,10 @@ const here = STOPS.find((s) => s.href === current);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .comet,
+    .comet {
+      animation: none;
+      opacity: 0;
+    }
     .room-nerve[data-arrive='1'] .room-stops a,
     .room-nerve[data-arrive='1'] .room-plate {
       animation: none;
