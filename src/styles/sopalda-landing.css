@@ -58,8 +58,15 @@
 }
 
 .mark {
-  text-align: center;
-  padding-top: 8vh;
+  position: fixed;
+  top: calc(14px + env(safe-area-inset-top));
+  right: 28px;
+  left: auto;
+  padding: 0;
+  text-align: right;
+  z-index: 8;
+  height: 0;
+  overflow: visible;
   cursor: pointer;
 }
 
@@ -68,7 +75,7 @@
   line-height: 0.88;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .given,
@@ -81,7 +88,7 @@
   display: inline-block;
   font-weight: inherit;
   will-change: transform;
-  opacity: 0;
+  opacity: 1;
 }
 
 /* No CSS animation-delay here on purpose (there used to be one, per
@@ -99,16 +106,16 @@
 .given {
   font-family: var(--font-wordmark-given);
   font-weight: 400;
-  font-size: clamp(1.7rem, 8vw, 3.2rem);
-  letter-spacing: .14em;
+  font-size: clamp(.95rem, 3.1vw, 1.2rem);
+  letter-spacing: .1em;
   color: var(--bronze);
 }
 
 .family {
   font-family: var(--font-wordmark);
   font-weight: 700;
-  font-size: clamp(2.4rem, 12vw, 4.6rem);
-  letter-spacing: -.02em;
+  font-size: clamp(1.28rem, 4.1vw, 1.65rem);
+  letter-spacing: 0;
   color: var(--flesh);
 }
 
@@ -130,16 +137,18 @@
      measurements reflect the real text width, so the computed scale is
      the true, modest ratio the font-size change alone accounts for. */
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 4px;
   font-family: var(--font-mono);
-  font-size: clamp(.58rem, 2.7vw, .72rem);
-  letter-spacing: .12em;
+  font-size: clamp(.42rem, 1.7vw, .52rem);
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--champagne);
   white-space: normal;
   text-wrap: balance;
-  opacity: 0;
-  animation: fade-in 1.8s ease 1.7s forwards;
+  text-align: right;
+  max-width: 16rem;
+  opacity: 1;
+  animation: none;
 }
 
 .tagline .amp {
