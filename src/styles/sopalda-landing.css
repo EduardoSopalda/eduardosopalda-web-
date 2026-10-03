@@ -59,8 +59,13 @@
 
 .mark {
   text-align: center;
-  padding-top: 8vh;
+  padding-top: 7vh;
   cursor: pointer;
+}
+
+.nerve-band {
+  height: 18vh;
+  width: 100%;
 }
 
 .mark h1 {
@@ -216,9 +221,9 @@ body.is-docked .cue {
 
 .slot {
   display: grid;
-  place-items: center;
+  place-items: start center;
   min-height: 0;
-  padding: 22vh 0 18vh;
+  padding: 0 0 12vh;
   align-self: stretch;
 }
 
