@@ -26,6 +26,44 @@ const q = `desk=${BERLIN_DESK}&dl=1`;
         <a href={`/api/berlin/roadmap.pdf?${q}`}>Download the roadmap</a>
         <a href={`/api/berlin/film.mp4?${q}`}>Download the film</a>
       </p>
+
+      <section class="means" aria-label="What the animation means">
+        <p class="kicker">What the animation means</p>
+        <h2>One sheet. Two distances.</h2>
+        <p>
+          The film is not a decoration in front of the talk. It is the talk, drawn.
+          One sheet of paper starts as a plan and has to survive the walk.
+        </p>
+        <p>
+          It opens with an architect drawing from above. The drawing becomes Brasília:
+          precise from the air, and a long way from the person on the ground.
+          That is the argument. Governance designed from the helicopter does not
+          always work for the person who has to live with it.
+        </p>
+        <p>
+          Then the sheet has to carry a number. It looks like chemistry. On the paper
+          it is a data product: a road, a source, and someone who can stand behind it.
+          You cannot report what you cannot trace.
+        </p>
+        <p>
+          The lines speed up. AI does not invent a clearer meaning. It scales the one
+          that is already there. A digital twin is only useful when an operator trusts
+          it and a person is accountable when it is wrong.
+        </p>
+        <p>
+          The sheet ends where a person is still in the drawing. Agents do not own risk.
+          Humans do.
+        </p>
+        <ol>
+          <li><span>00</span> Two distances. The title, before the drawing starts.</li>
+          <li><span>01</span> The architect. A plan, made from above.</li>
+          <li><span>02</span> Brasília. Perfect in plan. Different on the ground.</li>
+          <li><span>03</span> The number. Ambition has to become evidence.</li>
+          <li><span>04</span> AI scales what is already there.</li>
+          <li><span>05</span> The twin. A drawing someone has to trust.</li>
+          <li><span>06</span> The close. Humans do. Always.</li>
+        </ol>
+      </section>
     </main>
   </body>
 </html>
@@ -39,9 +77,9 @@ const q = `desk=${BERLIN_DESK}&dl=1`;
   }
 
   main {
-    max-width: 36rem;
+    max-width: 40rem;
     margin: 0 auto;
-    padding: 18vh 1.5rem 4rem;
+    padding: 14vh 1.5rem 5rem;
   }
 
   .kicker {
@@ -89,4 +127,50 @@ const q = `desk=${BERLIN_DESK}&dl=1`;
   }
 
   a:hover { color: var(--gold); }
+
+  .means { margin-top: 4.5rem; padding-top: 1.6rem; border-top: 1px solid rgba(170, 104, 66, 0.45); }
+
+  h2 {
+    margin: 0.7rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .means p {
+    max-width: 38rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.12rem;
+    line-height: 1.45;
+    color: var(--flesh);
+  }
+
+  ol {
+    list-style: none;
+    margin: 1.4rem 0 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.8rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid rgba(243, 235, 224, 0.14);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--bone);
+  }
+
+  li span {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    color: var(--champagne);
+  }
 </style>
