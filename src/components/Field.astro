@@ -500,8 +500,13 @@ import { STOPS } from '../data/stops';
        (smaller than intended) size became visible for the first time
        -- still a hierarchy problem, wanted closer to an old chemist's
        specimen label: legible as its own object at a glance, not a
-       caption you have to lean into. */
-    font-size: clamp(0.92rem, 2.6vw, 1.15rem);
+       caption you have to lean into.
+       Raised a third time, same direction, right after the click-
+       target and mark-collision fixes landed -- "now it clicks... I
+       really think the font of this options should be bigger." Same
+       ~1.25x ratio between the floor and ceiling preserved, just
+       shifted the whole range up. */
+    font-size: clamp(1.1rem, 3.1vw, 1.4rem);
     /* 400 (the weight everything else using --font-mono stays at --
        citations, specimen tags, footer meta) read thin next to a
        fragment's own Fraunces at this new size -- direct feedback, a
