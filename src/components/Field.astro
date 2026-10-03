@@ -163,7 +163,7 @@ import { STOPS } from '../data/stops';
 
   #nerve-dock-probe {
     position: fixed;
-    top: calc(var(--nerve-dock) + 1px);
+    top: var(--nerve-dock);
     left: 0;
     width: 0;
     height: 0;
@@ -173,7 +173,7 @@ import { STOPS } from '../data/stops';
   .nerve-rail {
     view-transition-name: nerve-rail;
     position: fixed;
-    top: calc(var(--nerve-dock) - 6px);
+    top: var(--nerve-dock);
     left: 0;
     right: 0;
     height: 14px;
@@ -2334,11 +2334,13 @@ import { STOPS } from '../data/stops';
         if (elapsed >= DEPART_MS && departHref) {
           const href = departHref;
           departHref = '';
+          if (railEl) railEl.style.opacity = '1';
+          canvas.style.opacity = '0';
           try {
             sessionStorage.setItem('sopalda-arrive', new URL(href, location.href).pathname);
             sessionStorage.setItem('sopalda-nerve', '1');
           } catch { /* private mode: the room simply doesn't play the settle */ }
-          location.href = href;
+          requestAnimationFrame(() => requestAnimationFrame(() => { location.href = href; }));
         }
       } else {
         const idleFor = t - lastActiveT;
