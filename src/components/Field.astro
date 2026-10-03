@@ -1033,11 +1033,7 @@ import { STOPS } from '../data/stops';
     // pulses stay. A full freeze reads as a crash.
     let calmAmt = 1;
     let holdAmt = 0;
-    const fromRoom = sessionStorage.getItem('sopalda-nerve') === '1';
-    if (fromRoom && railEl) {
-      railEl.style.opacity = '1';
-      sessionStorage.removeItem('sopalda-nerve');
-    }
+    const railEl = document.getElementById('nerve-rail');
     let departNerveFromMin = 0;
     let departNerveFromMax = 0;
     let departNerveToMin = 0;
@@ -2334,7 +2330,7 @@ import { STOPS } from '../data/stops';
         // the click handler, never has a stray inline opacity to worry
         // about in the first place.
         if (world.style.opacity) world.style.opacity = '';
-        if (railEl && railEl.style.opacity && !fromRoom) railEl.style.opacity = '';
+        if (railEl && railEl.style.opacity) railEl.style.opacity = '';
       }
       // Hold: a stop under the pointer eases the vertical breath out
       // and calms the wave. Drift is already paused via anyStopNear

@@ -69,6 +69,9 @@ const ogImageUrl = new URL('/og-image.png', Astro.site);
         this just does it before first paint instead of animating into
         it, for a tab that's already seen the real thing once. */}
     <script is:inline>
+      // A room clears this flag. Coming home replays the landing drop,
+      // the nerve stopping above the message, instead of arriving
+      // already in the field.
       if (sessionStorage.getItem('sopalda-docked') === '1') {
         document.body.setAttribute('data-landing', 'field');
         document.body.classList.add('is-docked');
