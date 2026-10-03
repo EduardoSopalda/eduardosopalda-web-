@@ -1,37 +1,29 @@
 ---
-// Plain reverse-chronological archive, per docs/BUILD-ORDER.md step 3 & 7:
-// "Writing first, since it has content." No invented copy -- every
-// title, date, kind and thread below comes straight from the real
-// content collection (src/content/config.ts, reading content/ itself),
-// the same source /writing/[slug] renders from -- one source of truth,
-// not the earlier hand-parsed content/_index.json snapshot.
+// Writing room. The nerve is already the menu (RoomNerve). This page
+// is the archive: one featured piece, then the rest by year, each
+// carrying its own illustration when one exists. No sample titles.
+// The tomato masthead was a stand-in; the plates are the articles'.
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import { toArticleRow } from '../data/articleIndex';
+import { STOPS } from '../data/stops';
 import ThreadNerve from '../components/ThreadNerve.astro';
 import ArticleList from '../components/ArticleList.astro';
 import RoomNerve from '../components/RoomNerve.astro';
 
 const entries = await getCollection('articles');
 const bySource = entries.map(toArticleRow).sort((a, b) => (a.date < b.date ? 1 : -1));
+// The plate belongs to a piece that has one. A newer note with no
+// illustration still leads the archive; it does not borrow a picture.
+const featured = bySource.find((a) => a.image) ?? bySource[0];
+const ahead = featured ? bySource.filter((a) => a.date > featured.date) : [];
+const rest = featured ? bySource.filter((a) => a.id !== featured.id) : bySource;
+const context = STOPS.find((s) => s.href === '/context');
 
-// The section's own masthead -- a correction on the earlier awake-
-// plate build, which bound this image to one specific article's front
-// matter. Direct correction: "the tomato belongs here... not to any
-// one article." This is the whole cabinet of writing's own cover, not
-// a per-article treatment, so it isn't sourced from the content
-// collection at all -- just this one local constant. null renders
-// today exactly as it did before this existed (title, filter row,
-// list, nothing missing or broken-looking); set it to bring the
-// masthead up, no other code change needed. One subject (not a Dada
-// collage of several) is the considered choice for now, consistent
-// with the single-collision method the field's own specimens already
-// use elsewhere on this site -- a multi-element collage would be a
-// real, different choice, not a default to drift into.
-const masthead: { image: string; alt: string } | null = {
-  image: '/writing/tomato.png',
-  alt: '',
-};
+const months = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
 ---
 
 <!doctype html>
@@ -45,31 +37,57 @@ const masthead: { image: string; alt: string } | null = {
   <body>
     <RoomNerve current="/writing" />
     <main>
-      <ThreadNerve />
-
-      {masthead && (
-        <div class="masthead">
-          <img src={masthead.image} alt={masthead.alt} />
-        </div>
+      {ahead.length > 0 && (
+        <ol class="ahead">
+          {ahead.map((a) => (
+            <li>
+              <a href={`/writing/${a.id}`}>
+                <span>{a.date.getDate()} {months[a.date.getMonth()]} · {a.kind}</span>
+                {a.title}
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
+      {featured && (
+        <article class="featured">
+          <div class="featured-copy">
+            <p class="kicker">
+              Current note
+              {featured.no ? ` / ${String(featured.no).padStart(2, '0')}` : ''}
+              · {featured.date.getDate()} {months[featured.date.getMonth()]} {featured.date.getFullYear()}
+            </p>
+            <h2><a href={`/writing/${featured.id}`}>{featured.title}</a></h2>
+            {(featured.dek || featured.lead) && <p class="dek">{featured.dek || featured.lead}</p>}
+            <p class="threads">
+              {featured.threads.map((t) => <span>{t}</span>)}
+            </p>
+            <a class="read" href={`/writing/${featured.id}`}>Read the essay</a>
+          </div>
+          {featured.image && (
+            <a class="featured-plate" href={`/writing/${featured.id}`} tabindex="-1" aria-hidden="true">
+              <img src={featured.image} alt="" />
+            </a>
+          )}
+        </article>
       )}
 
-      <ArticleList entries={bySource} />
+      <ThreadNerve />
+
+      <p class="from">From the archive</p>
+      <ArticleList entries={rest} />
+
+      {context && (
+        <p class="next">
+          <a href={context.href}>{context.label}</a>
+          <span>{context.subtitle}</span>
+        </p>
+      )}
     </main>
   </body>
 </html>
 
 <style>
-  /* global.css sets html AND body to overflow:hidden, correct for the
-     field (a fixed-viewport canvas that scrolls its own world) but
-     wrong here -- this page overrode body's own overflow already, but
-     never html's, and html is what actually governs whether the real
-     viewport can scroll at all. Confirmed directly, not assumed: body's
-     scrollHeight grew to include every row (real content, all present
-     in the DOM), but window.scrollY stayed pinned at 0 through 20 real
-     wheel/touch scroll attempts on a phone emulation -- the whole
-     archive existed on the page and was completely unreachable below
-     the first screen. html needs the same override body already has,
-     not just body alone. */
   html {
     overflow-y: auto;
     overflow-x: hidden;
@@ -82,66 +100,168 @@ const masthead: { image: string; alt: string } | null = {
   }
 
   main {
-    max-width: 42rem;
+    max-width: 68rem;
     margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 6rem;
+    padding: calc(var(--nerve-dock) + 3.2rem) 1.5rem 6rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }
 
-  /* Bone at rest, not gold -- gold is for the nerve, its beads, and
-     whatever is awake (CLAUDE.md non-negotiable 6), not a resting
-     link color. Hover/focus is the awake moment instead. */
-  .back a {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--bone);
-    text-decoration: none;
+  .featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 2.5rem;
+    align-items: center;
   }
 
-  .back a:hover,
-  .back a:focus-visible {
+  .ahead {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0 0 1.4rem;
+    border-bottom: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .ahead a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+
+  .ahead span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247, 197, 106, 0.7);
+  }
+
+  .ahead a:hover {
     color: var(--gold);
   }
 
-  .back a:focus-visible {
-    outline: 1.5px solid var(--gold);
-    outline-offset: 4px;
-    border-radius: 2px;
+  .featured:not(:has(.featured-plate)) {
+    grid-template-columns: 1fr;
+    max-width: 40rem;
   }
 
-  h1 {
-    margin: 3rem 0 0;
+  .kicker,
+  .from,
+  .threads {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(247, 197, 106, 0.72);
+  }
+
+  .kicker {
+    margin: 0;
+  }
+
+  .featured h2 {
+    margin: 0.7rem 0 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 1.6rem;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
   }
 
+  .featured h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-  /* The section's masthead -- substitution and scale-shift, per direct
-     critique: one real image standing in for a cover, held generously,
-     bigger than any single article's own plate is ever allowed to be.
-     void background (--void, true black, not a near-black -- same
-     ground the field's own specimens composite against, see
-     DESIGN-SYSTEM.md) so the image sits on the same ground a specimen
-     does elsewhere on this site, not a website hero banner. Full
-     image, not cropped -- object-fit: contain, letterboxed on void
-     rather than object-fit: cover cutting into it, since this is the
-     one place on the site allowed to show the whole thing. */
-  .masthead {
+  .featured h2 a:hover,
+  .read:hover,
+  .next a:hover {
+    color: var(--gold);
+  }
+
+  .dek {
+    margin: 1rem 0 0;
+    max-width: 36rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.45;
+    color: var(--oxide-lit);
+  }
+
+  .threads {
     display: flex;
-    justify-content: center;
-    margin: 2.5rem 0 0;
-    padding: 1.5rem;
-    background: var(--void);
-    border: 1px solid rgba(243, 235, 224, 0.12);
+    flex-wrap: wrap;
+    gap: 0.45rem 0.9rem;
+    margin: 1.1rem 0 0;
+    color: rgba(243, 235, 224, 0.45);
   }
 
-  .masthead img {
+  .read {
+    display: inline-block;
+    margin-top: 1.4rem;
+    color: var(--bone);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(247, 197, 106, 0.55);
+    padding-bottom: 0.2rem;
+  }
+
+  .featured-plate {
     display: block;
-    max-width: 100%;
-    max-height: 70vh;
-    width: auto;
-    height: auto;
+    background: var(--void);
+    border: 1px solid rgba(243, 235, 224, 0.1);
+    padding: 1.25rem;
+  }
+
+  .featured-plate img {
+    display: block;
+    width: 100%;
+    max-height: 62vh;
+    object-fit: contain;
+  }
+
+  .from {
+    margin: 2.4rem 0 0;
+  }
+
+  .next {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 3.5rem 0 0;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(243, 235, 224, 0.12);
+  }
+
+  .next a {
+    color: var(--bone);
+    text-decoration: none;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+  }
+
+  .next span {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--oxide-lit);
+  }
+
+  @media (max-width: 800px) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-plate {
+      order: -1;
+    }
   }
 </style>

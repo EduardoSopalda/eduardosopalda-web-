@@ -1,21 +1,9 @@
 ---
-// The real row list -- shared by /writing (all 25) and each
-// /thread/[name] page (whichever subset carries that thread), so the
-// same markup, the same CSS, the same hierarchy fix (title first, the
-// fragment quote second, date/kind/thread last) renders identically
-// wherever a list of articles appears, instead of two copies of this
-// slowly drifting apart the way three copies of STOPS/subtitle text
-// already had to be unified once (see src/data/stops.ts's own
-// comment).
-//
-// Per direct critique: threads used to print as a full comma-joined,
-// all-caps list under every row ("MEMORY, MEANING, GOVERNANCE...") --
-// "a spreadsheet wearing Fraunces." Only the article's own primary
-// thread (threads[0] -- the order Eduardo's front matter already lists
-// them in, not re-sorted here) prints now; the rest exist on the
-// article's own page (the reader's .threads pills already show the
-// full set there), not repeated as metadata soup on every row of the
-// archive.
+// Archive rows for /writing and each /thread/[name] page. The plate is
+// the article's own illustration when front matter has one, and the
+// catalogue number when it does not — never a borrowed image. Text
+// stays the row. The picture sits on void, contained, the way a
+// specimen sits in the field, not cropped into a card.
 export interface ArticleRow {
   id: string;
   title: string;
@@ -24,65 +12,91 @@ export interface ArticleRow {
   threads: string[];
   no: number | null;
   lead: string | null;
+  dek?: string | null;
+  image?: string | null;
 }
 
 interface Props {
   entries: ArticleRow[];
 }
+
 const { entries } = Astro.props;
+
+const months = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+const years = [...new Set(entries.map((a) => a.date.getFullYear()))];
+
+function stamp(d: Date) {
+  return `${d.getDate()} ${months[d.getMonth()]}`;
+}
 ---
 
-<ol class="list">
-  {entries.map((a, i) => (
-    <li style={`animation-delay: ${Math.min(i, 16) * 45}ms`}>
-      <a class="row" href={`/writing/${a.id}`}>
-        <span class="no">{a.no ? `No.${String(a.no).padStart(2, '0')}` : ''}</span>
-        <span class="title">{a.title}</span>
-        {a.lead && <span class="lead">{a.lead}</span>}
-        <span class="meta">
-          {a.date.getFullYear()} · {a.kind}{a.threads[0] ? ` · ${a.threads[0]}` : ''}
-        </span>
-      </a>
-    </li>
-  ))}
-</ol>
+{
+  years.map((year) => {
+    const rows = entries.filter((a) => a.date.getFullYear() === year);
+    return (
+      <section class="year">
+        <h2>{year}</h2>
+        <ol class="list">
+          {rows.map((a, i) => (
+            <li style={`animation-delay: ${Math.min(i, 12) * 40}ms`}>
+              <a class="row" href={`/writing/${a.id}`}>
+                <span class="plate">
+                  {a.image ? (
+                    <img src={a.image} alt="" />
+                  ) : (
+                    <span class="index">{a.no ? String(a.no).padStart(2, '0') : '—'}</span>
+                  )}
+                </span>
+                <span class="copy">
+                  <span class="meta">
+                    {stamp(a.date)} · {a.kind}
+                    {a.no ? ` · No.${String(a.no).padStart(2, '0')}` : ''}
+                  </span>
+                  <span class="title">{a.title}</span>
+                  {(a.dek || a.lead) && <span class="lead">{a.dek || a.lead}</span>}
+                  {a.threads[0] && <span class="thread">{a.threads[0]}</span>}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    );
+  })
+}
 
 <style>
+  .year {
+    margin-top: 2.75rem;
+  }
+
+  .year h2 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    color: rgba(247, 197, 106, 0.7);
+  }
+
   .list {
     list-style: none;
-    margin: 1.5rem 0 0;
+    margin: 0;
     padding: 0;
   }
 
   .list li {
     border-top: 1px solid rgba(243, 235, 224, 0.12);
+    clip-path: inset(0 0 100% 0);
+    animation: row-print 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both;
   }
 
   .list li:last-child {
     border-bottom: 1px solid rgba(243, 235, 224, 0.12);
-  }
-
-  /* "The menu falls from the nerve, as if being printed" -- direct
-     spec, for the room this list lands in right after the field's
-     departing nerve flattens into the corner mark above it (see
-     writing.astro's .nerve-rest and Field.astro's departure comments).
-     A pure CSS entrance, not a JS one: this file is shared by /writing
-     and every /thread/[name] page, some of which a visitor can reach
-     directly with no JS at all (CLAUDE.md non-negotiable 7 is about
-     the reader specifically, but the same "must still work" spirit
-     applies here) -- clip-path + a per-row animation-delay (set as an
-     inline style from the server loop above, not a runtime stagger)
-     plays identically whether or not any script ever runs, and simply
-     doesn't animate at all if the browser doesn't support clip-path
-     transitions, which still leaves a perfectly readable static list.
-     clip-path over a plain opacity fade specifically because "printed"
-     implies something emerging downward past a fixed line, not
-     dissolving into view -- inset(0 0 100% 0) hides the row below its
-     own top edge, animating toward inset(0 0 0 0) reveals it top to
-     bottom, like paper coming out from under a print head. */
-  .list li {
-    clip-path: inset(0 0 100% 0);
-    animation: row-print 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both;
   }
 
   @keyframes row-print {
@@ -105,53 +119,96 @@ const { entries } = Astro.props;
 
   .row {
     display: grid;
-    grid-template-columns: 3.5rem 1fr;
-    gap: 0.25rem 1rem;
-    padding: 1.1rem 0;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1.1rem;
+    align-items: center;
+    padding: 1rem 0;
     text-decoration: none;
     color: inherit;
   }
 
-  .row:focus-visible {
-    outline: 1.5px solid var(--gold);
-    outline-offset: 2px;
+  .row:hover .title,
+  .row:focus-visible .title {
+    color: var(--gold);
   }
 
-  .no {
-    font-size: 0.7rem;
-    color: rgba(227, 175, 149, 0.6);
-    align-self: start;
+  .row:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
+  }
+
+  /* The illustration is a specimen, not a thumbnail. Void ground,
+     contained, so a figure is never cropped to fill a box. Pieces
+     without a plate keep the catalogue number in the same slot, so
+     the column doesn't collapse. */
+  .plate {
+    width: 6.5rem;
+    height: 6.5rem;
+    display: grid;
+    place-items: center;
+    background: var(--void);
+    border: 1px solid rgba(243, 235, 224, 0.1);
+  }
+
+  .plate img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0.84) contrast(1.08) saturate(0.92);
+    transition: filter 0.7s var(--ease);
+  }
+
+  .row:hover .plate img,
+  .row:focus-visible .plate img {
+    filter: brightness(1) contrast(1.05) saturate(1);
+  }
+
+  .index {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: rgba(247, 197, 106, 0.55);
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+    min-width: 0;
+  }
+
+  .meta,
+  .thread {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(243, 235, 224, 0.42);
   }
 
   .title {
-    grid-column: 2;
     font-family: var(--font-display);
-    font-size: 1.05rem;
-    line-height: 1.35;
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    line-height: 1.25;
+    transition: color 0.4s var(--ease);
   }
 
-  /* The row's supporting quote, when a fragment exists for this
-     article -- a smaller, italic line under the real title, not
-     competing with it. Same colour Field.astro's own .frag-quote
-     uses, so a quote reads as the same kind of thing wherever it
-     appears on the site. Only 17 of 25 articles have one (see
-     leadFragmentFor's own comment); the other 8 rows have no second
-     line at all. */
   .lead {
-    grid-column: 2;
-    margin-top: 0.2rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 0.85rem;
+    font-size: 0.92rem;
     line-height: 1.4;
     color: var(--oxide-lit);
   }
 
-  .meta {
-    grid-column: 2;
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: rgba(243, 235, 224, 0.4);
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 4.6rem 1fr;
+      gap: 0.8rem;
+    }
+
+    .plate {
+      width: 4.6rem;
+      height: 4.6rem;
+    }
   }
 </style>
