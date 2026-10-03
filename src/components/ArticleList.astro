@@ -30,7 +30,7 @@ const months = [
 const years = [...new Set(entries.map((a) => a.date.getFullYear()))];
 
 function stamp(d: Date) {
-  return `${d.getDate()} ${months[d.getMonth()]}`;
+  return `${String(d.getDate()).padStart(2, '0')} / ${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 ---
 
@@ -52,13 +52,10 @@ function stamp(d: Date) {
                   )}
                 </span>
                 <span class="copy">
-                  <span class="meta">
-                    {stamp(a.date)} · {a.kind}
-                    {a.no ? ` · No.${String(a.no).padStart(2, '0')}` : ''}
-                  </span>
+                  <span class="meta">{stamp(a.date)}</span>
                   <span class="title">{a.title}</span>
                   {(a.dek || a.lead) && <span class="lead">{a.dek || a.lead}</span>}
-                  {a.threads[0] && <span class="thread">{a.threads[0]}</span>}
+                  <span class="more">Continue</span>
                 </span>
               </a>
             </li>
@@ -119,10 +116,10 @@ function stamp(d: Date) {
 
   .row {
     display: grid;
-    grid-template-columns: 9.5rem 1fr;
-    gap: 1.25rem;
-    align-items: center;
-    padding: 1.55rem 0;
+    grid-template-columns: 11.5rem 4.2rem 1fr;
+    gap: 1.4rem;
+    align-items: start;
+    padding: 1.8rem 0;
     text-decoration: none;
     color: inherit;
   }
@@ -142,20 +139,22 @@ function stamp(d: Date) {
      without a plate keep the catalogue number in the same slot, so
      the column doesn't collapse. */
   .plate {
-    width: 9.5rem;
-    height: 6.4rem;
+    width: 11.5rem;
+    height: 7.2rem;
     display: grid;
     place-items: center;
     background: #070707;
-    border: 1px solid rgba(243, 235, 224, 0.14);
+    border: 1px solid rgba(227, 175, 149, 0.28);
+    overflow: hidden;
   }
 
   .plate img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    filter: brightness(0.84) contrast(1.08) saturate(0.92);
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.9) saturate(0.9);
     transition: filter 0.7s var(--ease);
   }
 
@@ -177,38 +176,53 @@ function stamp(d: Date) {
     min-width: 0;
   }
 
-  .meta,
-  .thread {
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(243, 235, 224, 0.42);
+  .meta {
+    padding-top: 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--flesh);
   }
 
   .title {
     font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    line-height: 1.25;
+    font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+    line-height: 1.15;
+    color: var(--bone);
     transition: color 0.4s var(--ease);
   }
 
   .lead {
+    max-width: 38rem;
     font-family: var(--font-display);
-    font-style: italic;
-    font-size: 0.92rem;
-    line-height: 1.4;
-    color: var(--oxide-lit);
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--bone);
+  }
+
+  .more {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--flesh);
+  }
+
+  .more::after {
+    content: " →";
   }
 
   @media (max-width: 640px) {
     .row {
-      grid-template-columns: 6.4rem 1fr;
+      grid-template-columns: 7.2rem 1fr;
       gap: 0.8rem;
     }
 
+    .meta {
+      grid-column: 2;
+    }
+
     .plate {
-      width: 6.4rem;
-      height: 4.4rem;
+      width: 7.2rem;
+      height: 4.8rem;
+      grid-row: 1 / span 3;
     }
   }
 </style>

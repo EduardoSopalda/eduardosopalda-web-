@@ -67,7 +67,6 @@
   --font-wordmark-given: 'Italiana', serif;
   --font-wordmark: 'Glacial Indifference', sans-serif;
 
-  /* Name plate sits above the menu, menu sits above the line.
-     118px clears EDUARDO / sopalda and the seven stops. */
-  --nerve-dock: calc(118px + env(safe-area-inset-top));
+  /* Name plate, then the menu, then the nerve under both, edge to edge. */
+  --nerve-dock: calc(132px + env(safe-area-inset-top));
 }

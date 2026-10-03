@@ -71,24 +71,18 @@ const months = [
             </p>
             <h2><a href={`/writing/${featured.id}`}>{featured.title}</a></h2>
             {(featured.dek || featured.lead) && <p class="dek">{featured.dek || featured.lead}</p>}
+            <a class="read" href={`/writing/${featured.id}`}>Read the note</a>
           </div>
           {featured.image && (
             <a class="featured-plate" href={`/writing/${featured.id}`} tabindex="-1" aria-hidden="true">
               <img src={featured.image} alt="" />
             </a>
           )}
-          <div class="featured-meta">
-            <p class="threads">
-              {featured.threads.map((t) => <span>{t}</span>)}
-            </p>
-            <a class="read" href={`/writing/${featured.id}`}>Read the essay</a>
-          </div>
         </article>
       )}
 
-      <ThreadNerve />
-
       <p class="from">From the archive</p>
+      <ThreadNerve />
       <ArticleList entries={rest} />
 
       {context && (
