@@ -2294,13 +2294,13 @@ import { STOPS } from '../data/stops';
         straightenAmt = 1 - flatE;
         nerveMin = departNerveFromMin + (departNerveToMin - departNerveFromMin) * riseE;
         nerveMax = departNerveFromMax + (departNerveToMax - departNerveFromMax) * riseE;
-        // Specimens and the other beads leave during the rise. The
-        // canvas nerve stays. The named rail fades in over the last
-        // of the rise so the view transition hands off a line, not
-        // the whole painted field.
-        const fade = Math.min(1, Math.max(0, (elapsed - 500) / 900));
+        // The painted curve leaves as the rail arrives, so the cut
+        // hands off one filament. The canvas must be gone before
+        // navigation or the line vanishes and a second one appears.
+        const hand = Math.min(1, Math.max(0, (elapsed - 700) / 700));
         world.style.opacity = String(Math.max(0, 1 - fade));
-        if (railEl) railEl.style.opacity = String(riseE);
+        canvas.style.opacity = String(1 - hand);
+        if (railEl) railEl.style.opacity = String(Math.max(riseE, hand));
         if (elapsed >= DEPART_MS && departHref) {
           const href = departHref;
           departHref = '';

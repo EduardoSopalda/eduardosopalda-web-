@@ -156,8 +156,14 @@ const here = STOPS.find((s) => s.href === current);
     left: 0;
     right: 0;
     height: 1px;
-    background: var(--bronze);
-    box-shadow: 0 0 8px rgba(170, 104, 66, 0.45);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(247, 197, 106, 0.7) 8%,
+      rgba(247, 197, 106, 0.7) 92%,
+      transparent
+    );
+    filter: drop-shadow(0 0 5px rgba(247, 197, 106, 0.45));
   }
 
   .room-pulse {
