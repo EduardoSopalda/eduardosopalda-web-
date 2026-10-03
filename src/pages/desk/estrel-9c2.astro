@@ -1,0 +1,92 @@
+---
+// Unlisted. For the organization only. Not linked from the site.
+import '../../styles/fraunces.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../../styles/global.css';
+import { BERLIN_DESK } from '../../data/berlin';
+
+const q = `desk=${BERLIN_DESK}&dl=1`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Berlin desk · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <p class="kicker">AUTOMA Chem · Estrel Berlin · 26 October · 9:40</p>
+      <h1>For the organization</h1>
+      <p class="deck">The film and the roadmap. Not on the public site until after the talk.</p>
+      <p class="files">
+        <a href={`/api/berlin/roadmap.pdf?${q}`}>Download the roadmap</a>
+        <a href={`/api/berlin/film.mp4?${q}`}>Download the film</a>
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  html, body {
+    margin: 0;
+    min-height: 100svh;
+    background: var(--void);
+    color: var(--bone);
+  }
+
+  main {
+    max-width: 36rem;
+    margin: 0 auto;
+    padding: 18vh 1.5rem 4rem;
+  }
+
+  .kicker {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  h1 {
+    margin: 0.8rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .deck {
+    margin: 1rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--flesh);
+  }
+
+  .files {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin: 2.2rem 0 0;
+  }
+
+  a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.7);
+  }
+
+  a:hover { color: var(--gold); }
+</style>

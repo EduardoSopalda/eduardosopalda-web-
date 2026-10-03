@@ -1,7 +1,8 @@
-// Film, stills, and the roadmap. Nothing is served until the talk has been given.
+// Film, stills, and the roadmap. The public site gets them only after the talk.
+// The organization can download them sooner, with the desk key.
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { berlinOpen } from '../../../data/berlin';
+import { berlinOpen, BERLIN_DESK } from '../../../data/berlin';
 
 export const prerender = false;
 
@@ -23,13 +24,21 @@ const TYPE: Record<string, string> = {
 };
 
 export async function GET({ params, request }: { params: { file?: string }; request: Request }) {
-  if (!berlinOpen()) return new Response('Not yet.', { status: 404 });
+  const url = new URL(request.url);
+  const forDesk = url.searchParams.get('desk') === BERLIN_DESK;
+  if (!berlinOpen() && !forDesk) return new Response('Not yet.', { status: 404 });
   const name = params.file ?? '';
   if (!ALLOWED.has(name)) return new Response('Not found.', { status: 404 });
 
   const data = await readFile(join(process.cwd(), 'private/berlin', name));
   const type = TYPE[name] ?? 'image/jpeg';
   const size = data.byteLength;
+  const download = url.searchParams.get('dl') === '1';
+  const filename = name === 'film.mp4'
+    ? 'AUTOMA-Chem-2026-Eduardo-Sopalda.mp4'
+    : name === 'roadmap.pdf'
+      ? 'AUTOMA-Chem-2026-Roadmap.pdf'
+      : name;
   const range = request.headers.get('range');
   const match = range && /^bytes=(\d+)-(\d+)?$/.exec(range);
 
@@ -48,6 +57,7 @@ export async function GET({ params, request }: { params: { file?: string }; requ
         'Content-Range': `bytes ${start}-${end}/${size}`,
         'Accept-Ranges': 'bytes',
         'Cache-Control': 'private, max-age=3600',
+        ...(download ? { 'Content-Disposition': `attachment; filename="${filename}"` } : {}),
       },
     });
   }
@@ -58,6 +68,7 @@ export async function GET({ params, request }: { params: { file?: string }; requ
       'Content-Length': String(size),
       'Accept-Ranges': 'bytes',
       'Cache-Control': 'private, max-age=3600',
+      ...(download ? { 'Content-Disposition': `attachment; filename="${filename}"` } : {}),
     },
   });
 }
