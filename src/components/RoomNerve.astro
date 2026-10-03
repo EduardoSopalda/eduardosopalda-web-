@@ -26,8 +26,10 @@ const here = STOPS.find((s) => s.href === current);
 
 <header class="room-nerve" data-arrive="0">
   <a class="mark" href="/">
-    <span class="given">EDUARDO</span>
-    <span class="family">sopalda</span>
+    <span class="lockup">
+      <span class="given">EDUARDO</span>
+      <span class="family">sopalda</span>
+    </span>
     <span class="tagline">DATA | AI <span class="amp">&</span> The human experience</span>
   </a>
   <button type="button" class="menu-toggle" aria-expanded="true" aria-controls="room-stops">Main</button>
@@ -189,8 +191,15 @@ const here = STOPS.find((s) => s.href === current);
     align-items: flex-end;
     text-align: right;
     text-decoration: none;
-    line-height: 0.9;
+    line-height: normal;
     z-index: 30;
+  }
+
+  .lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
   }
 
   .given {
@@ -208,6 +217,7 @@ const here = STOPS.find((s) => s.href === current);
     letter-spacing: 0;
     text-transform: lowercase;
     color: var(--flesh);
+    line-height: normal;
   }
 
   .tagline {
@@ -217,6 +227,7 @@ const here = STOPS.find((s) => s.href === current);
     font-family: var(--font-mono);
     font-size: clamp(.42rem, 1.7vw, .52rem);
     letter-spacing: .16em;
+    line-height: normal;
     text-transform: uppercase;
     text-align: right;
     color: var(--champagne);
