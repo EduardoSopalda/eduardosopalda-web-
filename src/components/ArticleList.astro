@@ -68,16 +68,21 @@ function stamp(d: Date) {
 
 <style>
   .year {
-    margin-top: 2.75rem;
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 2rem;
+    margin-top: 3.2rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(170, 104, 66, 0.45);
   }
 
   .year h2 {
-    margin: 0 0 0.4rem;
-    font-family: var(--font-mono);
+    margin: 0.35rem 0 0;
+    font-family: var(--font-display);
     font-weight: 400;
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
-    color: rgba(247, 197, 106, 0.7);
+    font-size: 1.8rem;
+    letter-spacing: 0;
+    color: var(--bronze);
   }
 
   .list {
@@ -210,6 +215,11 @@ function stamp(d: Date) {
   }
 
   @media (max-width: 640px) {
+    .year {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
     .row {
       grid-template-columns: 7.2rem 1fr;
       gap: 0.8rem;
