@@ -107,15 +107,19 @@ const here = STOPS.find((s) => s.href === current);
   toggle?.addEventListener('click', () => {
     const rail = document.querySelector('.room-nerve');
     if (!rail || !toggle || !line) return;
-    const dropping = !rail.classList.contains('is-dropped');
     if (stops) {
-      stops.style.transition = 'opacity 0.45s ease';
+      stops.style.transition = 'opacity 0.6s ease';
       stops.style.opacity = '0';
     }
-    rail.classList.toggle('is-dropped', dropping);
-    toggle.setAttribute('aria-expanded', dropping ? 'true' : 'false');
-    toggle.textContent = dropping ? 'Close' : 'Menu';
+    toggle.style.transition = 'opacity 0.6s ease';
+    toggle.style.opacity = '0';
+    toggle.style.pointerEvents = 'none';
+    rail.classList.add('is-dropped');
     travel();
+    window.setTimeout(() => {
+      try { sessionStorage.setItem('sopalda-docked', '1'); } catch (e) {}
+      location.href = '/';
+    }, reduced ? 1 : 900);
   });
 </script>
 
