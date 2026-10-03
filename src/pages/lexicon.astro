@@ -1,10 +1,239 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/lexicon')!;
+// Public record. The mockup called this Lexicon: talks, panels, rooms.
+// Roles are stated as given. The Spain forum stage role is not confirmed.
+// The Berlin congress stays upcoming, and already has its own page.
+import '../styles/fraunces.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import RoomNerve from '../components/RoomNerve.astro';
+import RoomShell from '../components/RoomShell.astro';
+
+const records = [
+  {
+    img: '/cabinet/datanext-speaker-card.jpg',
+    alt: 'DataNext Agentic Summit 2026 speaker card for Eduardo Sopalda',
+    date: '28 May 2026 · Online',
+    title: 'DataNext Agentic Summit',
+    text: '“Shaping the Future of Business with Agentic AI: Opportunities, Challenges & Responsible Innovation.” Followed by the closing panel.',
+    meta: 'Agentic AI · Responsible innovation',
+    role: 'Speaker · panelist',
+  },
+  {
+    img: '/cabinet/madrid-data-trust-forum.jpg',
+    alt: 'Spain Cybersecurity and Data Trust Forum 2026',
+    date: '21 May 2026 · Madrid',
+    title: 'Spain Cybersecurity and Data Trust Forum',
+    text: 'Trust, resilience, and digital sovereignty in critical sectors. Organized by Bamberg Dialogues at Hotel ILUNION Pío XII.',
+    meta: 'Data trust · Digital sovereignty',
+    role: 'Invited · stage role to confirm',
+  },
+  {
+    img: '/cabinet/sigmoid-un-ballroom.png',
+    alt: 'Eduardo and fellow roundtable participants in the UN Ballroom at Ten Trinity Square',
+    date: '13 May 2026 · London',
+    title: 'Sigmoid — A room that remembers',
+    text: 'A closed-door Agentic AI roundtable in the UN Ballroom at Ten Trinity Square. The room hosted the inaugural reception of the first UN General Assembly in 1946. The first meeting itself was held at Central Hall Westminster on 10 January 1946.',
+    meta: 'Reimagine with AI · London',
+    role: 'Roundtable participant',
+  },
+  {
+    img: '/cabinet/kith-climate-workshop-article.jpg',
+    alt: 'Field note artwork for the Kith Lab Claude Code and Climate workshop',
+    date: 'Late February 2026 · Kith Lab',
+    title: 'Claude Code × Climate',
+    text: 'A 35-minute AI-native workflow built an ESG fund tear sheet, risk scorecard, deal memo, and investor slides, and raised questions about verification and accountability.',
+    meta: 'Climate · ESG · Agentic workflows',
+    role: 'Invited workshop participant',
+  },
+  {
+    img: '/cabinet/dama-management-summit-tour.jpg',
+    alt: 'Data Management Summit Tour stop in Barcelona',
+    date: '12 March 2026 · Barcelona',
+    title: 'Data Management Summit Tour',
+    text: 'Joined as a VIP guest of DAMA España for a conversation on data governance, quality, culture, and AI in organizations.',
+    meta: 'Data management · DAMA España',
+    role: 'VIP guest · attendee',
+  },
+  {
+    img: '/cabinet/women-in-tech-talks.jpg',
+    alt: 'Women in Tech Talks at dsm-firmenich',
+    date: '18 September 2026 · dsm-firmenich',
+    title: 'Women in Tech Talks',
+    text: 'Introduced Yvonne Espinosa and Zainab Al Yasiri for a conversation on AI, confidence, curiosity, and trusting our judgment.',
+    meta: 'Women in tech · AI · Leadership',
+    role: 'Introducer',
+  },
+];
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="the entries. Which words, and his definitions."
-/>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lexicon · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <RoomNerve current="/lexicon" heading={false} />
+    <RoomShell title="Lexicon" italic="out in the world.">
+      <section class="open">
+        <p class="kicker">Talks · panels · roundtables</p>
+        <p class="display">The ideas I carry into rooms, and what those rooms give back.</p>
+        <p class="dek">A living index of conversations across data, AI, trust, climate, and the human choices underneath them. Different rooms. Connected questions.</p>
+      </section>
+
+      <article class="feature">
+        <figure>
+          <img src="/cabinet/datanext-roundtable-recap.jpg" alt="Eduardo and fellow panelists at the DataNext Agentic Summit closing panel" />
+          <figcaption>On the record · DataNext 2026</figcaption>
+        </figure>
+        <div>
+          <p class="kicker">Featured · Agentic AI</p>
+          <h2>Shaping the future of business with agentic AI.</h2>
+          <p>At DataNext Agentic Summit, the closing panel was on opportunities, challenges, and what responsible innovation costs when systems move faster than approval.</p>
+          <p class="meta">28 May 2026 · Online · Speaker, closing panel</p>
+        </div>
+      </article>
+
+      <section class="index">
+        <p class="kicker">A field record · 2026</p>
+        <h2>Conversations, indexed.</h2>
+        <ol>
+          {records.map((r) => (
+            <li>
+              <figure>
+                <img src={r.img} alt={r.alt} />
+              </figure>
+              <div>
+                <p class="meta">{r.date}</p>
+                <h3>{r.title}</h3>
+                <p>{r.text}</p>
+                <p class="meta">{r.meta}</p>
+                <p class="role">{r.role}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="next">
+        <p class="kicker">Next · not yet a record</p>
+        <h2>Industry governance, at scale.</h2>
+        <p class="when">26–27 October 2026 · Berlin</p>
+        <p>
+          Chemical Automation and Digitalisation Congress. Opening panel: data and AI governance as the
+          foundation for sustainable digital transformation in the chemical industry. Invited by BGS Group.
+        </p>
+        <p class="links"><a href="/out-loud/automa-chem-2026">The Berlin note</a></p>
+      </section>
+    </RoomShell>
+  </body>
+</html>
+
+<style>
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+
+  .kicker, .meta, .role, figcaption {
+    margin: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .display, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    color: var(--bone);
+  }
+
+  .display {
+    margin: 0.8rem 0 0;
+    max-width: 16em;
+    font-size: clamp(2.1rem, 3.2vw, 3rem);
+  }
+
+  .dek, .feature p, .index p, .next p {
+    max-width: 38rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.08rem;
+    line-height: 1.45;
+    color: var(--flesh);
+  }
+
+  .dek { margin: 1rem 0 0; }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
+    gap: 1.8rem;
+    align-items: center;
+    margin-top: 3.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(243, 235, 224, 0.14);
+  }
+
+  figure { margin: 0; }
+  img {
+    display: block;
+    width: 100%;
+    height: 16rem;
+    object-fit: contain;
+    object-position: center;
+    background: #070707;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+  }
+
+  figcaption { margin-top: 0.55rem; }
+
+  h2 { margin: 0.55rem 0 0.8rem; font-size: clamp(1.7rem, 2.4vw, 2.2rem); }
+  h3 { margin: 0.3rem 0 0.35rem; font-size: 1.45rem; }
+
+  .feature .meta, .index .meta { margin-top: 0.7rem; font-style: normal; font-family: var(--font-mono); }
+
+  .index { margin-top: 4.5rem; }
+  ol { list-style: none; margin: 1.2rem 0 0; padding: 0; }
+  li {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.3rem;
+    align-items: center;
+    padding: 1.15rem 0;
+    border-top: 1px solid rgba(243, 235, 224, 0.14);
+  }
+  li img { height: 11rem; }
+  .role {
+    display: inline-block;
+    margin-top: 0.7rem;
+    padding-top: 0.15rem;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.7);
+    color: var(--bronze);
+  }
+
+  .next {
+    margin-top: 4rem;
+    padding: 1.6rem 0 0;
+    border-top: 1px solid rgba(170, 104, 66, 0.55);
+  }
+  .when {
+    font-style: normal !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold) !important;
+  }
+  .links { font-style: normal; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .links a { color: var(--champagne); text-decoration: none; }
+  .links a:hover { color: var(--gold); }
+
+  @media (max-width: 800px) {
+    .feature, li { grid-template-columns: 1fr; }
+    img, li img { height: auto; max-height: 16rem; }
+  }
+</style>

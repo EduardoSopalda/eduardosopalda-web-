@@ -1,0 +1,106 @@
+---
+// The same room as Writing: lockup fixed on the left, the note centered
+// in the space beside it. The sticker is the page. The column is the rest.
+interface Props {
+  title: string;
+  italic: string;
+}
+const { title, italic } = Astro.props;
+---
+
+<main>
+  <header class="room-title">
+    <p class="room-kicker">Field notes</p>
+    <h1>{title}<em>{italic}</em></h1>
+  </header>
+  <div class="room">
+    <slot />
+  </div>
+</main>
+
+<style>
+  main {
+    --rail: 17rem;
+    --inset: 1.75rem;
+    --gutter: 6.5rem;
+    --measure: 54rem;
+    display: grid;
+    grid-template-columns: var(--rail) var(--gutter) minmax(0, 1fr);
+    align-items: start;
+    margin: 0;
+    padding: calc(var(--nerve-dock) + 2.75rem) 7rem 8rem var(--inset);
+    font-family: var(--font-mono);
+    color: var(--bone);
+  }
+
+  .room-title {
+    grid-column: 1;
+    position: fixed;
+    top: calc(var(--nerve-dock) + 2.2rem);
+    left: var(--inset);
+    z-index: 12;
+    width: var(--rail);
+    margin: 0;
+  }
+
+  .room-kicker {
+    margin: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .room-kicker::after {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    height: 1px;
+    margin-left: 0.65rem;
+    vertical-align: middle;
+    background: rgba(170, 104, 66, 0.7);
+  }
+
+  .room-title h1 {
+    margin: 0.7rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.1rem, 4.4vw, 4.4rem);
+    line-height: 0.86;
+    letter-spacing: -0.03em;
+    color: var(--bone);
+  }
+
+  .room-title em {
+    display: block;
+    margin: 0.28em 0 0 2.4em;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.38em;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: var(--bronze);
+  }
+
+  .room {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: center;
+    width: min(100%, var(--measure));
+    min-width: 0;
+  }
+
+  @media (max-width: 900px) {
+    main {
+      display: block;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .room-title {
+      position: static;
+      width: auto;
+      margin: 0 0 2.4rem;
+    }
+  }
+</style>

@@ -1,10 +1,279 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/context')!;
+import '../styles/fraunces.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import RoomNerve from '../components/RoomNerve.astro';
+import RoomShell from '../components/RoomShell.astro';
+
+const specimens = [
+  {
+    src: '/cabinet/umbrella-elephant-cutout.png',
+    no: '01',
+    title: 'The weather keeper',
+    meta: 'Elephant · umbrella · impossible poise',
+    alt: 'A seated figure with an elephant head holding an umbrella',
+  },
+  {
+    src: '/cabinet/goldfish-source.png',
+    no: '02',
+    title: 'A thought in suspension',
+    meta: 'Goldfish · memory · interior worlds',
+    alt: 'A goldfish held in a dark interior',
+  },
+  {
+    src: '/cabinet/keepsake-brain-cutout.png',
+    no: '03',
+    title: 'The portable cabinet',
+    meta: 'Brain · keepsakes · collected matter',
+    alt: 'A brain form filled with small keepsakes',
+  },
+];
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="the Context text. Not drafted by anyone else -- see CLAUDE.md non-negotiable 1."
-/>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Context · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <RoomNerve current="/context" heading={false} />
+    <RoomShell title="Context" italic="a small history.">
+      <section class="open">
+        <div>
+          <p class="kicker">An opening specimen</p>
+          <p class="display">Before knowledge had departments, the world could still sit in one room.</p>
+        </div>
+        <figure class="hero-plate">
+          <img src="/cabinet/umbrella-elephant-cutout.png" alt="A seated figure with an elephant head holding an umbrella" />
+          <figcaption>One room trying to hold the world</figcaption>
+        </figure>
+      </section>
+
+      <section class="block">
+        <p class="kicker">01 · Before the departments</p>
+        <h2>A room for the almost unbelievable.</h2>
+        <p>
+          In early modern Europe, a <em>Wunderkammer</em> — a chamber of wonder — or <em>Kunstkammer</em>
+          gathered natural things, human-made marvels and instruments under one roof.
+        </p>
+        <p>
+          Shell beside astrolabe. Fossil beside carved ivory. Not a catalogue of the strange: a small,
+          imperfect world assembled to be looked at, argued with, and understood.
+        </p>
+        <p class="tags"><span>Naturalia</span><span>Artificialia</span><span>Scientifica</span></p>
+      </section>
+
+      <blockquote>
+        <p>A collection was also a portrait of the person who <em>made it.</em></p>
+        <footer>Taste · reach · curiosity · the limits of what one could know</footer>
+      </blockquote>
+
+      <section class="block">
+        <p class="kicker">02 · When the shelves divided</p>
+        <h2>Then the world got labelled.</h2>
+        <p>
+          Over time, collections became museums. Inquiry acquired disciplines, departments and names.
+          The sorting made knowledge more exact, and easier to share.
+        </p>
+        <p>
+          But a label can arrive too soon. Sometimes the most useful thing is to leave two unlike objects
+          together long enough for a third idea to appear.
+        </p>
+        <p class="spine" aria-hidden="true"><span>wonder</span><span>specimen</span><span>discipline</span><span>?</span></p>
+      </section>
+
+      <section class="block">
+        <p class="kicker">03 · The collector, now</p>
+        <h2>I collect ideas. I collect experience.</h2>
+        <p>
+          I collect questions, places, stories, contradictions, people. Things that have no obvious reason
+          to be beside one another, until they do.
+        </p>
+      </section>
+
+      <section class="block">
+        <p class="kicker">Loose specimens · 01 — 03</p>
+        <h2>Curiosities, for now.</h2>
+        <ol class="plates">
+          {specimens.map((s) => (
+            <li>
+              <figure>
+                <img src={s.src} alt={s.alt} />
+                <figcaption>
+                  <span>{s.no}</span>
+                  <strong>{s.title}</strong>
+                  {s.meta}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="close">
+        <p class="kicker">04 · What the cabinet is for</p>
+        <h2>The meaning is in the between.</h2>
+        <p>
+          The work moves across architecture and data, technology and people, systems and stories.
+          I am interested in what happens when unlike things meet, and in the meaning we make there, together.
+        </p>
+        <p class="end">A collection is never the whole world. It is one way of seeing it.</p>
+        <p class="links"><a href="/writing">Step into the writing</a></p>
+      </section>
+    </RoomShell>
+  </body>
+</html>
+
+<style>
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+
+  .kicker {
+    margin: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .open {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(11rem, 15rem);
+    gap: 2.5rem;
+    align-items: end;
+  }
+
+  .display, h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .display {
+    margin: 0.9rem 0 0;
+    font-size: clamp(2.1rem, 3.2vw, 3rem);
+  }
+
+  h2 {
+    margin: 0.7rem 0 0;
+    max-width: 16em;
+    font-size: clamp(2rem, 3vw, 2.7rem);
+  }
+
+  .block { margin-top: 5.2rem; }
+
+  .block p, .close p {
+    max-width: 38rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.12rem;
+    line-height: 1.45;
+    color: var(--flesh);
+  }
+
+  .block em { color: var(--bone); }
+
+  .tags { display: flex; gap: 0.7rem; flex-wrap: wrap; font-style: normal; font-family: var(--font-mono); }
+  .tags span {
+    border: 1px solid rgba(170, 104, 66, 0.55);
+    padding: 0.4rem 0.55rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .hero-plate, .plates figure { margin: 0; }
+  .hero-plate img, .plates img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 26rem;
+    object-fit: contain;
+  }
+
+  figcaption, blockquote footer {
+    margin-top: 0.7rem;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  blockquote {
+    margin: 4.5rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  blockquote p {
+    margin: 0;
+    max-width: 16em;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    color: var(--bone);
+  }
+
+  blockquote em { font-style: italic; color: var(--bronze); }
+
+  .spine {
+    display: flex;
+    gap: 1.4rem;
+    margin: 1.6rem 0 0;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(170, 104, 66, 0.55);
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .plates {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.2rem;
+    margin: 1.6rem 0 0;
+    padding: 0;
+  }
+
+  .plates img {
+    height: 16rem;
+    background: #070707;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+  }
+
+  .plates figcaption { display: flex; flex-direction: column; gap: 0.25rem; }
+  .plates strong {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.15rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--bone);
+  }
+
+  .close { margin-top: 5rem; padding-top: 2rem; border-top: 1px solid rgba(170, 104, 66, 0.45); }
+  .end { color: var(--bronze) !important; }
+
+  .links { font-style: normal; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .links a { color: var(--champagne); text-decoration: none; }
+  .links a:hover { color: var(--gold); }
+
+  @media (max-width: 800px) {
+    .open, .plates { grid-template-columns: 1fr; }
+    .hero-plate { max-width: 16rem; }
+  }
+</style>
