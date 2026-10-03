@@ -60,10 +60,17 @@ const here = STOPS.find((s) => s.href === current);
   const toggle = document.querySelector('.menu-toggle');
   const stops = document.getElementById('room-stops');
   toggle?.addEventListener('click', () => {
-    const open = toggle.getAttribute('aria-expanded') !== 'true';
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    toggle.textContent = open ? 'Menu' : 'Close';
-    if (stops) stops.hidden = !open;
+    const rail = document.querySelector('.room-nerve');
+    const dropping = !rail?.classList.contains('is-dropped');
+    rail?.classList.toggle('is-dropped', dropping);
+    toggle.setAttribute('aria-expanded', dropping ? 'true' : 'false');
+    toggle.textContent = dropping ? 'Close' : 'Menu';
+    if (!stops) return;
+    stops.hidden = true;
+    window.setTimeout(() => {
+      if (!stops) return;
+      stops.hidden = !dropping;
+    }, dropping ? 1400 : 200);
   });
 </script>
 
@@ -198,6 +205,11 @@ const here = STOPS.find((s) => s.href === current);
     pointer-events: none;
     background: linear-gradient(rgba(247, 197, 106, 0.9), rgba(247, 197, 106, 0.9)) center / 100% 1px no-repeat;
     box-shadow: 0 7px 6px -6px rgba(247, 197, 106, 0.45);
+    transition: top 1.6s cubic-bezier(.22, .7, .2, 1);
+  }
+
+  .room-nerve.is-dropped .room-line {
+    top: 42vh;
   }
 
   .comet {
@@ -246,6 +258,12 @@ const here = STOPS.find((s) => s.href === current);
     justify-content: flex-start;
     flex-wrap: nowrap;
     gap: 1.35rem;
+    transition: top 1.6s cubic-bezier(.22, .7, .2, 1), opacity 0.6s ease;
+  }
+
+  .room-nerve.is-dropped .room-stops {
+    top: calc(42vh - 2.4rem);
+    left: 1.4rem;
   }
 
   .room-stops a {
