@@ -991,6 +991,23 @@ import { STOPS } from '../data/stops';
     const DEPART_REVEAL_STAGGER_MS = 35;
     const DEPART_REVEAL_ITEM_MS = 120;
     const DEPART_REVEAL_MS = (STOPS.length - 1) * DEPART_REVEAL_STAGGER_MS + DEPART_REVEAL_ITEM_MS;
+    // Direct feedback, watching the real hard-cut land: "it jumps...
+    // looks cheap... like 2 separate pages pasted together." Confirmed
+    // via a captured frame pair, not assumed: the project's own
+    // cross-document view-transition (global.css) was crossfading the
+    // fully revealed, brightly lit seven-stop menu straight into the
+    // destination room's own, completely unrelated hero -- two busy
+    // layouts double-exposed on top of each other for the crossfade's
+    // own duration, which is exactly what read as a glitchy paste
+    // rather than one continuous motion. The fix isn't to remove the
+    // crossfade (it's free, already-built, and a dark-to-dark dissolve
+    // is genuinely nice) -- it's to stop handing it a busy frame.
+    // DEPART_CLEAR_MS is one last short beat after the reveal finishes:
+    // everything (nerve, pulses, all seven stops) fades to nothing
+    // before location.href ever fires, so whatever the browser
+    // snapshots to crossfade FROM is calm and nearly void, the same
+    // dark the destination room's own first paint already is.
+    const DEPART_CLEAR_MS = 200;
     type DepartPhase = 'idle' | 'straightening' | 'docking' | 'docked' | 'navigating';
     let departPhase: DepartPhase = 'idle';
     // Reset at every phase transition -- each phase's own progress is
@@ -2369,15 +2386,16 @@ import { STOPS } from '../data/stops';
           }
         } else if (departPhase === 'docked') {
           // The band itself already finished arriving (docking's own
-          // eased2 reached 1 to get here) -- this phase is purely the
-          // seven stops' own staggered reveal running out its clock,
-          // handled in the stops loop below off this same
-          // departPhaseStartT. Navigation fires once that stagger
-          // (DEPART_REVEAL_MS) completes.
+          // eased2 reached 1 to get here) -- this phase is the seven
+          // stops' own staggered reveal running out its clock (handled
+          // in the stops loop below off this same departPhaseStartT),
+          // then DEPART_CLEAR_MS more of everything fading to void
+          // (see that constant's own comment) before navigation
+          // actually fires.
           straightenAmt = 0;
           nerveMin = departNerveToMin;
           nerveMax = departNerveToMax;
-          if (elapsed >= DEPART_REVEAL_MS && departHref) {
+          if (elapsed >= DEPART_REVEAL_MS + DEPART_CLEAR_MS && departHref) {
             const href = departHref;
             departHref = '';
             departPhase = 'navigating';
@@ -2439,6 +2457,21 @@ import { STOPS } from '../data/stops';
       if (departPhase === 'docking' && !departSpecimensHidden) {
         departSpecimensHidden = true;
         for (const n of specNodes) n.el.dataset.shown = '0';
+      }
+
+      // clearFade: 1 everywhere except the very last beat of 'docked'
+      // (see DEPART_CLEAR_MS's own comment) -- eases to 0 over that
+      // window, applied to the nerve line/pulses below and to every
+      // stop label in the stops loop, so the frame the view-transition
+      // crossfade actually grabs right before location.href fires is
+      // calm and nearly void instead of the fully lit menu.
+      let clearFade = 1;
+      if (departPhase === 'docked') {
+        const clearElapsed = Math.max(0, (performance.now() - departPhaseStartT) - DEPART_REVEAL_MS);
+        const pClear = Math.min(1, clearElapsed / DEPART_CLEAR_MS);
+        clearFade = 1 - (0.5 - 0.5 * Math.cos(pClear * Math.PI));
+      } else if (departPhase === 'navigating') {
+        clearFade = 0;
       }
 
       // Every ~20 frames (~3/sec), not every frame -- getBoundingClientRect
@@ -2527,6 +2560,15 @@ import { STOPS } from '../data/stops';
       // reads as dormant rather than dead.
       const flatness = 1 - straightenAmt;
       const breath = currentBreath();
+      // clearFade wraps the whole nerve+pulses paint as one globalAlpha
+      // multiply, rather than threading it into every individual rgba()
+      // string below -- simplest way to fade the entire line down to
+      // nothing for the final departure beat (see that variable's own
+      // comment) without touching each of the many colour expressions
+      // this block already has. 1 (no-op) outside a departure's own
+      // final clear window, so this changes nothing the rest of the
+      // time.
+      ctx!.globalAlpha = clearFade;
       ctx!.shadowColor = 'rgba(247, 197, 106, 0.5)';
       ctx!.shadowBlur = 10;
       strokePath();
@@ -2591,6 +2633,7 @@ import { STOPS } from '../data/stops';
         ctx!.fill();
       }
       ctx!.shadowBlur = 0;
+      ctx!.globalAlpha = 1;
 
       // ---- the point of light: the cursor itself, replaced. Drawn at
       // the same px/py already tracked for bending the nerve, so the
@@ -3700,7 +3743,12 @@ import { STOPS } from '../data/stops';
             // the loop keeps running every frame until the real unload,
             // same as everything else on this canvas.
           }
-          s.el.style.opacity = opacity.toFixed(3);
+          // clearFade (1 outside the final departure beat, eased to 0
+          // across it -- see its own comment) fades every stop label
+          // along with the nerve/pulses, so the crossfade this is all
+          // leading up to grabs a calm, nearly void frame instead of
+          // the fully revealed menu.
+          s.el.style.opacity = (opacity * clearFade).toFixed(3);
           if (isSelected) s.el.setAttribute('aria-current', 'true');
           else s.el.removeAttribute('aria-current');
           s.el.style.transform = `translate3d(${finalX}px, ${finalY}px, 0)`;

@@ -194,6 +194,19 @@ const jellyfishPoster = '/concepts/data-jellyfish-cutout.png';
     margin: 0 auto;
     padding: 4rem 1.5rem 7rem;
     color: var(--bone);
+    /* Direct feedback on the real hard-cut arriving from the field:
+       content used to render at full brightness the instant this page
+       painted, which (once the departure's own busy end-frame was
+       fixed to fade to void first -- see Field.astro's DEPART_CLEAR_MS)
+       still read as a slightly abrupt snap after a calm, dark
+       crossfade. A short fade-up on arrival instead, so the room
+       settles in rather than appearing. */
+    animation: room-arrive 0.6s var(--ease) both;
+  }
+
+  @keyframes room-arrive {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
 
   .back a {
@@ -509,6 +522,10 @@ const jellyfishPoster = '/concepts/data-jellyfish-cutout.png';
     .nerve-rest {
       animation: none;
       opacity: 0.75;
+    }
+
+    main {
+      animation: none;
     }
   }
 </style>

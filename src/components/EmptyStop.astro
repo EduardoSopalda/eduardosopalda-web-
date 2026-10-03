@@ -62,6 +62,23 @@ const { title, subtitle, todo } = Astro.props;
     padding: 0 1.5rem;
     font-family: var(--font-mono);
     color: var(--bone);
+    /* Same arrival fade as who/context/writing -- see who.astro's own
+       comment: softens the hard navigation cut from the field's own
+       departure (which fades its last frame to void first, Field.astro's
+       DEPART_CLEAR_MS) into this room settling in, rather than snapping
+       to full brightness the instant the crossfade completes. */
+    animation: room-arrive 0.6s var(--ease) both;
+  }
+
+  @keyframes room-arrive {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    main {
+      animation: none;
+    }
   }
 
   .label {
