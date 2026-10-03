@@ -36,6 +36,12 @@ const here = STOPS.find((s) => s.href === current);
   <div class="room-line" aria-hidden="true"><span class="room-pulse"></span></div>
 </header>
 
+<script is:inline>
+  // A room is outside the show. Coming back to the field should meet
+  // "unroll the logic" again, not the already-docked field. Cleared
+  // here so the next load of / plays the nerve drop and the opening.
+  try { sessionStorage.removeItem('sopalda-docked'); } catch (e) {}
+</script>
 <script>
   // Field.astro sets this on the way out. A direct visit has no flag,
   // so the rail is simply already there — no fake entrance.
