@@ -423,15 +423,15 @@ const masthead: { image: string; alt: string } | null = {
      stays edge to edge even once flattened, only its vertical channel
      collapses -- see Field.astro's straightenAmt), faded at both ends
      rather than hard-cut, so it reads as a line running past the
-     frame, not a bar sized to it. top/height approximate where
-     Field.astro's own departure actually measures body.is-docked
-     .mark h1's real rect and eases toward -- necessarily
-     approximate, since this is a static illusion on a different
-     document, not the same element, but close enough that nothing
-     visibly jumps across the cut. */
+     frame, not a bar sized to it. Direct feedback, confirmed via a
+     zoomed screenshot: at the old 38px this ran straight through
+     "EDUARDO sopalda" (Nameplate.astro, same fixed top-right corner
+     on every room). Dropped below Nameplate's own full box instead of
+     trying to thread a Y between its lines -- simpler and more robust
+     than matching pixel heights across two different documents. */
   .nerve-rest {
     position: fixed;
-    top: calc(38px + env(safe-area-inset-top));
+    top: calc(84px + env(safe-area-inset-top));
     left: 0;
     right: 0;
     height: 1px;

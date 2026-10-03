@@ -180,9 +180,14 @@ const talks = [
     color: rgba(243, 235, 224, 0.4);
   }
 
+  /* Direct feedback, confirmed via a zoomed screenshot: at the old
+     38px this ran straight through "EDUARDO sopalda" (Nameplate.astro,
+     same fixed top-right corner on every room). Dropped below
+     Nameplate's own full box instead of trying to thread a Y between
+     its lines. */
   .nerve-rest {
     position: fixed;
-    top: calc(38px + env(safe-area-inset-top));
+    top: calc(84px + env(safe-area-inset-top));
     left: 0;
     right: 0;
     height: 1px;
