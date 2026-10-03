@@ -25,8 +25,8 @@ const here = STOPS.find((s) => s.href === current);
 ---
 
 <header class="room-nerve" data-arrive="0">
-  <a class="mark" href="/">
-    <span class="lockup">
+  <a class="mark" href="/" aria-label="Eduardo Sopalda, home">
+    <span class="name">
       <span class="given">EDUARDO</span>
       <span class="family">sopalda</span>
     </span>
@@ -186,20 +186,28 @@ const here = STOPS.find((s) => s.href === current);
     position: fixed;
     top: calc(42px + env(safe-area-inset-top));
     right: 28px;
+    left: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    padding: 0;
     text-align: right;
     text-decoration: none;
-    line-height: normal;
     z-index: 30;
   }
 
-  .lockup {
+  .name {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 0;
+    margin: 0;
+    line-height: 0.88;
+  }
+
+  .given,
+  .family {
+    white-space: nowrap;
   }
 
   .given {
@@ -215,9 +223,7 @@ const here = STOPS.find((s) => s.href === current);
     font-weight: 700;
     font-size: clamp(1.28rem, 4.1vw, 1.65rem);
     letter-spacing: 0;
-    text-transform: lowercase;
     color: var(--flesh);
-    line-height: normal;
   }
 
   .tagline {
@@ -230,7 +236,9 @@ const here = STOPS.find((s) => s.href === current);
     line-height: normal;
     text-transform: uppercase;
     text-align: right;
+    text-wrap: balance;
     color: var(--champagne);
+    white-space: normal;
   }
 
   .tagline .amp {
