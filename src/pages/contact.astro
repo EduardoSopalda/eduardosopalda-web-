@@ -1,8 +1,7 @@
 ---
 // Contact is still a question, not a booking form. The question is the
 // page. Name and reply address appear only after the first sentence.
-// FormSubmit delivers it to me@eduardosopalda.com. The first message
-// asks that inbox to confirm the address; after that, questions arrive.
+// The address it arrives at is not on this page.
 import '../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
@@ -49,8 +48,6 @@ import RoomShell from '../components/RoomShell.astro';
         <q id="kept-question"></q>
         <span>It's with me.</span>
       </p>
-
-      <p class="address"><a href="mailto:me@eduardosopalda.com">me@eduardosopalda.com</a></p>
     </RoomShell>
   </body>
 </html>
@@ -109,21 +106,18 @@ import RoomShell from '../components/RoomShell.astro';
     carry();
 
     try {
-      const response = await fetch('https://formsubmit.co/ajax/me@eduardosopalda.com', {
+      const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           message: text,
-          name: name || 'Unsigned',
+          name,
           email: mail,
-          _subject: 'A question from the site',
-          _captcha: 'false',
-          _template: 'box',
+          honey: honey?.value ?? '',
         }),
       });
       const data = await response.json().catch(() => ({}));
-      const arrived = response.ok && String(data.success) !== 'false';
-      if (!arrived) throw new Error(data.message || 'not sent');
+      if (!response.ok || data.ok === false) throw new Error('not sent');
       if (keptQuestion) keptQuestion.textContent = text;
       form.hidden = true;
       if (kept) kept.hidden = false;
@@ -304,21 +298,6 @@ import RoomShell from '../components/RoomShell.astro';
     text-transform: uppercase;
     color: var(--bronze);
   }
-
-  .address {
-    margin: 4.5rem 0 0;
-    font-size: 0.66rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  .address a {
-    color: var(--champagne);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(170, 104, 66, 0.55);
-  }
-
-  .address a:hover { color: var(--gold); }
 
   @keyframes question-carry {
     from { transform: translateX(-140px); }
