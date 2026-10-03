@@ -105,10 +105,22 @@ const months = [
     min-height: 100svh;
   }
 
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nerve-dock);
+    background: var(--void);
+    z-index: 15;
+    pointer-events: none;
+  }
+
   main {
     max-width: 72rem;
     margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 4.5rem) 2.25rem 8rem;
+    padding: calc(var(--nerve-dock) + 2.75rem) 2.25rem 8rem;
     font-family: var(--font-mono);
     color: var(--bone);
   }
