@@ -257,6 +257,11 @@ import { STOPS } from '../data/stops';
     transition: opacity 5.6s ease 1.8s;
   }
 
+  body.is-leaving .stop {
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+
   body.is-returning.is-nerve #nerve {
     opacity: 1;
   }
@@ -2234,6 +2239,7 @@ import { STOPS } from '../data/stops';
         if (reduced || departing) return;
         e.preventDefault();
         departing = true;
+        document.body.classList.add('is-leaving');
         departEl = el;
         departHref = el.href;
         departFromX = worldX;
