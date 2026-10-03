@@ -242,6 +242,21 @@ import { STOPS } from '../data/stops';
     visibility: visible;
   }
 
+  body.is-returning .world,
+  body.is-returning .stop {
+    opacity: 0;
+  }
+
+  body.is-returning.is-arrived .world,
+  body.is-returning.is-arrived .stop {
+    opacity: 1;
+    transition: opacity 2.6s var(--ease);
+  }
+
+  body.is-returning .nerve-rail {
+    opacity: 1;
+  }
+
   /* ---- specimens ---- */
   .spec {
     position: absolute;
@@ -987,6 +1002,9 @@ import { STOPS } from '../data/stops';
     // same instant settle reduced motion already gets, not a new kind
     // of skip invented for this.
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
+    if (document.body.classList.contains('is-returning')) {
+      requestAnimationFrame(() => document.body.classList.add('is-arrived'));
+    }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.
     // A touch device has no hover, only contact, so on its own terms

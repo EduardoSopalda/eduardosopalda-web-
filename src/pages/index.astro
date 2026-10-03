@@ -76,6 +76,10 @@ const ogImageUrl = new URL('/og-image.png', Astro.site);
         document.body.setAttribute('data-landing', 'field');
         document.body.classList.add('is-docked');
       }
+      if (sessionStorage.getItem('sopalda-return') === '1') {
+        document.body.classList.add('is-returning');
+        sessionStorage.removeItem('sopalda-return');
+      }
     </script>
     <Field />
     <Landing />
