@@ -119,8 +119,8 @@ function stamp(d: Date) {
 
   .row {
     display: grid;
-    grid-template-columns: 6.5rem 1fr;
-    gap: 1.1rem;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1.25rem;
     align-items: center;
     padding: 1rem 0;
     text-decoration: none;
@@ -142,12 +142,12 @@ function stamp(d: Date) {
      without a plate keep the catalogue number in the same slot, so
      the column doesn't collapse. */
   .plate {
-    width: 6.5rem;
-    height: 6.5rem;
+    width: 9.5rem;
+    height: 6.4rem;
     display: grid;
     place-items: center;
-    background: var(--void);
-    border: 1px solid rgba(243, 235, 224, 0.1);
+    background: #070707;
+    border: 1px solid rgba(243, 235, 224, 0.14);
   }
 
   .plate img {
@@ -202,13 +202,13 @@ function stamp(d: Date) {
 
   @media (max-width: 640px) {
     .row {
-      grid-template-columns: 4.6rem 1fr;
+      grid-template-columns: 6.4rem 1fr;
       gap: 0.8rem;
     }
 
     .plate {
-      width: 4.6rem;
-      height: 4.6rem;
+      width: 6.4rem;
+      height: 4.4rem;
     }
   }
 </style>

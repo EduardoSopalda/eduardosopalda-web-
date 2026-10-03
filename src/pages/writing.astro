@@ -17,7 +17,7 @@ const bySource = entries.map(toArticleRow).sort((a, b) => (a.date < b.date ? 1 :
 // illustration still leads the archive; it does not borrow a picture.
 const featured = bySource.find((a) => a.image) ?? bySource[0];
 const ahead = featured ? bySource.filter((a) => a.date > featured.date) : [];
-const rest = featured ? bySource.filter((a) => a.id !== featured.id) : bySource;
+const rest = featured ? bySource.filter((a) => a.id !== featured.id && !ahead.some((n) => n.id === a.id)) : bySource;
 const context = STOPS.find((s) => s.href === '/context');
 
 const months = [
