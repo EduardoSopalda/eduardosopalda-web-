@@ -68,6 +68,17 @@
   height: 0;
   overflow: visible;
   cursor: pointer;
+  perspective: 700px;
+}
+
+/* The name is a plate, not a spinner. EDUARDO sits forward of
+   sopalda; the tagline sits back. A slow drift turns it in space,
+   and the pointer leans it a few degrees, like a specimen under glass. */
+.plate-3d {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--tilt-x, 7deg)) rotateY(var(--tilt-y, -12deg));
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transform-origin: 80% 40%;
 }
 
 .mark h1 {
@@ -76,6 +87,13 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  transform-style: preserve-3d;
+  animation: plate-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes plate-drift {
+  from { transform: rotateX(2deg) rotateY(-6deg) translateZ(0); }
+  to { transform: rotateX(-3deg) rotateY(8deg) translateZ(6px); }
 }
 
 .given,
@@ -109,6 +127,8 @@
   font-size: clamp(.95rem, 3.1vw, 1.2rem);
   letter-spacing: .1em;
   color: var(--bronze);
+  transform: translateZ(16px);
+  text-shadow: 0 8px 14px rgba(0, 0, 0, 0.45);
 }
 
 .family {
@@ -117,6 +137,8 @@
   font-size: clamp(1.28rem, 4.1vw, 1.65rem);
   letter-spacing: 0;
   color: var(--flesh);
+  transform: translateZ(4px);
+  text-shadow: 0 10px 16px rgba(0, 0, 0, 0.5);
 }
 
 .tagline {
@@ -149,6 +171,7 @@
   max-width: 16rem;
   opacity: 1;
   animation: none;
+  transform: translateZ(-10px);
 }
 
 .tagline .amp {
@@ -164,6 +187,16 @@
    nerve's own curve had nowhere calm to resolve into. Compact and
    right-aligned instead -- EDUARDO stacked above sopalda even once
    docked (h1 stays column, not row), not spread across one wide line. */
+@media (prefers-reduced-motion: reduce) {
+  .mark h1 {
+    animation: none;
+  }
+
+  .plate-3d {
+    transform: none;
+  }
+}
+
 body.is-docked .mark {
   position: fixed;
   top: calc(18px + env(safe-area-inset-top));

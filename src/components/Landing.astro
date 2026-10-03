@@ -27,6 +27,7 @@ import '../styles/sopalda-landing.css';
 
   <div class="stage">
     <header class="mark" id="mark">
+      <div class="plate-3d" id="plate-3d">
       {/* Real static text, not empty spans -- splitWord() below clears
           and rebuilds each into letter-by-letter <b> spans on load, so
           the animation is unaffected, but a crawler or a page that
@@ -52,6 +53,7 @@ import '../styles/sopalda-landing.css';
         document.getElementById('family').textContent = '';
       </script>
       <p class="tagline">DATA | AI <span class="amp">&amp;</span> The human experience</p>
+      </div>
     </header>
 
     <main class="slot">
@@ -698,6 +700,17 @@ import '../styles/sopalda-landing.css';
   // anyone else, rather than deciding for them.
   document.getElementById('cue')?.addEventListener('click', dock);
   document.getElementById('mark')?.addEventListener('click', dock);
+
+  // The plate leans toward the pointer. A few degrees, not a spin.
+  const plate = document.getElementById('plate-3d');
+  if (plate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('pointermove', (e) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      plate.style.setProperty('--tilt-y', (-12 + nx * -16).toFixed(2) + 'deg');
+      plate.style.setProperty('--tilt-x', (7 + ny * -10).toFixed(2) + 'deg');
+    }, { passive: true });
+  }
   addEventListener('wheel', dock, { once: true, passive: true });
   addEventListener('touchstart', dock, { once: true, passive: true });
 </script>
