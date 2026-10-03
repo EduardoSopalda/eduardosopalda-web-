@@ -32,12 +32,15 @@ const { active = null } = Astro.props;
 
 <style>
   .thread-nerve {
-    margin: 3.5rem 0 0;
-    padding-bottom: 0.9rem;
-    /* The line itself -- thin, resting well under the gold nerve's own
-       strength, since this is one filter inside one room, not the
-       site's real navigation (CLAUDE.md non-negotiable 2). */
-    border-bottom: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 16;
+    margin: 0;
+    padding: 0.4rem 2.5rem 0.8rem;
+    background: linear-gradient(to top, var(--void) 70%, transparent);
+    pointer-events: none;
   }
 
   .thread-nerve ol {
@@ -50,7 +53,7 @@ const { active = null } = Astro.props;
     gap: 0;
     white-space: nowrap;
     border-top: 1px solid rgba(227, 175, 149, 0.28);
-    border-bottom: 1px solid rgba(227, 175, 149, 0.28);
+    pointer-events: auto;
   }
 
   .thread-nerve li {
