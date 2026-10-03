@@ -114,10 +114,10 @@ const months = [
 
   .room-title {
     grid-column: 1;
-    grid-row: 1 / span 20;
-    position: sticky;
+    position: fixed;
     top: calc(var(--nerve-dock) + 2.2rem);
-    align-self: start;
+    left: var(--inset);
+    z-index: 12;
     width: var(--rail);
     margin: 0;
   }
