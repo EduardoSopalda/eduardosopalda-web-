@@ -38,16 +38,16 @@ const months = [
     <main>
       <header class="room-title">
         <p class="room-kicker">Field notes</p>
-        <h1>Writing <em>in circulation.</em></h1>
+        <h1>Writing<em>in circulation.</em></h1>
       </header>
       {featured && (
         <article class="featured">
           <div class="featured-copy">
             <p class="kicker">
               Current note
-              {featured.no ? ` / ${String(featured.no).padStart(2, '0')}` : ''}
               · {featured.date.getDate()} {months[featured.date.getMonth()]} {featured.date.getFullYear()}
             </p>
+            {featured.no && <p class="numeral" aria-hidden="true">{String(featured.no).padStart(2, '0')}</p>}
             <h1><a href={`/writing/${featured.id}`}>{featured.title}</a></h1>
             {(featured.dek || featured.lead) && <p class="dek">{featured.dek || featured.lead}</p>}
             <a class="read" href={`/writing/${featured.id}`}>Read the note</a>
@@ -109,20 +109,49 @@ const months = [
     margin: 0 0 3.2rem;
   }
 
+  .room-kicker {
+    margin: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .room-kicker::after {
+    content: '';
+    display: inline-block;
+    width: 3.2rem;
+    height: 1px;
+    margin-left: 0.8rem;
+    vertical-align: middle;
+    background: var(--bronze);
+  }
+
   .room-title h1 {
-    margin: 0.35rem 0 0;
+    margin: 0.55rem 0 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(2rem, 3.4vw, 2.7rem);
-    line-height: 0.95;
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    line-height: 0.9;
     letter-spacing: -0.03em;
     color: var(--bone);
   }
 
   .room-title em {
     display: block;
+    margin-left: 12vw;
     font-style: italic;
     font-weight: 400;
+    font-size: 1.15em;
+    color: var(--bronze);
+  }
+
+  .numeral {
+    margin: 0.8rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    line-height: 0.8;
     color: var(--bronze);
   }
 
