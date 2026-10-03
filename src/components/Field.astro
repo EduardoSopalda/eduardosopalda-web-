@@ -1076,7 +1076,7 @@ import { STOPS } from '../data/stops';
     // flattened nerve settles into the same corner the wordmark
     // already claimed on the way into the field, not a new resting
     // place invented for this.
-    let straightenAmt = 1;
+    let straightenAmt = document.body.classList.contains('is-returning') ? 0 : 1;
     // 1 while the field is drifting, eased toward ~0.28 while a stop
     // is held. Multiplies nerveBaseY's amplitude only — breath and the
     // pulses stay. A full freeze reads as a crash.
