@@ -28,7 +28,8 @@ const here = STOPS.find((s) => s.href === current);
     <span class="family">sopalda</span>
     <span class="tagline">DATA &nbsp;|&nbsp; AI & THE HUMAN EXPERIENCE</span>
   </a>
-  <nav class="room-stops" aria-label="Site">
+  <button type="button" class="menu-toggle" aria-expanded="true" aria-controls="room-stops">Menu</button>
+  <nav class="room-stops" id="room-stops" aria-label="Site">
     {STOPS.map((s) => (
       <a href={s.href} aria-current={s.href === current ? 'page' : undefined}>{s.label}</a>
     ))}
@@ -56,6 +57,14 @@ const here = STOPS.find((s) => s.href === current);
     rail.setAttribute('data-arrive', '1');
     sessionStorage.removeItem('sopalda-arrive');
   }
+  const toggle = document.querySelector('.menu-toggle');
+  const stops = document.getElementById('room-stops');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.textContent = open ? 'Menu' : 'Close';
+    if (stops) stops.hidden = !open;
+  });
 </script>
 
 <style>
@@ -72,9 +81,31 @@ const here = STOPS.find((s) => s.href === current);
   }
 
   .room-home,
+  .menu-toggle,
   .room-stops a,
   .mark {
     pointer-events: auto;
+  }
+
+  .menu-toggle {
+    position: absolute;
+    top: calc(82px + env(safe-area-inset-top));
+    left: 1.4rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .menu-toggle:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
   }
 
   /* Same lockup as the docked field wordmark: given name tall,
