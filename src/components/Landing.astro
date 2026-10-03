@@ -409,9 +409,10 @@ import '../styles/sopalda-landing.css';
     const clearAfter = mode === 'explode' ? 10000 : 14000;
     setTimeout(() => {
       if (docked) return;
+      decaying = false;
       const f = nextFrag();
       setLine(f.text, f.source, f.year, next);
-      setTimeout(decay, reduced ? 999999 : 16000);
+      setTimeout(decay, reduced ? 999999 : 9000);
     }, overlap);
     setTimeout(() => {
       if (dying !== layers[live]) {
@@ -642,7 +643,7 @@ import '../styles/sopalda-landing.css';
     revealed = true;
     animateWordmark();
     animateLetters();
-    if (!reduced) setTimeout(decay, 12000);
+    if (!reduced) setTimeout(decay, 8000);
   }
 
   if (returning) {
