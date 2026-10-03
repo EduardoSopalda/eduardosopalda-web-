@@ -4,7 +4,7 @@ date:     2026-08-13
 kind:     article
 threads:  [MEMORY, MEANING]
 dek:      An agent goes live. Adoption is immediate, which is what everyone wanted. Within weeks the team has uploaded ten thousand documents into it.
-image:
+image:    /illustrations/tenthousand.jpg
 family:   void
 people:   []
 question:
