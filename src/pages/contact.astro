@@ -1,10 +1,332 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/contact')!;
+// Contact is still a question, not a booking form. The question is the
+// page. Name and reply address appear only after the first sentence.
+// FormSubmit delivers it to me@eduardosopalda.com. The first message
+// asks that inbox to confirm the address; after that, questions arrive.
+import '../styles/fraunces.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import RoomNerve from '../components/RoomNerve.astro';
+import RoomShell from '../components/RoomShell.astro';
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="the copy. No form, per CLAUDE.md non-negotiable 9 -- the contact mechanism is the question each article ends on."
-/>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <RoomNerve current="/contact" heading={false} />
+    <RoomShell title="Contact" italic="a question, answerable.">
+      <form class="ask" id="ask" novalidate>
+        <label class="prompt" for="question">Ask the one you actually have.</label>
+        <div class="ink">
+          <textarea id="question" name="message" rows="3" autocomplete="off"></textarea>
+          <span class="wick" aria-hidden="true"></span>
+        </div>
+
+        <div class="quiet" id="quiet">
+          <label>
+            Your name, if you want it
+            <input name="name" type="text" autocomplete="name" />
+          </label>
+          <label>
+            Where to answer
+            <input name="email" type="email" autocomplete="email" inputmode="email" />
+          </label>
+        </div>
+
+        <input class="honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <button type="submit" id="send" disabled>Send the question</button>
+        <p class="status" id="status" role="status"></p>
+      </form>
+
+      <p class="kept" id="kept" hidden>
+        <q id="kept-question"></q>
+        <span>It's with me.</span>
+      </p>
+
+      <p class="address"><a href="mailto:me@eduardosopalda.com">me@eduardosopalda.com</a></p>
+    </RoomShell>
+  </body>
+</html>
+
+<script>
+  const form = document.getElementById('ask') as HTMLFormElement | null;
+  const question = document.getElementById('question') as HTMLTextAreaElement | null;
+  const quiet = document.getElementById('quiet');
+  const send = document.getElementById('send') as HTMLButtonElement | null;
+  const status = document.getElementById('status');
+  const kept = document.getElementById('kept');
+  const keptQuestion = document.getElementById('kept-question');
+
+  function emailOf() {
+    const field = form?.querySelector<HTMLInputElement>('input[name="email"]');
+    return field?.value.trim() ?? '';
+  }
+
+  function ready() {
+    const text = question?.value.trim() ?? '';
+    const mail = emailOf();
+    const open = text.length > 0;
+    quiet?.classList.toggle('is-open', open);
+    const ok = open && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+    if (send) send.disabled = !ok;
+  }
+
+  question?.addEventListener('input', ready);
+
+  function carry() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const line = document.querySelector('.room-line');
+    const seed = line?.querySelector('.comet');
+    if (!line || !seed) return;
+    const comet = seed.cloneNode(true) as HTMLElement;
+    comet.style.animation = 'question-carry 2.8s linear 1 both';
+    line.appendChild(comet);
+    comet.addEventListener('animationend', () => comet.remove());
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form || !question || !send || !status) return;
+    const honey = form.querySelector<HTMLInputElement>('input[name="_honey"]');
+    if (honey?.value) return;
+    const text = question.value.trim();
+    const mail = emailOf();
+    const name = form.querySelector<HTMLInputElement>('input[name="name"]')?.value.trim() ?? '';
+    if (!text || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+      ready();
+      return;
+    }
+
+    send.disabled = true;
+    status.textContent = '';
+    carry();
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/me@eduardosopalda.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          name: name || 'Unsigned',
+          email: mail,
+          _subject: 'A question from the site',
+          _captcha: 'false',
+          _template: 'box',
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      const arrived = response.ok && String(data.success) !== 'false';
+      if (!arrived) throw new Error(data.message || 'not sent');
+      if (keptQuestion) keptQuestion.textContent = text;
+      form.hidden = true;
+      if (kept) kept.hidden = false;
+    } catch {
+      status.textContent = "It didn't leave. The question is still here.";
+      send.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+
+  .prompt {
+    display: block;
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+    line-height: 1.2;
+    color: var(--flesh);
+  }
+
+  .ink {
+    position: relative;
+    margin-top: 1.4rem;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 7.5rem;
+    margin: 0;
+    padding: 0 0 0.8rem;
+    border: 0;
+    border-bottom: 1px solid rgba(247, 197, 106, 0.85);
+    background: transparent;
+    resize: vertical;
+    caret-color: #fff6d8;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+    line-height: 1.35;
+    color: var(--bone);
+  }
+
+  textarea:focus { outline: none; }
+
+  .wick {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 7rem;
+    height: 5px;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(255, 255, 240, 0), rgba(255, 250, 220, 0.55) 60%, #fff);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 235, 0.9));
+    animation: wick 7.5s linear infinite;
+  }
+
+  .wick::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: -1px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 235, 0.95);
+  }
+
+  @keyframes wick {
+    from { transform: translateX(-8rem); }
+    to { transform: translateX(54rem); }
+  }
+
+  .quiet {
+    display: grid;
+    gap: 1rem;
+    max-height: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 1.6s cubic-bezier(.22, .7, .2, 1), max-height 1.6s cubic-bezier(.22, .7, .2, 1), margin 1.6s cubic-bezier(.22, .7, .2, 1);
+  }
+
+  .quiet.is-open {
+    max-height: 12rem;
+    margin-top: 1.8rem;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .quiet label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  .quiet input {
+    width: min(100%, 24rem);
+    padding: 0.35rem 0;
+    border: 0;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.55);
+    background: transparent;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--bone);
+  }
+
+  .quiet input:focus { outline: none; border-bottom-color: var(--gold); }
+
+  .honey {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    width: 0;
+    opacity: 0;
+  }
+
+  button {
+    margin-top: 2rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    cursor: pointer;
+  }
+
+  button:disabled {
+    color: rgba(170, 104, 66, 0.35);
+    cursor: default;
+  }
+
+  button:not(:disabled):hover,
+  button:not(:disabled):focus-visible { color: var(--gold); }
+
+  .status {
+    min-height: 1.2rem;
+    margin: 0.8rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--flesh);
+  }
+
+  .kept {
+    margin: 0;
+  }
+
+  .kept q {
+    display: block;
+    quotes: none;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    line-height: 1.25;
+    color: var(--bone);
+  }
+
+  .kept span {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+
+  .address {
+    margin: 4.5rem 0 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .address a {
+    color: var(--champagne);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.55);
+  }
+
+  .address a:hover { color: var(--gold); }
+
+  @keyframes question-carry {
+    from { transform: translateX(-140px); }
+    to { transform: translateX(100vw); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wick { animation: none; opacity: 0; }
+    .quiet { transition: none; }
+  }
+</style>
