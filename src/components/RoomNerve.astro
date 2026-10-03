@@ -159,19 +159,19 @@ const here = STOPS.find((s) => s.href === current);
   .room-line {
     view-transition-name: nerve-rail;
     position: absolute;
-    top: var(--nerve-dock);
+    top: calc(var(--nerve-dock) - 6px);
     left: 0;
     right: 0;
-    height: 1px;
+    height: 14px;
     overflow: visible;
-    background: rgba(247, 197, 106, 0.9);
-    box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
-    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    pointer-events: none;
+    background: linear-gradient(rgba(247, 197, 106, 0.9), rgba(247, 197, 106, 0.9)) center / 100% 1px no-repeat;
+    box-shadow: 0 7px 6px -6px rgba(247, 197, 106, 0.45);
   }
 
   .comet {
     position: absolute;
-    top: -2px;
+    top: 4px;
     width: 130px;
     height: 5px;
     border-radius: 3px;
