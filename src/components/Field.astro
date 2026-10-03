@@ -176,18 +176,18 @@ import { STOPS } from '../data/stops';
     top: var(--nerve-dock);
     left: 0;
     right: 0;
-    height: 14px;
+    height: 1px;
     z-index: 260;
     pointer-events: none;
     opacity: 0;
     overflow: visible;
-    background: linear-gradient(rgba(247, 197, 106, 0.9), rgba(247, 197, 106, 0.9)) center / 100% 1px no-repeat;
-    box-shadow: 0 7px 6px -6px rgba(247, 197, 106, 0.45);
+    background: rgba(247, 197, 106, 0.9);
+    box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
   }
 
   .comet {
     position: absolute;
-    top: 4px;
+    top: -2px;
     width: 130px;
     height: 5px;
     border-radius: 3px;
@@ -1004,6 +1004,12 @@ import { STOPS } from '../data/stops';
     const returning = sessionStorage.getItem('sopalda-docked') === '1';
     if (document.body.classList.contains('is-returning')) {
       requestAnimationFrame(() => document.body.classList.add('is-arrived'));
+      const nerve = document.getElementById('nerve');
+      const rail = document.getElementById('nerve-rail');
+      window.setTimeout(() => {
+        if (nerve) nerve.style.opacity = '1';
+        if (rail) rail.style.opacity = '0';
+      }, 700);
     }
     // Almost everything in the field -- specimens waking, fragments
     // holding their decay, the nerve bending -- is a hover mechanic.

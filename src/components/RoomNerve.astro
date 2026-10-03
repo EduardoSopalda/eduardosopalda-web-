@@ -250,17 +250,17 @@ const here = STOPS.find((s) => s.href === current);
     top: var(--nerve-dock);
     left: 0;
     right: 0;
-    height: 14px;
+    height: 1px;
     overflow: visible;
     pointer-events: none;
-    background: linear-gradient(rgba(247, 197, 106, 0.9), rgba(247, 197, 106, 0.9)) center / 100% 1px no-repeat;
-    box-shadow: 0 7px 6px -6px rgba(247, 197, 106, 0.45);
+    background: rgba(247, 197, 106, 0.9);
+    box-shadow: 0 0 6px rgba(247, 197, 106, 0.45);
     will-change: transform;
   }
 
   .comet {
     position: absolute;
-    top: 4px;
+    top: -2px;
     width: 130px;
     height: 5px;
     border-radius: 3px;
