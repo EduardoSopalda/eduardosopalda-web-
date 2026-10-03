@@ -96,22 +96,7 @@ const bySource = entries
 
   .room {
     grid-column: 3;
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: 1.25rem;
-    align-items: start;
     min-width: 0;
-  }
-
-  .back,
-  .none,
-  .room > :global(.thread-nerve),
-  .room > :global(.year) {
-    grid-column: 1 / -1;
-  }
-
-  .room > :global(.year) {
-    grid-template-columns: subgrid;
   }
 
   .room-kicker {

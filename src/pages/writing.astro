@@ -125,22 +125,7 @@ const months = [
   .room {
     grid-column: 3;
     grid-row: 1;
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: 1.25rem;
-    align-items: start;
     min-width: 0;
-  }
-
-  .featured,
-  .room > :global(.thread-nerve),
-  .next,
-  .room > :global(.year) {
-    grid-column: 1 / -1;
-  }
-
-  .room > :global(.year) {
-    grid-template-columns: subgrid;
   }
 
   .room-kicker {

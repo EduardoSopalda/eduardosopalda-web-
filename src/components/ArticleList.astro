@@ -1,7 +1,6 @@
 ---
-// The archive is a contents page. The plate belongs to the current
-// note, not to every row. Date in the margin, title on the line, lead
-// under it, a rule the full measure.
+// The archive is a contents page. Date in the margin, the title on a
+// readable measure, the thread closing the line on the right.
 export interface ArticleRow {
   id: string;
   title: string;
@@ -42,6 +41,7 @@ function stamp(d: Date) {
                   <span class="title">{a.title}</span>
                   {(a.dek || a.lead) && <span class="lead">{a.dek || a.lead}</span>}
                 </span>
+                {a.threads[0] && <span class="thread">{a.threads[0]}</span>}
               </a>
             </li>
           ))}
@@ -53,18 +53,16 @@ function stamp(d: Date) {
 
 <style>
   .year {
-    display: grid;
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    gap: 1.5rem;
-    margin-top: 2.8rem;
+    margin-top: 3.4rem;
   }
 
   .year h2 {
-    margin: 0.15rem 0 0;
+    margin: 0 0 0.35rem;
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 400;
-    font-size: 1.35rem;
+    font-size: 1.45rem;
+    letter-spacing: 0.04em;
     color: var(--bronze);
   }
 
@@ -84,10 +82,10 @@ function stamp(d: Date) {
 
   .row {
     display: grid;
-    grid-template-columns: 4.2rem minmax(0, 1fr);
-    gap: 1.4rem;
-    align-items: baseline;
-    padding: 1.15rem 0;
+    grid-template-columns: 4.6rem minmax(0, 1fr) auto;
+    column-gap: 2rem;
+    align-items: start;
+    padding: 1.35rem 0 1.5rem;
     text-decoration: none;
     color: inherit;
   }
@@ -98,41 +96,60 @@ function stamp(d: Date) {
   }
 
   .meta {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
+    padding-top: 0.55rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
     color: var(--champagne);
   }
 
   .copy {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
     min-width: 0;
   }
 
   .title {
+    display: block;
+    max-width: 22em;
     font-family: var(--font-display);
-    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    font-size: clamp(1.65rem, 2.3vw, 2.15rem);
     font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
     color: var(--bone);
   }
 
   .lead {
-    max-width: 40rem;
+    display: block;
+    max-width: 38rem;
+    margin-top: 0.45rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1rem;
+    font-size: 1.05rem;
     line-height: 1.4;
     color: var(--flesh);
   }
 
-  @media (max-width: 640px) {
-    .year,
+  .thread {
+    padding-top: 0.7rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
     .row {
-      grid-template-columns: 1fr;
-      gap: 0.25rem;
+      grid-template-columns: 1fr auto;
+      row-gap: 0.35rem;
+    }
+
+    .meta {
+      grid-column: 1 / -1;
+      padding-top: 0;
+    }
+
+    .thread {
+      padding-top: 0.15rem;
     }
   }
 </style>
