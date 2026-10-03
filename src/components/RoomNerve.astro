@@ -152,6 +152,24 @@ const here = STOPS.find((s) => s.href === current);
     font-family: var(--font-mono);
   }
 
+  .room-nerve::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nerve-dock);
+    background: var(--void);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .menu-toggle,
+  .room-stops,
+  .mark {
+    z-index: 2;
+  }
+
   .room-home,
   .menu-toggle,
   .room-stops a,
