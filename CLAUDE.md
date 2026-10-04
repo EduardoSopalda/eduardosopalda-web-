@@ -1,6 +1,9 @@
 # eduardosopalda.com
 
 Read this file first, then `docs/BRIEF.md`, then `docs/FIELD-SPEC.md`.
+
+Pre-launch audit (4 Oct 2026): `docs/AUDIT-2026-10-04.md` — launch blockers, design/motion/type findings, and the prioritised action plan. Read it before making launch changes.
+
 Open `prototype/field.html` in a browser before writing any code. It is the reference
 implementation of the hardest part of the site and it already works.
 
