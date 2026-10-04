@@ -2,14 +2,17 @@ name: Deploy to IONOS
 
 # The build itself is now fully static (the Vercel adapter and both
 # /api routes are gone -- see astro.config.mjs), so this workflow is no
-# longer blocked on a hosting-architecture mismatch. remote_path below
-# is now confirmed against this IONOS webspace's real folder structure
-# (/eduardoweb, shared with other unrelated sites like /alinaweb --
-# IONOS would not let the domain attach to the webspace root).
-# IONOS_SFTP_PASSWORD still needs to be added as a repository secret
-# before this can run at all. workflow_dispatch lets it run manually
-# once that's set; re-add "push: branches: [main]" here once a manual
-# run has been verified, to get real push-to-deploy.
+# longer blocked on a hosting-architecture mismatch. The remaining
+# blocker was the deploy step itself: wlixcc/SFTP-Deploy-Action issues
+# a raw SSH shell command ("mkdir -p") before uploading, and this IONOS
+# account's shell is restricted to the sftp subsystem only (rssh) --
+# confirmed via a failed test run (run #1) that got "This account is
+# restricted by rssh. Allowed commands: sftp" before it ever reached
+# remote_path. Replaced with a small script using ssh2-sftp-client,
+# which never shells out -- see .github/scripts/deploy-ionos.mjs.
+# workflow_dispatch lets this run manually; re-add
+# "push: branches: [main]" once a manual run is verified working, to
+# get real push-to-deploy.
 on:
   workflow_dispatch:
 
@@ -34,15 +37,12 @@ jobs:
       # attached to the webspace root -- only to a subfolder. /eduardoweb
       # is that subfolder for eduardosopalda.com. It previously held an
       # unrelated site (confirmed stale); clear it out via the IONOS
-      # file manager before this workflow's first real run, since this
-      # action uploads on top of whatever is already there rather than
-      # replacing the folder wholesale.
+      # file manager before this workflow's first real run, since the
+      # upload adds to whatever is already there rather than replacing
+      # the folder wholesale.
       - name: Deploy to IONOS via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: a604739
-          server: access-5017995636.webspace-host.com
-          port: 22
-          password: ${{ secrets.IONOS_SFTP_PASSWORD }}
-          local_path: './dist/*'
-          remote_path: '/eduardoweb'
+        run: |
+          npm install --no-save ssh2-sftp-client
+          node .github/scripts/deploy-ionos.mjs
+        env:
+          IONOS_SFTP_PASSWORD: ${{ secrets.IONOS_SFTP_PASSWORD }}
