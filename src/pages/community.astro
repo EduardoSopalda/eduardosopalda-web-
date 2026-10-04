@@ -1,0 +1,308 @@
+---
+// The room that was First Dates. Three separate contributions.
+// No link is invented: European Career Support has none.
+import '../styles/fraunces.css';
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/500.css';
+import '../styles/global.css';
+import RoomNerve from '../components/RoomNerve.astro';
+import RoomShell from '../components/RoomShell.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Community · EDUARDO sopalda</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <RoomNerve current="/community" heading={false} />
+    <RoomShell title="Community" italic="giving back.">
+      <header class="intro">
+        <div>
+          <p class="kicker">Three ways to contribute</p>
+          <h2>Make room at the <em>table.</em></h2>
+        </div>
+        <p class="lede">
+          <strong>Good work travels further when it is shared.</strong>
+          I give time to communities through mentoring, collaborative AI governance, and writing—three ways to help people learn from one another and shape what comes next.
+        </p>
+      </header>
+
+      <section class="initiatives" aria-label="Community initiatives">
+        <article class="card">
+          <div class="card-top">
+            <div class="logo-frame ecs">
+              <img src="/community/european-career-support.png" alt="European Career Support logo" />
+            </div>
+            <div>
+              <span class="index">01</span>
+              <p class="label">European Career Support</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="role">Volunteer mentor</p>
+            <h3>Helping people find their next step.</h3>
+            <p>Mentoring in a European community of more than 15,000 members—sharing experience, perspective, and practical support along the way.</p>
+            <p class="note">A community of 15,000+</p>
+          </div>
+        </article>
+
+        <article class="card dama">
+          <div class="card-top">
+            <div class="logo-frame">
+              <img src="/community/dama-spain.png" alt="DAMA España logo" />
+            </div>
+            <div>
+              <span class="index">02</span>
+              <p class="label">DAMA España</p>
+            </div>
+          </div>
+          <figure class="post">
+            <img
+              src="/community/dama-governance-meeting-post.png"
+              alt="DAMA España AI Governance group in a virtual meeting"
+            />
+            <figcaption>AI Governance Working Group · Virtual session</figcaption>
+          </figure>
+          <div class="card-body">
+            <p class="role">Volunteer · AI governance</p>
+            <h3>Better governance, built together.</h3>
+            <p>Working with the DAMA España community on practical guidance for governing agentic AI in organizations, grounded in strong data governance.</p>
+            <a class="card-link" href="https://www.linkedin.com/company/damaspain/" target="_blank" rel="noreferrer noopener">Join the conversation</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <div class="logo-frame ai">
+              <img src="/community/ai-collaborative-community.png" alt="AI Collaborative Community logo" />
+            </div>
+            <div>
+              <span class="index">03</span>
+              <p class="label">AI Collaborative Community</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="role">Writer · Community contributor</p>
+            <h3>Making useful ideas travel.</h3>
+            <p>I write articles for a community that brings people together around AI innovation, practical use cases, events, and shared resources.</p>
+            <a
+              class="card-link"
+              href="https://www.linkedin.com/feed/update/urn:li:groupPost:15389056-7391739689403318272/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >The community post</a>
+          </div>
+        </article>
+      </section>
+
+      <blockquote>
+        “To make a difference, you need to be part of the conversation. You need to be <em>on the table.</em>”
+      </blockquote>
+    </RoomShell>
+  </body>
+</html>
+
+<style>
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+
+  .kicker, .label, .role, .note, .card-link, figcaption {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 0.66rem;
+    color: var(--champagne);
+  }
+
+  .intro {
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  h2, h3, .index, blockquote {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+
+  h2 {
+    margin: 0.7rem 0 0;
+    max-width: 10em;
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+  }
+
+  h2 em, blockquote em { font-style: italic; color: var(--bronze); }
+
+  .lede {
+    margin: 0;
+    max-width: 34rem;
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--bronze);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--champagne);
+  }
+
+  .lede strong { color: var(--bone); font-weight: 500; }
+
+  .initiatives {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin-top: 2.4rem;
+  }
+
+  .card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(170, 104, 66, 0.45);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 6.4rem;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.28);
+  }
+
+  .logo-frame {
+    width: 4.4rem;
+    height: 4.4rem;
+    flex: 0 0 4.4rem;
+    display: grid;
+    place-items: center;
+    padding: 0.4rem;
+    overflow: hidden;
+    background: #f7f5ef;
+  }
+
+  .logo-frame.ecs { background: #a8dbe5; padding: 0; }
+  .logo-frame.ai { background: #001f30; padding: 0; }
+
+  .logo-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .index {
+    display: block;
+    font-style: italic;
+    font-size: 1.45rem;
+    line-height: 1;
+    color: var(--bronze);
+  }
+
+  .label {
+    margin: 0.35rem 0 0;
+    font-size: 0.62rem;
+    line-height: 1.4;
+    color: var(--champagne);
+  }
+
+  .post { margin: 0; }
+  .post img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.22 / 1;
+    object-fit: cover;
+    object-position: center 96%;
+    background: #111;
+  }
+
+  figcaption {
+    margin: 0;
+    padding: 0.55rem 1rem 0;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    color: var(--champagne);
+  }
+
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .role {
+    margin: 0 0 0.55rem;
+    font-size: 0.62rem;
+    color: var(--bronze);
+  }
+
+  h3 {
+    margin: 0 0 0.7rem;
+    font-size: clamp(1.35rem, 1.6vw, 1.7rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .card-body p {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: var(--champagne);
+  }
+
+  .note, .card-link {
+    margin-top: auto;
+    padding-top: 1.3rem;
+    font-size: 0.62rem;
+    color: var(--gold);
+  }
+
+  .card-link {
+    width: fit-content;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.7);
+  }
+
+  .card-link::after { content: ' ↗'; }
+
+  .card-link:hover,
+  .card-link:focus-visible { color: var(--bone); }
+
+  .card-link:focus-visible {
+    outline: 1.5px solid var(--gold);
+    outline-offset: 4px;
+  }
+
+  blockquote {
+    margin: 3.2rem 0 0;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgba(170, 104, 66, 0.45);
+    max-width: 18em;
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  @media (max-width: 900px) {
+    .initiatives { grid-template-columns: 1fr; }
+    .post img { aspect-ratio: 1.6 / 1; }
+    blockquote { max-width: 16em; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-link::after { content: ' ↗'; }
+  }
+</style>

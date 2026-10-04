@@ -1,6 +1,17 @@
 ---
-import EmptyStop from '../components/EmptyStop.astro';
-import { STOPS } from '../data/stops';
-const stop = STOPS.find((s) => s.href === '/first-dates')!;
+// The stop moved. Keep the old address from landing on an empty room.
 ---
-<EmptyStop title={stop.label} subtitle={stop.subtitle} />
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content="0; url=/community" />
+    <link rel="canonical" href="/community" />
+    <title>Community · EDUARDO sopalda</title>
+  </head>
+  <body>
+    <p><a href="/community">Community</a></p>
+  </body>
+</html>

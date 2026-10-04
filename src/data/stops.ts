@@ -22,7 +22,7 @@ export const STOPS: Stop[] = [
   { label: 'Writing', subtitle: 'twenty five signals', href: '/writing' },
   { label: 'Lexicon', subtitle: 'contested words, defined in public', href: '/lexicon' },
   { label: 'Out Loud', subtitle: 'talks, panels, DAMA, the white paper', href: '/out-loud' },
-  { label: 'First Dates', subtitle: 'speed dating the machines', href: '/first-dates' },
+  { label: 'Community', subtitle: 'giving time back', href: '/community' },
   { label: 'Who', subtitle: 'Panama, Finland, Barcelona, a goat', href: '/who' },
   { label: 'Contact', subtitle: 'a question, answerable', href: '/contact' },
 ];
