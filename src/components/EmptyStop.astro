@@ -1,11 +1,5 @@
 ---
-// Shared shell for the six rooms that are empty until Eduardo writes or
-// builds them (see CLAUDE.md "What is not done" and docs/BUILD-ORDER.md
-// step 7: "build the shells with visible TODOs, invent nothing"). The
-// subtitle prop is the same line src/data/stops.ts holds for this stop
-// and Field.astro now shows on the nerve itself (close approach or
-// focus, see .stop-sub) -- both this page and the field pull from that
-// one source, so this really is reused, not new copy.
+// A quiet stop. Title and the nerve's own subtitle. No production notes.
 import '../styles/global.css';
 import RoomNerve from './RoomNerve.astro';
 
@@ -14,9 +8,8 @@ import { STOPS } from '../data/stops';
 interface Props {
   title: string;
   subtitle: string;
-  todo: string;
 }
-const { title, subtitle, todo } = Astro.props;
+const { title, subtitle } = Astro.props;
 const current = STOPS.find((s) => s.label === title)?.href ?? '/';
 ---
 
@@ -33,7 +26,6 @@ const current = STOPS.find((s) => s.label === title)?.href ?? '/';
     <main>
       <h1>{title}</h1>
       <p class="label">{subtitle}</p>
-      <p class="todo">TODO (Eduardo): {todo}</p>
     </main>
   </body>
 </html>
@@ -82,13 +74,6 @@ const current = STOPS.find((s) => s.label === title)?.href ?? '/';
     line-height: 0.9;
     margin: 0 0 0.8rem;
     color: var(--bone);
-  }
-
-  .todo {
-    font-size: 0.75rem;
-    line-height: 1.6;
-    color: rgba(243, 235, 224, 0.4);
-    margin: 0 0 2.5rem;
   }
 
   /* Bone at rest, not gold -- gold is for the nerve, its beads, and

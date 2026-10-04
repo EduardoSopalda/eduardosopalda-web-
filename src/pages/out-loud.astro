@@ -3,15 +3,7 @@ import '../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
-
-const talks = [
-  {
-    href: '/out-loud/automa-chem-2026',
-    title: 'Data and AI in Sustainable Digital Transformation',
-    deck: 'From Brasília to the Plant Floor',
-    meta: 'Opens after 26 October · Estrel Berlin',
-  },
-];
+import RoomShell from '../components/RoomShell.astro';
 ---
 
 <!doctype html>
@@ -23,139 +15,81 @@ const talks = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <RoomNerve current="/out-loud" />
-    <main>
-      <ol class="list">
-        {
-          talks.map((talk) => (
-            <li>
-              <a class="row" href={talk.href}>
-                <span class="title">{talk.title}</span>
-                <span class="deck">{talk.deck}</span>
-                <span class="meta">{talk.meta}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ol>
-      <p class="todo">TODO (Eduardo): the other transcriptions. He is transcribing them (see CLAUDE.md).</p>
-    </main>
+    <RoomNerve current="/out-loud" heading={false} />
+    <RoomShell title="Out loud" italic="in the room.">
+      <p class="kicker">AUTOMA Chem 2026 · Estrel Berlin · 26 October · 9:40</p>
+      <h2>Data and AI in Sustainable Digital Transformation</h2>
+      <p class="deck">From Brasília to the plant floor.</p>
+      <p>
+        A plan can be right from above and still fail the person who has to walk it.
+        That distance is the talk.
+      </p>
+      <p class="closed">The film and the script stay closed until after it is given.</p>
+      <p class="links"><a href="/out-loud/automa-chem-2026">The Berlin note</a></p>
+    </RoomShell>
   </body>
 </html>
 
 <style>
-  html {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
 
-  body {
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 100svh;
-  }
-
-  main {
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: calc(var(--nerve-dock) + 3.5rem) 1.5rem 6rem;
-    font-family: var(--font-mono);
-    color: var(--bone);
-  }
-
-  .back a {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--bone);
-    text-decoration: none;
-  }
-
-  .back a:hover,
-  .back a:focus-visible,
-  .row:hover .title,
-  .row:focus-visible .title {
-    color: var(--gold);
-  }
-
-  .back a:focus-visible,
-  .row:focus-visible {
-    outline: 1.5px solid var(--gold);
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
-
-  .label {
-    margin: 2.5rem 0 0;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+  .kicker {
+    margin: 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(227, 175, 149, 0.55);
+    color: var(--champagne);
   }
 
-  h1 {
-    margin: 0.75rem 0 0;
+  h2 {
+    margin: 0.8rem 0 0;
+    max-width: 16em;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 1.8rem;
+    font-size: clamp(2rem, 3vw, 2.7rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
   }
 
-  .cover {
-    display: block;
-    margin-top: 1.75rem;
-    background: #000;
-  }
-
-  .cover img {
-    width: 100%;
-    height: auto;
-  }
-
-  .list {
-    list-style: none;
-    margin: 2rem 0 0;
-    padding: 0;
-  }
-
-  .list li {
-    border-top: 1px solid rgba(243, 235, 224, 0.12);
-  }
-
-  .row {
-    display: block;
-    padding: 1.15rem 0;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .title {
-    display: block;
+  .deck, p {
     font-family: var(--font-display);
-    font-size: 1.2rem;
-    line-height: 1.3;
+    font-style: italic;
+    color: var(--flesh);
   }
 
   .deck {
-    display: block;
-    margin-top: 0.35rem;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 0.95rem;
-    color: var(--oxide-lit);
+    margin: 0.7rem 0 0;
+    font-size: 1.25rem;
   }
 
-  .meta {
-    display: block;
-    margin-top: 0.55rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
+  p {
+    max-width: 34rem;
+    margin: 1.4rem 0 0;
+    font-size: 1.15rem;
+    line-height: 1.45;
+  }
+
+  .closed {
+    margin-top: 1.6rem;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(243, 235, 224, 0.4);
+    color: var(--champagne);
   }
 
-  .todo {
-    margin: 2rem 0 0;
-    font-size: 0.75rem;
-    line-height: 1.6;
-    color: rgba(243, 235, 224, 0.4);
+  .links { margin-top: 1.8rem; font-style: normal; }
+  .links a {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(170, 104, 66, 0.7);
   }
+  .links a:hover { color: var(--gold); }
 </style>

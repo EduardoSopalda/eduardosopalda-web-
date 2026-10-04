@@ -3,8 +3,4 @@ import EmptyStop from '../components/EmptyStop.astro';
 import { STOPS } from '../data/stops';
 const stop = STOPS.find((s) => s.href === '/first-dates')!;
 ---
-<EmptyStop
-  title={stop.label}
-  subtitle={stop.subtitle}
-  todo="not a text gap -- this is a query over the six real Speed Dating articles already in content/, not yet built. See docs/BUILD-ORDER.md step 7."
-/>
+<EmptyStop title={stop.label} subtitle={stop.subtitle} />
