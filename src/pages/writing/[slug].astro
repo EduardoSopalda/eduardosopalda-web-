@@ -285,7 +285,25 @@ const lead = leadFragmentFor(title);
         .room-title {
           position: static;
           width: auto;
-          padding: calc(var(--nerve-dock) + 1.4rem) 1.5rem 0;
+          padding: calc(var(--nerve-dock) + 1.15rem) 1.5rem 0;
+        }
+
+        .plate {
+          min-height: 0;
+          justify-content: flex-start;
+          padding: 0.85rem 1.25rem 2.5rem;
+        }
+
+        .plate-image {
+          order: 8;
+          max-width: 12rem;
+          max-height: none;
+          margin-inline: auto;
+        }
+
+        .plate-image img {
+          height: auto;
+          max-height: 28vh;
         }
       }
 

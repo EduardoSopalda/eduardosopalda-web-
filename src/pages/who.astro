@@ -281,6 +281,22 @@ const beliefs = [
 
   @media (max-width: 800px) {
     .open, .split, .beliefs { grid-template-columns: 1fr; }
-    .specimen { max-width: 16rem; }
+    .specimen {
+      max-width: 16rem;
+      justify-self: center;
+      margin-inline: auto;
+    }
+    .specimen img {
+      animation: cabinet-float 9s ease-in-out infinite;
+    }
+  }
+
+  @keyframes cabinet-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .specimen img { animation: none; }
   }
 </style>

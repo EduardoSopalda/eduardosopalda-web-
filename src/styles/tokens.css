@@ -70,3 +70,9 @@
   /* Name plate, then the menu, then the nerve under both, edge to edge. */
   --nerve-dock: calc(132px + env(safe-area-inset-top));
 }
+
+@media (max-width: 800px) {
+  :root {
+    --nerve-dock: calc(108px + env(safe-area-inset-top));
+  }
+}
