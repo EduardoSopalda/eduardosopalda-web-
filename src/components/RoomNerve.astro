@@ -211,7 +211,7 @@ const here = STOPS.find((s) => s.href === current);
   .menu-toggle,
   .nav-open {
     position: absolute;
-    top: calc(78px + env(safe-area-inset-top));
+    top: calc(64px + env(safe-area-inset-top));
     left: 1.4rem;
     padding: 0;
     border: 0;
@@ -220,7 +220,7 @@ const here = STOPS.find((s) => s.href === current);
     font-family: 'Space Grotesk', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     cursor: pointer;
   }
@@ -235,7 +235,7 @@ const here = STOPS.find((s) => s.href === current);
      surname round, tagline in mono. Upper right, above the nerve. */
   .mark {
     position: fixed;
-    top: calc(42px + env(safe-area-inset-top));
+    top: calc(16px + env(safe-area-inset-top));
     right: 28px;
     left: auto;
     display: flex;
@@ -394,7 +394,7 @@ const here = STOPS.find((s) => s.href === current);
 
   .room-stops {
     position: absolute;
-    top: calc(78px + env(safe-area-inset-top));
+    top: calc(64px + env(safe-area-inset-top));
     left: 5.6rem;
     right: 11.5rem;
     display: flex;
@@ -413,7 +413,7 @@ const here = STOPS.find((s) => s.href === current);
     font-family: 'Space Grotesk', sans-serif;
     font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -427,12 +427,12 @@ const here = STOPS.find((s) => s.href === current);
   @media (max-width: 800px) {
     .nav-open {
       display: block;
-      top: calc(22px + env(safe-area-inset-top));
+      top: calc(14px + env(safe-area-inset-top));
       left: 1rem;
       z-index: 32;
       min-height: 2.75rem;
       font-size: 12px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.03em;
     }
 
     .menu-toggle {
@@ -474,7 +474,7 @@ const here = STOPS.find((s) => s.href === current);
 
     .room-stops a {
       font-size: 12px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.03em;
       padding: 0.7rem 0;
     }
   }

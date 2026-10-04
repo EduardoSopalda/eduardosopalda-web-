@@ -67,12 +67,13 @@
   --font-wordmark-given: 'Italiana', serif;
   --font-wordmark: 'Glacial Indifference', sans-serif;
 
-  /* Name plate, then the menu, then the nerve under both, edge to edge. */
-  --nerve-dock: calc(132px + env(safe-area-inset-top));
+  /* Name plate, then the menu, then the nerve under both, edge to edge.
+     About a quarter shorter than the first dock, still clear of the plate. */
+  --nerve-dock: calc(99px + env(safe-area-inset-top));
 }
 
 @media (max-width: 800px) {
   :root {
-    --nerve-dock: calc(108px + env(safe-area-inset-top));
+    --nerve-dock: calc(81px + env(safe-area-inset-top));
   }
 }
