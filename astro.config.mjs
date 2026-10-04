@@ -1,23 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel';
 
+// IONOS Hosting Plus serves a plain static export over SFTP -- no Node
+// runtime, so no adapter and no server-rendered routes. Both /api routes
+// that used to need one are gone (see src/pages/contact.astro and
+// src/pages/out-loud/automa-chem-2026.astro).
 export default defineConfig({
   site: 'https://www.eduardosopalda.com',
   output: 'static',
-  adapter: vercel({
-    includeFiles: [
-      './private/berlin/film.mp4',
-      './private/berlin/roadmap.pdf',
-      './private/berlin/00.jpg',
-      './private/berlin/01.jpg',
-      './private/berlin/02.jpg',
-      './private/berlin/03.jpg',
-      './private/berlin/04.jpg',
-      './private/berlin/05.jpg',
-      './private/berlin/06.jpg',
-    ],
-  }),
   prefetch: true,
   build: {
     inlineStylesheets: 'always',

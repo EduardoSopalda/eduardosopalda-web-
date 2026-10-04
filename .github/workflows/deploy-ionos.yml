@@ -1,10 +1,13 @@
 name: Deploy to IONOS
 
-# push-to-main trigger intentionally left out for now: IONOS_SFTP_PASSWORD
-# isn't set yet and remote_path is still an unconfirmed placeholder, so
-# firing on every push would just fail. workflow_dispatch lets it be run
-# manually once both are ready; re-add "push: branches: [main]" here
-# once they are, to get real push-to-deploy.
+# The build itself is now fully static (the Vercel adapter and both
+# /api routes are gone -- see astro.config.mjs), so this workflow is no
+# longer blocked on a hosting-architecture mismatch. Two IONOS-account
+# specifics still need confirming before this is safe to automate:
+# IONOS_SFTP_PASSWORD isn't set yet, and remote_path below is still an
+# unconfirmed placeholder. workflow_dispatch lets it run manually once
+# both are ready; re-add "push: branches: [main]" here once they are,
+# to get real push-to-deploy.
 on:
   workflow_dispatch:
 

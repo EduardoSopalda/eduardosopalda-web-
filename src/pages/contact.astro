@@ -96,7 +96,7 @@ import RoomShell from '../components/RoomShell.astro';
     const text = question.value.trim();
     const mail = emailOf();
     const name = form.querySelector<HTMLInputElement>('input[name="name"]')?.value.trim() ?? '';
-    if (!text || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+    if (!text || text.length > 4000 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
       ready();
       return;
     }
@@ -105,19 +105,24 @@ import RoomShell from '../components/RoomShell.astro';
     status.textContent = '';
     carry();
 
+    // No server on this site anymore (static export on IONOS), so this
+    // calls FormSubmit directly from the browser instead of proxying
+    // through our own now-gone /api/ask. FormSubmit's AJAX endpoint is
+    // built for exactly this: static sites with no backend.
     try {
-      const response = await fetch('/api/ask', {
+      const response = await fetch('https://formsubmit.co/ajax/me@eduardosopalda.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           message: text,
-          name,
+          name: name || 'Unsigned',
           email: mail,
-          honey: honey?.value ?? '',
+          _subject: 'A question from the site',
+          _template: 'box',
         }),
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || data.ok === false) throw new Error('not sent');
+      if (!response.ok || String(data.success) === 'false') throw new Error('not sent');
       if (keptQuestion) keptQuestion.textContent = text;
       form.hidden = true;
       if (kept) kept.hidden = false;

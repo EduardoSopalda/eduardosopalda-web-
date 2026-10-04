@@ -1,6 +1,15 @@
 ---
 // Berlin, restyled as a room. The film, the stills, and the script
 // stay closed until the day after the talk: 27 October 2026, Berlin time.
+//
+// This is a static export (no server), so "open" is decided once, at
+// build time, not per visitor. The film/roadmap/stills below are NOT
+// committed anywhere this build can reach until after the talk -- they
+// don't exist at /berlin/ in the deployed site, so there is nothing to
+// find early even by guessing the URL. The one remaining manual step:
+// after 27 October, copy the organizers' master files into
+// public/berlin/ (matching the names below), commit, and redeploy.
+// That rebuild is what actually flips `open` to true for visitors.
 import '../../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../../styles/global.css';
@@ -8,10 +17,8 @@ import RoomNerve from '../../components/RoomNerve.astro';
 import RoomShell from '../../components/RoomShell.astro';
 import { berlinOpen } from '../../data/berlin';
 
-export const prerender = false;
-
 const open = berlinOpen();
-const media = '/api/berlin';
+const media = '/berlin';
 
 const chapters = [
   { id: 'open', t: 0, still: '00', kicker: 'Open', title: 'Two distances' },
