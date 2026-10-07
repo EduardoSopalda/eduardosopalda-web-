@@ -1,5 +1,5 @@
 ---
-title:    'ATLAN´S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning'
+title:    "ATLAN'S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning"
 date:     2026-02-13
 kind:     article
 threads:  [MEANING, GOVERNANCE]

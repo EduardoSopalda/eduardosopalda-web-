@@ -222,6 +222,7 @@ body.is-docked .cue {
   grid-area: 1 / 1;
   max-width: 22rem;
   text-align: center;
+  font-family: var(--font-display);
   font-size: clamp(1.15rem, 4.6vw, 1.55rem);
   font-variation-settings: "SOFT" 60, "WONK" 0;
   line-height: 1.28;

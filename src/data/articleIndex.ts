@@ -34,7 +34,7 @@ export const ARTICLE_CATALOG: Record<string, number> = {
   'Responsible AI in Times of Chaos: Why Trust Is Not a Feature': 17,
   'Lessons from the DAMA ESPAÑA × Gaia-X Hub España webinar on data spaces': 18,
   'From Stewardship to Partnership: Why GenAI in Data Governance Is No Longer “The Future”': 19,
-  'ATLAN´S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning': 20,
+  "ATLAN'S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning": 20,
   'Starting the AI Journey: From First Wave to Business-Ready AI': 21,
   'When Governance Lives in Memory… and When It Becomes Muscle': 22,
   'If We Can’t Agree on “Customer,” How Can We Ever Govern Data?': 23,
