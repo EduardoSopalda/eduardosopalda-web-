@@ -27,7 +27,7 @@ import RoomShell from '../components/RoomShell.astro';
           decoration. It now has a visible label, a placeholder, a framed
           writing area with a focus ring, and a hint that says what's
           still needed before the question can be sent. */}
-      <form class="ask" id="ask" method="post" action="/api/ask" novalidate>
+      <form class="ask" id="ask" method="POST" action="https://formsubmit.co/me@eduardosopalda.com" novalidate>
         <p class="prompt" id="ask-prompt">Ask the one you actually have.</p>
         <label class="field-label" for="question">Your message</label>
         <div class="ink">
@@ -57,16 +57,20 @@ import RoomShell from '../components/RoomShell.astro';
         </div>
 
         <input class="honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        {/* Used by FormSubmit only on the no-JavaScript path (plain POST).
+            The fetch path below sends its own fields to the AJAX endpoint. */}
+        <input type="hidden" name="_subject" value="A question from the site" />
+        <input type="hidden" name="_template" value="box" />
+        <input type="hidden" name="_next" value="https://www.eduardosopalda.com/contact/#sent" />
 
         <button type="submit" id="send" disabled aria-describedby="hint">Send the question →</button>
         <p class="hint" id="hint">Write your question above, then add an email so I can answer.</p>
         <p class="status" id="status" role="status"></p>
       </form>
 
-      {/* No-JavaScript fallback: /api/ask redirects a plain form post
-          back here with #sent or #unsent. */}
+      {/* No-JavaScript fallback: after a plain form post, FormSubmit
+          sends the visitor back here via _next, to /contact/#sent. */}
       <p class="fallback" id="sent" role="status">It's with me. Thank you for the question.</p>
-      <p class="fallback" id="unsent" role="status">It didn't leave. Please go back and try again.</p>
 
       <p class="kept" id="kept" hidden>
         <q id="kept-question"></q>
@@ -130,7 +134,7 @@ import RoomShell from '../components/RoomShell.astro';
     const text = question.value.trim();
     const mail = emailOf();
     const name = form.querySelector<HTMLInputElement>('input[name="name"]')?.value.trim() ?? '';
-    if (!text || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+    if (!text || text.length > 4000 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
       ready();
       return;
     }
@@ -139,19 +143,24 @@ import RoomShell from '../components/RoomShell.astro';
     status.textContent = '';
     carry();
 
+    // No server on this site anymore (static export on IONOS), so this
+    // calls FormSubmit directly from the browser instead of proxying
+    // through our own now-gone /api/ask. FormSubmit's AJAX endpoint is
+    // built for exactly this: static sites with no backend.
     try {
-      const response = await fetch('/api/ask', {
+      const response = await fetch('https://formsubmit.co/ajax/me@eduardosopalda.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           message: text,
-          name,
+          name: name || 'Unsigned',
           email: mail,
-          honey: honey?.value ?? '',
+          _subject: 'A question from the site',
+          _template: 'box',
         }),
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || data.ok === false) throw new Error('not sent');
+      if (!response.ok || String(data.success) === 'false') throw new Error('not sent');
       if (keptQuestion) keptQuestion.textContent = text;
       form.hidden = true;
       if (kept) kept.hidden = false;

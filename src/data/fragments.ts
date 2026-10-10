@@ -45,7 +45,7 @@ export const FRAGS: Fragment[] = [
   { text: 'Human override exists only on paper.', thread: 'GOVERNANCE', weight: 'short', source: 'Responsible AI in Times of Chaos: Why Trust Is Not a Feature', year: 2026 },
   { text: 'AI is a hammer.', thread: 'GOVERNANCE', weight: 'short', source: 'The Data Is My Shepherd, I Shall Not Want', year: 2026 },
   { text: 'I do not trust evangelists.', thread: 'TRUST', weight: 'short', source: 'The Data Is My Shepherd, I Shall Not Want', year: 2026 },
-  { text: 'AI does not hesitate. It does not say, "That depends." It simply responds.', thread: 'TRUST', weight: 'long', source: 'ATLAN´S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning', year: 2026 },
+  { text: 'AI does not hesitate. It does not say, "That depends." It simply responds.', thread: 'TRUST', weight: 'long', source: "ATLAN'S Great Data Debate: DATA, Dashboards, AI, and the Fragility of Meaning", year: 2026 },
   { text: 'Agents do not own risk. They do not carry accountability. Humans do… always.', thread: 'TRUST', weight: 'long', source: 'From Stewardship to Partnership: Why GenAI in Data Governance Is No Longer “The Future”', year: 2026 },
   { text: "In times of chaos, the absence of friction is not efficiency. It's a warning sign.", thread: 'TRUST', weight: 'long', source: 'Responsible AI in Times of Chaos: Why Trust Is Not a Feature', year: 2026 },
   { text: 'Speed is mistaken for correctness.', thread: 'TRUST', weight: 'short', source: 'Responsible AI in Times of Chaos: Why Trust Is Not a Feature', year: 2026 },

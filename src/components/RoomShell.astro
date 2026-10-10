@@ -12,6 +12,7 @@ const { title, italic } = Astro.props;
   <header class="room-title">
     <p class="room-kicker">Field notes</p>
     <h1>{title}<em>{italic}</em></h1>
+    <slot name="rail-extra" />
   </header>
   <div class="room">
     <slot />
