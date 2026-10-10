@@ -208,6 +208,15 @@ const acts = [
         </figcaption>
       </figure>
 
+      {/* Open side only: rendered solely in a build made after the opening
+          (BERLIN_OPEN=1 or past BERLIN_OPENS), so a closed build never
+          carries it. The CSS also hides it if ?sealed forces the seal. */}
+      {open && (
+        <p class="shared">
+          Shared with the cohorts of <a href="https://kithailab.com/" target="_blank" rel="noopener">Kith AI Lab</a>
+        </p>
+      )}
+
       <!-- ── the script ── -->
       <section class="script" aria-labelledby="script-h">
         <div class="section-head">
@@ -456,6 +465,10 @@ const acts = [
   .film-bar .time { font-variant-numeric: tabular-nums; color: var(--champagne); }
   .film-bar .note { margin-left: auto; text-transform: none; letter-spacing: 0.04em; font-family: var(--font-display); font-style: italic; font-size: 0.9rem; color: rgba(227, 175, 149, 0.75); }
   body[data-seal="sealed"] .film-bar button { opacity: 0.35; pointer-events: none; }
+  .shared { margin: 0.9rem 0 0; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(230, 203, 155, 0.7); }
+  .shared a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(247, 197, 106, 0.5); }
+  .shared a:hover, .shared a:focus-visible { color: var(--bronze); border-bottom-color: var(--bronze); outline: none; }
+  body[data-seal="sealed"] .shared { display: none; }
 
   /* ── the script ───────────────────────────────────────────── */
   .script { margin: 6rem 0 0; }
