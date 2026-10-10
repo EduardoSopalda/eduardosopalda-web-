@@ -1,0 +1,96 @@
+name: Deploy to IONOS
+
+# The build itself is now fully static (the Vercel adapter and both
+# /api routes are gone -- see astro.config.mjs), so this workflow is no
+# longer blocked on a hosting-architecture mismatch. The remaining
+# blocker was the deploy step itself: wlixcc/SFTP-Deploy-Action issues
+# a raw SSH shell command ("mkdir -p") before uploading, and this IONOS
+# account's shell is restricted to the sftp subsystem only (rssh) --
+# confirmed via a failed test run (run #1) that got "This account is
+# restricted by rssh. Allowed commands: sftp" before it ever reached
+# remote_path. Replaced with a small script using ssh2-sftp-client,
+# which never shells out -- see .github/scripts/deploy-ionos.mjs.
+# workflow_dispatch lets this run manually; re-add
+# "push: branches: [main]" once a manual run is verified working, to
+# get real push-to-deploy.
+on:
+  workflow_dispatch:
+  # Berlin opening: Monday 26 October 2026, 10:00 CET = 09:00 UTC.
+  # A static site can't change itself, so this rebuilds and re-uploads
+  # the site right after that moment; the build then drops the Berlin
+  # page's noindex (src/data/berlin.ts decides). GitHub can start
+  # scheduled runs several minutes late, never early, so two extra
+  # runs follow as retries; re-uploading the same build is harmless.
+  # Scheduled runs only fire from the default branch (main), and cron
+  # has no year, so the job below skips every year except 2026.
+  schedule:
+    - cron: '0 9 26 10 *'
+    - cron: '20 9 26 10 *'
+    - cron: '0 10 26 10 *'
+
+concurrency:
+  group: deploy-ionos
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Cron has no year: on any scheduled run that isn't 26 Oct 2026
+      # (UTC), skip everything below.
+      - name: Decide whether to deploy
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(date -u +%F)" != "2026-10-26" ]; then
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "Scheduled run outside 2026-10-26; nothing to do."
+          else
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.go == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.go == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: steps.gate.outputs.go == 'true'
+      - run: npx astro build
+        if: steps.gate.outputs.go == 'true'
+
+      # Nothing embargoed may leave with the build: private/ is not in
+      # public/, so it should never be in dist -- this makes sure.
+      - name: Check dist has no private Berlin files
+        if: steps.gate.outputs.go == 'true'
+        run: |
+          if [ -e dist/private ] || find dist -name 'film.mp4' -o -name 'roadmap.pdf' | grep -q .; then
+            echo 'dist contains private Berlin files; refusing to deploy.'
+            exit 1
+          fi
+          if grep -q 'name="robots" content="noindex"' dist/out-loud/automa-chem-2026/index.html; then
+            echo 'Berlin page: closed (noindex) in this build.'
+          else
+            echo 'Berlin page: open (indexable) in this build.'
+          fi
+
+      # IONOS Hosting Plus has no Git integration, so this is the
+      # replacement for what a Vercel/Deploy Now push-to-deploy would
+      # have done -- upload the static build over SFTP instead.
+      #
+      # This webspace hosts more than one site as sibling subfolders
+      # (e.g. /alinaweb next to /eduardoweb), and the domain can't be
+      # attached to the webspace root -- only to a subfolder. /eduardoweb
+      # is that subfolder for eduardosopalda.com. It previously held an
+      # unrelated site (confirmed stale); clear it out via the IONOS
+      # file manager before this workflow's first real run, since the
+      # upload adds to whatever is already there rather than replacing
+      # the folder wholesale.
+      - name: Deploy to IONOS via SFTP
+        if: steps.gate.outputs.go == 'true'
+        run: |
+          npm install --no-save ssh2-sftp-client
+          node .github/scripts/deploy-ionos.mjs
+        env:
+          IONOS_SFTP_PASSWORD: ${{ secrets.IONOS_SFTP_PASSWORD }}

@@ -18,14 +18,25 @@
 // is no real embargo left to protect technically. A ?sealed query
 // param forces the pre-talk view for preview/testing either way.
 //
-// This page is not linked from the public nav yet and isn't merged
-// to main -- noindex stays on until Eduardo says go for the 27th.
+// Opening moment: Monday 26 October 2026, 10:00 Berlin time (CET),
+// from src/data/berlin.ts. The site is static (IONOS), so two things
+// carry the opening:
+// - At build time, `open` decides the noindex. A build made before
+//   10:00 CET keeps noindex; the scheduled IONOS deploy at 09:00 UTC on
+//   the 26th (.github/workflows/deploy-ionos.yml) rebuilds after the
+//   moment, so the noindex disappears. BERLIN_OPEN=1 forces it open.
+// - In the browser, the seal below uses the same BERLIN_OPENS and
+//   reloads the page when the countdown reaches zero, as a backup if
+//   the scheduled deploy is late.
 import '../../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource-variable/newsreader/opsz.css';
 import '../../styles/global.css';
 import RoomNerve from '../../components/RoomNerve.astro';
 import RoomShell from '../../components/RoomShell.astro';
+import { BERLIN_OPENS, berlinOpen } from '../../data/berlin';
+
+const open = process.env.BERLIN_OPEN === '1' || berlinOpen();
 
 const canonicalUrl = new URL('/out-loud/automa-chem-2026/', Astro.site);
 const ogImageUrl = new URL('/out-loud/automa-chem-2026/film-poster.jpg', Astro.site);
@@ -136,7 +147,7 @@ const acts = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Berlin · Out Loud · EDUARDO sopalda</title>
     <meta name="description" content="Data and AI in Sustainable Digital Transformation. From Brasília to the plant floor. AUTOMA Chem 2026, Estrel Berlin, 26 October 2026: the film and the script." />
-    <meta name="robots" content="noindex" />
+    {!open && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalUrl} />
     <meta property="og:type" content="article" />
@@ -234,19 +245,20 @@ const acts = [
       <dl class="colophon">
         <div><dt>Event</dt><dd>AUTOMA Chem 2026</dd></div>
         <div><dt>Room</dt><dd>Estrel Berlin<br />26 October 2026 · 9:40</dd></div>
-        <div><dt>Speaker</dt><dd>Eduardo Sopalda<br />D&amp;T Global Data Governance Lead, <span style="white-space:nowrap">dsm-firmenich</span></dd></div>
+        <div><dt>Speaker</dt><dd>Eduardo Sopalda<br />D&amp;T Global Data Governance Lead, <span class="brand-name" style="white-space:nowrap">dsm-firmenich</span></dd></div>
         <div><dt>Film</dt><dd>7:47 · six acts<br />silent, one paper tap</dd></div>
       </dl>
 
       <p class="back"><a href="/out-loud">← Out loud</a></p>
     </RoomShell>
 
-    <script define:vars={{ chapters: CHAPTERS, duration: DURATION }}>
+    <script define:vars={{ chapters: CHAPTERS, duration: DURATION, opens: BERLIN_OPENS }}>
       /* Out Loud · Berlin — film, nerve and script, one clock. */
       const CHAPTERS = chapters;
       const DURATION = duration;
       // The film opens after the talk: 26 Oct 2026, 10:00 in Berlin (CET, UTC+1).
-      const OPENS = Date.parse('2026-10-26T09:00:00Z');
+      // Same moment as BERLIN_OPENS in src/data/berlin.ts.
+      const OPENS = opens;
 
       const $ = (s, r = document) => r.querySelector(s);
       const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -265,6 +277,9 @@ const acts = [
         screen.removeAttribute('role'); screen.removeAttribute('tabindex');
         const tick = () => {
           const ms = Math.max(0, OPENS - Date.now());
+          // Backup reveal: when the moment arrives on an open tab, reload
+          // so the page comes back unsealed (unless ?sealed forces it).
+          if (ms === 0 && !q.has('sealed')) { location.reload(); return; }
           const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60;
           $('#count').textContent = `Opens in ${d} d · ${String(h).padStart(2,'0')} h · ${String(m).padStart(2,'0')} m`;
         };
