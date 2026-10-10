@@ -272,3 +272,12 @@ video {
     padding-right: 0;
   }
 }
+
+/* Brand rule: "dsm-firmenich" is always lowercase, everywhere. Labels
+   across the site use text-transform: uppercase (and could pick up
+   small caps), so the name is wrapped in .brand-name (see
+   components/BrandText.astro) and this rule wins over any of them. */
+.brand-name {
+  text-transform: none !important;
+  font-variant-caps: normal !important;
+}
