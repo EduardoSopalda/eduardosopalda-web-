@@ -16,14 +16,32 @@ import RoomShell from '../components/RoomShell.astro';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Contact · EDUARDO sopalda</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* Lets the CSS keep name/email visible when JavaScript is off,
+        so the plain form post below still has somewhere to answer. */}
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <RoomNerve current="/contact" heading={false} />
     <RoomShell title="Contact" italic="a question, answerable.">
-      <form class="ask" id="ask" novalidate>
-        <label class="prompt" for="question">Ask the one you actually have.</label>
+      {/* Visitors asked "where do I leave the comment?": the field read as
+          decoration. It now has a visible label, a placeholder, a framed
+          writing area with a focus ring, and a hint that says what's
+          still needed before the question can be sent. */}
+      <form class="ask" id="ask" method="post" action="/api/ask" novalidate>
+        <p class="prompt" id="ask-prompt">Ask the one you actually have.</p>
+        <label class="field-label" for="question">Your message</label>
         <div class="ink">
-          <textarea id="question" name="message" rows="3" autocomplete="off"></textarea>
+          <textarea
+            id="question"
+            name="message"
+            rows="4"
+            maxlength="4000"
+            autocomplete="off"
+            required
+            aria-required="true"
+            aria-describedby="ask-prompt hint"
+            placeholder="Type your question here…"
+          ></textarea>
           <span class="wick" aria-hidden="true"></span>
         </div>
 
@@ -34,15 +52,21 @@ import RoomShell from '../components/RoomShell.astro';
           </label>
           <label>
             Where to answer
-            <input name="email" type="email" autocomplete="email" inputmode="email" />
+            <input name="email" type="email" autocomplete="email" inputmode="email" required aria-required="true" placeholder="you@example.com" />
           </label>
         </div>
 
         <input class="honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
-        <button type="submit" id="send" disabled>Send the question</button>
+        <button type="submit" id="send" disabled aria-describedby="hint">Send the question →</button>
+        <p class="hint" id="hint">Write your question above, then add an email so I can answer.</p>
         <p class="status" id="status" role="status"></p>
       </form>
+
+      {/* No-JavaScript fallback: /api/ask redirects a plain form post
+          back here with #sent or #unsent. */}
+      <p class="fallback" id="sent" role="status">It's with me. Thank you for the question.</p>
+      <p class="fallback" id="unsent" role="status">It didn't leave. Please go back and try again.</p>
 
       <p class="kept" id="kept" hidden>
         <q id="kept-question"></q>
@@ -60,6 +84,7 @@ import RoomShell from '../components/RoomShell.astro';
   const status = document.getElementById('status');
   const kept = document.getElementById('kept');
   const keptQuestion = document.getElementById('kept-question');
+  const hint = document.getElementById('hint');
 
   function emailOf() {
     const field = form?.querySelector<HTMLInputElement>('input[name="email"]');
@@ -73,9 +98,18 @@ import RoomShell from '../components/RoomShell.astro';
     quiet?.classList.toggle('is-open', open);
     const ok = open && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
     if (send) send.disabled = !ok;
+    if (hint) {
+      hint.textContent = !open
+        ? 'Write your question above, then add an email so I can answer.'
+        : ok
+          ? ''
+          : 'Add an email so I can answer.';
+    }
   }
 
   question?.addEventListener('input', ready);
+  form?.querySelector('input[name="email"]')?.addEventListener('input', ready);
+  ready();
 
   function carry() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -142,29 +176,58 @@ import RoomShell from '../components/RoomShell.astro';
     color: var(--flesh);
   }
 
+  .field-label {
+    display: block;
+    margin-top: 1.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
   .ink {
     position: relative;
-    margin-top: 1.4rem;
+    margin-top: 0.6rem;
   }
 
   textarea {
     display: block;
     width: 100%;
-    min-height: 7.5rem;
+    min-height: 9rem;
     margin: 0;
-    padding: 0 0 0.8rem;
-    border: 0;
+    padding: 0.9rem 1rem 1rem;
+    box-sizing: border-box;
+    border: 1px solid rgba(230, 203, 155, 0.4);
     border-bottom: 1px solid rgba(247, 197, 106, 0.85);
-    background: transparent;
+    border-radius: 2px;
+    background: rgba(243, 235, 224, 0.035);
     resize: vertical;
+    cursor: text;
     caret-color: #fff6d8;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-family: var(--font-display);
     font-size: clamp(1.45rem, 2.2vw, 1.85rem);
     line-height: 1.35;
     color: var(--bone);
   }
 
+  textarea::placeholder {
+    color: rgba(243, 235, 224, 0.55);
+    font-style: italic;
+    opacity: 1;
+  }
+
+  textarea:hover { border-color: rgba(230, 203, 155, 0.65); }
+
   textarea:focus { outline: none; }
+
+  textarea:focus-visible,
+  textarea:focus {
+    border-color: var(--gold);
+    background: rgba(243, 235, 224, 0.06);
+    box-shadow: 0 0 0 2px rgba(247, 197, 106, 0.35);
+  }
 
   .wick {
     position: absolute;
@@ -195,9 +258,14 @@ import RoomShell from '../components/RoomShell.astro';
     to { transform: translateX(54rem); }
   }
 
+  /* Without JavaScript the name/email fields stay visible. */
   .quiet {
     display: grid;
     gap: 1rem;
+    margin-top: 1.8rem;
+  }
+
+  :global(html.js) .quiet {
     max-height: 0;
     margin: 0;
     opacity: 0;
@@ -206,7 +274,7 @@ import RoomShell from '../components/RoomShell.astro';
     transition: opacity 1.6s cubic-bezier(.22, .7, .2, 1), max-height 1.6s cubic-bezier(.22, .7, .2, 1), margin 1.6s cubic-bezier(.22, .7, .2, 1);
   }
 
-  .quiet.is-open {
+  :global(html.js) .quiet.is-open {
     max-height: 12rem;
     margin-top: 1.8rem;
     opacity: 1;
@@ -236,7 +304,9 @@ import RoomShell from '../components/RoomShell.astro';
     color: var(--bone);
   }
 
-  .quiet input:focus { outline: none; border-bottom-color: var(--gold); }
+  .quiet input::placeholder { color: rgba(243, 235, 224, 0.45); }
+
+  .quiet input:focus { outline: none; border-bottom-color: var(--gold); box-shadow: 0 1px 0 0 var(--gold); }
 
   .honey {
     position: absolute;
@@ -248,24 +318,51 @@ import RoomShell from '../components/RoomShell.astro';
 
   button {
     margin-top: 2rem;
-    padding: 0;
-    border: 0;
+    padding: 0.75rem 1.2rem;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
     background: none;
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--bronze);
+    color: var(--gold);
     cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   }
 
   button:disabled {
-    color: rgba(170, 104, 66, 0.35);
-    cursor: default;
+    border-color: rgba(230, 203, 155, 0.35);
+    color: rgba(230, 203, 155, 0.6);
+    cursor: not-allowed;
   }
 
   button:not(:disabled):hover,
-  button:not(:disabled):focus-visible { color: var(--gold); }
+  button:not(:disabled):focus-visible {
+    color: var(--void);
+    background: var(--gold);
+    outline: none;
+  }
+
+  .hint {
+    min-height: 1.2rem;
+    margin: 0.7rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--champagne);
+  }
+
+  .fallback {
+    display: none;
+    margin: 1.6rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--bone);
+  }
+
+  .fallback:target { display: block; }
 
   .status {
     min-height: 1.2rem;
