@@ -7,6 +7,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
 import RoomShell from '../components/RoomShell.astro';
+import BrandText from '../components/BrandText.astro';
 
 const records = [
   {
@@ -106,11 +107,11 @@ const records = [
                 <img src={r.img} alt={r.alt} />
               </figure>
               <div>
-                <p class="meta">{r.date}</p>
-                <h3>{r.title}</h3>
-                <p>{r.text}</p>
-                <p class="meta">{r.meta}</p>
-                <p class="role">{r.role}</p>
+                <p class="meta"><BrandText text={r.date} /></p>
+                <h3><BrandText text={r.title} /></h3>
+                <p><BrandText text={r.text} /></p>
+                <p class="meta"><BrandText text={r.meta} /></p>
+                <p class="role"><BrandText text={r.role} /></p>
               </div>
             </li>
           ))}

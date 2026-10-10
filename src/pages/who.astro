@@ -4,6 +4,7 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
 import RoomShell from '../components/RoomShell.astro';
+import BrandText from '../components/BrandText.astro';
 
 const steps = [
   {
@@ -47,7 +48,7 @@ const beliefs = [
           <p class="kicker">Architect, operator, governance practitioner</p>
           <p class="display">I don’t make AI sound magical. I make it operational.</p>
           <p class="dek">
-            Architect by training. Global AI and Data Governance Lead at dsm-firmenich.
+            Architect by training. Global AI and Data Governance Lead at <span class="brand-name">dsm-firmenich</span>.
             Still curious about what systems mean for people.
           </p>
         </div>
@@ -79,8 +80,8 @@ const beliefs = [
         <ol class="steps">
           {steps.map((s) => (
             <li>
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
+              <h3><BrandText text={s.title} /></h3>
+              <p><BrandText text={s.text} /></p>
             </li>
           ))}
         </ol>

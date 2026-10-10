@@ -1,0 +1,15 @@
+---
+// Brand rule from Eduardo: "dsm-firmenich" is ALWAYS written in
+// lowercase, everywhere. Many labels on the site use
+// text-transform: uppercase (kickers, .meta, .role...), which turned
+// it into DSM-FIRMENICH on screen. Render any plain string through
+// this component and every mention of the company (any casing in the
+// source) comes out as <span class="brand-name">dsm-firmenich</span>,
+// which global.css protects from text-transform and small caps.
+interface Props {
+  text?: string | null;
+}
+const { text } = Astro.props;
+const parts = String(text ?? '').split(/(dsm[\s-]?firmenich)/i);
+---
+{parts.map((part, i) => (i % 2 === 1 ? <span class="brand-name">dsm-firmenich</span> : part))}
