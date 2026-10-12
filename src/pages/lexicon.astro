@@ -1,6 +1,6 @@
 ---
 // Public record. The mockup called this Lexicon: talks, panels, rooms.
-// Roles are stated as given. The Spain forum stage role is not confirmed.
+// Roles are stated as given.
 // The Berlin congress stays upcoming, and already has its own page.
 import '../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
@@ -20,6 +20,7 @@ type LexiconRecord = {
   title: string;
   text: string;
   more?: string[];
+  link?: { href: string; label: string };
   meta: string;
   role: string;
 };
@@ -45,9 +46,16 @@ const records: LexiconRecord[] = [
     alt: 'Spain Cybersecurity and Data Trust Forum 2026',
     date: '21 May 2026 · Madrid',
     title: 'Spain Cybersecurity and Data Trust Forum',
-    text: 'Trust, resilience, and digital sovereignty in critical sectors. Organized by Bamberg Dialogues at Hotel ILUNION Pío XII.',
+    text: 'A 5 a.m. flight, terrible airport coffee, and a room of policymakers, bankers, technologists and security people circling one question: how do you build lasting trust in a world that moves faster than regulation can breathe?',
+    more: [
+      'What I enjoyed most wasn’t consensus but the healthy friction. Data sovereignty, shadow AI, regulation, cyber resilience: everyone came at them from a different seat. If everyone in the room says the same thing, you’re not having a conversation, you’re attending a rehearsal.',
+      'Olga Forné spoke about regulation not as a burden but as a distinctly European strength, a foundation for trust. I agree, and it deserves to be said louder. Good regulation isn’t a tax on progress; it’s part of the architecture that makes progress last. The head of governance at Banco de España reminded us this is a marathon, not a sprint. The Google voice in the room added that risk is real, but the seven plagues of Egypt are not a governance framework.',
+      'The risks we can’t ignore were there too: European data on infrastructure governed by US law, local data centres that don’t mean local control, and encryption keys sitting in the same cloud as the data they protect.',
+      'I still left hopeful. The paths differed, sometimes sharply, but the intention was the same: protect what matters, keep meaningful control, and build systems that deserve trust. Trust isn’t the nice-to-have at the end of the strategy deck. Trust is the business model.',
+    ],
+    link: { href: 'https://www.linkedin.com/pulse/trust-real-business-model-eduardo-sopalda-u6pcf', label: 'Read the full article on LinkedIn' },
     meta: 'Data trust · Digital sovereignty',
-    role: 'Invited · stage role to confirm',
+    role: 'Invited participant',
   },
   {
     img: '/cabinet/sigmoid-un-ballroom.png',
@@ -145,6 +153,9 @@ const records: LexiconRecord[] = [
                       </summary>
                       <div class="more-body">
                         {r.more.map((para) => <p><BrandText text={para} /></p>)}
+                        {r.link && (
+                          <p class="more-link"><a href={r.link.href} target="_blank" rel="noopener">{r.link.label} ↗</a></p>
+                        )}
                       </div>
                     </details>
                   </>
@@ -281,6 +292,7 @@ const records: LexiconRecord[] = [
   .more-open, .more[open] .more-closed { display: none; }
   .more[open] .more-open { display: inline; }
   .more-body { margin-top: 0.4rem; }
+  .more-link a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
   /* Where the browser lets <details> lay out its parts, put "Read less"
      under the full text. Older engines simply keep it on top. */
   .more[open] { display: flex; flex-direction: column; }
