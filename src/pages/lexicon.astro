@@ -9,7 +9,22 @@ import RoomNerve from '../components/RoomNerve.astro';
 import RoomShell from '../components/RoomShell.astro';
 import BrandText from '../components/BrandText.astro';
 
-const records = [
+// Each record shows `text` on the card. A record may also carry `more`:
+// an optional list of paragraphs. When present, `text` acts as a short
+// teaser and a native <details> "Read more" opens the full piece in place
+// (no JS needed). Records without `more` render exactly as before.
+type LexiconRecord = {
+  img: string;
+  alt: string;
+  date: string;
+  title: string;
+  text: string;
+  more?: string[];
+  meta: string;
+  role: string;
+};
+
+const records: LexiconRecord[] = [
   {
     img: '/cabinet/datanext-speaker-card.jpg',
     alt: 'DataNext Agentic Summit 2026 speaker card for Eduardo Sopalda',
@@ -31,9 +46,14 @@ const records = [
   {
     img: '/cabinet/sigmoid-un-ballroom.png',
     alt: 'Eduardo and fellow roundtable participants in the UN Ballroom at Ten Trinity Square',
-    date: '13 May 2026 · London',
+    date: '13–14 May 2026 · London',
     title: 'Sigmoid — A room that remembers',
-    text: 'A closed-door Agentic AI roundtable in the UN Ballroom at Ten Trinity Square. The room hosted the inaugural reception of the first UN General Assembly in 1946. The first meeting itself was held at Central Hall Westminster on 10 January 1946.',
+    text: 'In 1946, delegates to the first UN General Assembly gathered in the UN Ballroom at Ten Trinity Square. Eighty years later, we sat in that same room, talking about agentic AI.',
+    more: [
+      'In 1946, delegates to the first UN General Assembly gathered in the UN Ballroom at Ten Trinity Square, people trying to agree on how a changed world should be governed. Eighty years later, over two days in May, we sat in that same room, around the same kind of tables, talking about another technology that’s changing the world: agentic AI.',
+      'You could feel it. The room still felt like a place where important decisions take shape, and AI governance is one of them. No single company, regulator or expert will get it right alone. It takes people from very different seats (growth, revenue, supply chain, data, policy) sitting down to share what’s working, admit what isn’t, and work out answers together.',
+      'We talked about agents only being as good as the data and context we give them, about keeping humans able to see and steer what agents do, and about governance as the thing that makes innovation trustworthy enough to scale rather than the thing that stops it. Conversations like this are where that work starts. Thank you, Sigmoid, for opening the room.',
+    ],
     meta: 'Reimagine with AI · London',
     role: 'Roundtable participant',
   },
@@ -109,7 +129,22 @@ const records = [
               <div>
                 <p class="meta"><BrandText text={r.date} /></p>
                 <h3><BrandText text={r.title} /></h3>
-                <p><BrandText text={r.text} /></p>
+                {r.more?.length ? (
+                  <>
+                    <p class="preview"><BrandText text={r.text} /></p>
+                    <details class="more">
+                      <summary>
+                        <span class="more-closed">Read more</span>
+                        <span class="more-open">Read less</span>
+                      </summary>
+                      <div class="more-body">
+                        {r.more.map((para) => <p><BrandText text={para} /></p>)}
+                      </div>
+                    </details>
+                  </>
+                ) : (
+                  <p><BrandText text={r.text} /></p>
+                )}
                 <p class="meta"><BrandText text={r.meta} /></p>
                 <p class="role"><BrandText text={r.role} /></p>
               </div>
@@ -215,6 +250,39 @@ const records = [
     border-bottom: 1px solid rgba(170, 104, 66, 0.7);
     color: var(--bronze);
   }
+
+  /* Optional long text on a record: teaser + native "Read more". */
+  .more { margin: 0.2rem 0 0; }
+  .more summary {
+    display: inline-block;
+    cursor: pointer;
+    list-style: none;
+    padding: 0.2rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    border-bottom: 1px solid rgba(230, 203, 155, 0.45);
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .more summary::-webkit-details-marker { display: none; }
+  .more summary::marker { content: ''; }
+  .more summary::after { content: ' +'; }
+  .more[open] summary::after { content: ' −'; }
+  .more summary:hover { color: var(--gold); border-color: var(--gold); }
+  .more summary:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
+  .more-open, .more[open] .more-closed { display: none; }
+  .more[open] .more-open { display: inline; }
+  .more-body { margin-top: 0.4rem; }
+  /* Where the browser lets <details> lay out its parts, put "Read less"
+     under the full text. Older engines simply keep it on top. */
+  .more[open] { display: flex; flex-direction: column; }
+  .more[open] summary { order: 2; align-self: flex-start; margin-top: 0.2rem; }
+  .more-body p:first-child { margin-top: 0.6rem; }
+  /* Once open, the full text replaces the teaser so nothing repeats. */
+  li:has(.more[open]) .preview { display: none; }
+  li:has(.more[open]) { align-items: start; }
 
   .next {
     margin-top: 4rem;
