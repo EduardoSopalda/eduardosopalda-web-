@@ -1,7 +1,7 @@
 ---
 // Public record. The mockup called this Lexicon: talks, panels, rooms.
 // Roles are stated as given.
-// The Berlin congress stays upcoming, and already has its own page.
+// The Berlin congress stays in Upcoming until it happens, and already has its own page.
 import '../styles/fraunces.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
@@ -24,6 +24,25 @@ type LexiconRecord = {
   meta: string;
   role: string;
 };
+
+// Future commitments, shown first. Move each one into `records` once it has happened.
+const upcoming = [
+  {
+    when: '26–27 October 2026 · Berlin',
+    title: 'AUTOMA Chem 2026',
+    text: 'Chemical Automation and Digitalisation Congress. Opening panel: data and AI governance as the foundation for sustainable digital transformation in the chemical industry. Invited by BGS Group. The note opens after the talk.',
+  },
+  {
+    when: '4 February 2027 · Online',
+    title: 'DataNext Trust Summit',
+    text: 'Panel discussion.',
+  },
+  {
+    when: '13–14 April 2027 · RAI Amsterdam',
+    title: 'EuroLab Live',
+    text: 'Speaker.',
+  },
+];
 
 const records: LexiconRecord[] = [
   {
@@ -125,6 +144,20 @@ const records: LexiconRecord[] = [
         <p class="dek">A living index of conversations across data, AI, trust, climate, and the human choices underneath them. Different rooms. Connected questions.</p>
       </section>
 
+      <section class="next upcoming">
+        <p class="kicker">Upcoming · not yet a record</p>
+        <h2>Rooms ahead.</h2>
+        <div class="up-list">
+          {upcoming.map((u) => (
+            <div class="up-item">
+              <p class="when">{u.when}</p>
+              <h3>{u.title}</h3>
+              <p>{u.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <article class="feature">
         <figure>
           <img src="/cabinet/datanext-roundtable-recap.jpg" alt="Eduardo and fellow panelists at the DataNext Agentic Summit closing panel" />
@@ -177,16 +210,6 @@ const records: LexiconRecord[] = [
         </ol>
       </section>
 
-      <section class="next">
-        <p class="kicker">Next · not yet a record</p>
-        <h2>Industry governance, at scale.</h2>
-        <p class="when">26–27 October 2026 · Berlin</p>
-        <p>
-          Chemical Automation and Digitalisation Congress. Opening panel: data and AI governance as the
-          foundation for sustainable digital transformation in the chemical industry. Invited by BGS Group.
-          The note opens after the talk.
-        </p>
-      </section>
     </RoomShell>
   </body>
 </html>
@@ -309,8 +332,11 @@ const records: LexiconRecord[] = [
   li:has(.more[open]) .preview { display: none; }
   li:has(.more[open]) { align-items: start; }
 
+  .up-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.6rem; margin-top: 1rem; }
+  .up-item h3 { margin: 0.4rem 0 0.4rem; font-size: 1.35rem; }
+  .up-item p { margin: 0; }
   .next {
-    margin-top: 4rem;
+    margin-top: 3.2rem;
     padding: 1.6rem 0 0;
     border-top: 1px solid rgba(170, 104, 66, 0.55);
   }
