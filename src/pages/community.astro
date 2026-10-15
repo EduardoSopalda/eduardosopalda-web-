@@ -106,8 +106,13 @@ import RoomShell from '../components/RoomShell.astro';
 </html>
 
 <style>
-  html { overflow-y: auto; overflow-x: clip; }
-  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+  /* !important: this must win over global.css's html,body{overflow:hidden}
+     reset every time. Both rules have equal specificity, so without it
+     the winner depends on which one the bundler happens to place last
+     in the compiled stylesheet -- which silently locked this page's
+     scroll on a prior build while every sibling room page won by luck. */
+  html { overflow-y: auto !important; overflow-x: clip; }
+  body { overflow-y: auto !important; overflow-x: clip; min-height: 100svh; color: var(--bone); }
 
   .kicker, .label, .role, .note, .card-link, figcaption {
     font-family: 'Space Grotesk', sans-serif;
