@@ -49,7 +49,7 @@ const months = [
               · {featured.date.getDate()} {months[featured.date.getMonth()]} {featured.date.getFullYear()}
             </p>
             {featured.no && <p class="numeral" aria-hidden="true">{String(featured.no).padStart(2, '0')}</p>}
-            <h1><a href={`/writing/${featured.id}`}>{featured.title}</a></h1>
+            <h2><a href={`/writing/${featured.id}`}>{featured.title}</a></h2>
             {(featured.dek || featured.lead) && <p class="dek">{featured.dek || featured.lead}</p>}
             <a class="read" href={`/writing/${featured.id}`}>Read the note</a>
           </div>
@@ -194,7 +194,7 @@ const months = [
     min-width: 0;
   }
 
-  .featured h1 {
+  .featured h2 {
     margin: 0.7rem 0 0;
     font-family: var(--font-display);
     font-weight: 400;
@@ -204,12 +204,12 @@ const months = [
     color: var(--bone);
   }
 
-  .featured h1 a {
+  .featured h2 a {
     color: inherit;
     text-decoration: none;
   }
 
-  .featured h1 a:hover,
+  .featured h2 a:hover,
   .read:hover {
     color: var(--gold);
   }
