@@ -3,6 +3,7 @@
 // Roles are stated as given.
 // The Berlin congress stays in Upcoming until it happens, and already has its own page.
 import '../styles/fraunces.css';
+import '@fontsource-variable/newsreader/opsz.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
@@ -166,7 +167,7 @@ const records: LexiconRecord[] = [
         <div>
           <p class="kicker">Featured · Agentic AI</p>
           <h2>Shaping the future of business with agentic AI.</h2>
-          <p>At DataNext Agentic Summit, the closing panel was on opportunities, challenges, and what responsible innovation costs when systems move faster than approval.</p>
+          <p class="copy">At DataNext Agentic Summit, the closing panel was on opportunities, challenges, and what responsible innovation costs when systems move faster than approval.</p>
           <p class="meta">28 May 2026 · Online · Speaker, closing panel</p>
         </div>
       </article>
@@ -200,7 +201,7 @@ const records: LexiconRecord[] = [
                     </details>
                   </>
                 ) : (
-                  <p><BrandText text={r.text} /></p>
+                  <p class="copy"><BrandText text={r.text} /></p>
                 )}
                 <p class="meta"><BrandText text={r.meta} /></p>
                 <p class="role"><BrandText text={r.role} /></p>
@@ -240,7 +241,7 @@ const records: LexiconRecord[] = [
     font-size: clamp(2.1rem, 3.2vw, 3rem);
   }
 
-  .dek, .feature p, .index p, .next p {
+  .dek, .next p {
     max-width: 38rem;
     font-family: var(--font-display);
     font-style: italic;
@@ -250,6 +251,18 @@ const records: LexiconRecord[] = [
   }
 
   .dek { margin: 1rem 0 0; }
+
+  /* Actual paragraph body copy (the feature recap, record teasers and
+     full "read more" text) reads in Newsreader, not the Fraunces italic
+     reserved for short editorial accents above. */
+  .copy, .preview, .more-body p {
+    max-width: 62ch;
+    font-family: var(--font-reading);
+    font-style: normal;
+    font-size: clamp(1.0625rem, 1.1vw, 1.2rem);
+    line-height: 1.7;
+    color: var(--flesh);
+  }
 
   .feature {
     display: grid;
@@ -265,7 +278,7 @@ const records: LexiconRecord[] = [
   img {
     display: block;
     width: 100%;
-    height: 16rem;
+    aspect-ratio: 4 / 3;
     object-fit: contain;
     object-position: center;
     background: #070707;
@@ -289,7 +302,6 @@ const records: LexiconRecord[] = [
     padding: 1.15rem 0;
     border-top: 1px solid rgba(243, 235, 224, 0.14);
   }
-  li img { height: 11rem; }
   .role {
     display: inline-block;
     margin-top: 0.7rem;
@@ -354,6 +366,5 @@ const records: LexiconRecord[] = [
 
   @media (max-width: 800px) {
     .feature, li { grid-template-columns: 1fr; }
-    img, li img { height: auto; max-height: 16rem; }
   }
 </style>

@@ -338,6 +338,19 @@ const months = [
     color: var(--flesh);
   }
 
+  @media (min-width: 901px) and (max-width: 1300px) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
+
+    .featured-plate {
+      justify-self: start;
+      width: min(100%, 20rem);
+      height: auto;
+      aspect-ratio: 784 / 1168;
+    }
+  }
+
   @media (max-width: 900px) {
     main {
       display: block;
@@ -358,6 +371,11 @@ const months = [
 
     .featured {
       grid-template-columns: 1fr;
+    }
+
+    .featured h2 {
+      font-size: clamp(2.25rem, 9vw, 3.4rem);
+      line-height: 0.98;
     }
 
     .featured-plate {
