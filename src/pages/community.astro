@@ -32,16 +32,12 @@ import RoomShell from '../components/RoomShell.astro';
 
       <section class="initiatives" aria-label="Community initiatives">
         <article class="card">
-          <div class="card-top">
-            <div class="logo-frame ecs">
-              <img src="/community/european-career-support.png" alt="European Career Support logo" />
-            </div>
-            <div>
-              <span class="index">01</span>
-              <p class="label">European Career Support</p>
-            </div>
+          <p class="no" aria-hidden="true">01</p>
+          <div class="logo-frame ecs">
+            <img src="/community/european-career-support.png" alt="European Career Support logo" />
           </div>
           <div class="card-body">
+            <p class="label">European Career Support</p>
             <p class="role">Volunteer mentor</p>
             <h3>Helping people find their next step.</h3>
             <p>Mentoring in a European community of more than 15,000 members—sharing experience, perspective, and practical support along the way.</p>
@@ -50,41 +46,33 @@ import RoomShell from '../components/RoomShell.astro';
         </article>
 
         <article class="card dama">
-          <div class="card-top">
-            <div class="logo-frame">
-              <img src="/community/dama-spain.png" alt="DAMA España logo" />
-            </div>
-            <div>
-              <span class="index">02</span>
-              <p class="label">DAMA España</p>
-            </div>
+          <p class="no" aria-hidden="true">02</p>
+          <div class="logo-frame">
+            <img src="/community/dama-spain.png" alt="DAMA España logo" />
           </div>
-          <figure class="post">
-            <img
-              src="/community/dama-governance-meeting-post.png"
-              alt="DAMA España AI Governance group in a virtual meeting"
-            />
-            <figcaption>AI Governance Working Group · Virtual session</figcaption>
-          </figure>
           <div class="card-body">
+            <p class="label">DAMA España</p>
             <p class="role">Volunteer · AI governance</p>
             <h3>Better governance, built together.</h3>
             <p>Working with the DAMA España community on practical guidance for governing agentic AI in organizations, grounded in strong data governance.</p>
+            <figure class="post">
+              <img
+                src="/community/dama-governance-meeting-post.png"
+                alt="DAMA España AI Governance group in a virtual meeting"
+              />
+              <figcaption>AI Governance Working Group · Virtual session</figcaption>
+            </figure>
             <a class="card-link" href="https://www.linkedin.com/company/damaspain/" target="_blank" rel="noreferrer noopener">Join the conversation</a>
           </div>
         </article>
 
         <article class="card">
-          <div class="card-top">
-            <div class="logo-frame ai">
-              <img src="/community/ai-collaborative-community.png" alt="AI Collaborative Community logo" />
-            </div>
-            <div>
-              <span class="index">03</span>
-              <p class="label">AI Collaborative Community</p>
-            </div>
+          <p class="no" aria-hidden="true">03</p>
+          <div class="logo-frame ai">
+            <img src="/community/ai-collaborative-community.png" alt="AI Collaborative Community logo" />
           </div>
           <div class="card-body">
+            <p class="label">AI Collaborative Community</p>
             <p class="role">Writer · Community contributor</p>
             <h3>Making useful ideas travel.</h3>
             <p>I write articles for a community that brings people together around AI innovation, practical use cases, events, and shared resources.</p>
@@ -161,38 +149,54 @@ import RoomShell from '../components/RoomShell.astro';
 
   .lede strong { color: var(--bone); font-weight: 500; }
 
+  /* A sequence of framed specimens, not a features grid -- same idea
+     as Lexicon's record cards: one column, each entry its own bordered
+     case with a catalogue number in the corner, image and text sharing
+     the case rather than stacked as separate blocks. */
   .initiatives {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
     margin-top: 2.4rem;
   }
 
   .card {
+    position: relative;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid rgba(170, 104, 66, 0.45);
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid rgba(170, 104, 66, 0.4);
   }
 
-  .card-top {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    min-height: 6.4rem;
-    padding: 1rem;
-    border-bottom: 1px solid rgba(170, 104, 66, 0.28);
+  .no {
+    position: absolute;
+    top: 0.9rem;
+    right: 1.1rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--bronze);
   }
 
+  .no::before { content: 'No. '; font-family: 'Space Grotesk', sans-serif; font-style: normal; font-size: 0.6rem; letter-spacing: 0.1em; vertical-align: 1px; }
+
+  /* Each org's own brand colour, muted into this site's own bronze/
+     sepia family -- a mark in the cabinet, not a partner-logo badge. */
   .logo-frame {
-    width: 4.4rem;
-    height: 4.4rem;
-    flex: 0 0 4.4rem;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
     padding: 0.4rem;
     overflow: hidden;
     background: #f7f5ef;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+    filter: grayscale(0.55) sepia(0.5) saturate(1.3) brightness(0.88) contrast(1.05);
   }
 
   .logo-frame.ecs { background: #a8dbe5; padding: 0; }
@@ -205,22 +209,14 @@ import RoomShell from '../components/RoomShell.astro';
     object-fit: contain;
   }
 
-  .index {
-    display: block;
-    font-style: italic;
-    font-size: 1.45rem;
-    line-height: 1;
-    color: var(--bronze);
-  }
-
   .label {
-    margin: 0.35rem 0 0;
+    margin: 0;
     font-size: 0.62rem;
     line-height: 1.4;
     color: var(--champagne);
   }
 
-  .post { margin: 0; }
+  .post { margin: 1rem 0 0; max-width: 24rem; }
   .post img {
     display: block;
     width: 100%;
@@ -228,25 +224,29 @@ import RoomShell from '../components/RoomShell.astro';
     object-fit: cover;
     object-position: center 96%;
     background: #111;
+    border: 1px solid rgba(170, 104, 66, 0.4);
+    /* Exhibit treatment, not a pasted screenshot: muted into the same
+       bronze/sepia family as every specimen render, so a Zoom grid
+       reads as a plate in the cabinet rather than a UI capture. */
+    filter: grayscale(0.5) sepia(0.3) saturate(1.2) brightness(0.85) contrast(1.05);
   }
 
   figcaption {
     margin: 0;
-    padding: 0.55rem 1rem 0;
+    padding: 0.55rem 0 0;
     font-size: 0.58rem;
     letter-spacing: 0.08em;
     color: var(--champagne);
   }
 
   .card-body {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 1rem 1rem 1.15rem;
+    gap: 0.3rem;
   }
 
   .role {
-    margin: 0 0 0.55rem;
+    margin: 0.3rem 0 0.25rem;
     font-size: 0.62rem;
     color: var(--bronze);
   }
@@ -301,7 +301,8 @@ import RoomShell from '../components/RoomShell.astro';
   }
 
   @media (max-width: 900px) {
-    .initiatives { grid-template-columns: 1fr; }
+    .card { grid-template-columns: 1fr; }
+    .logo-frame { max-width: 6rem; }
     .post img { aspect-ratio: 1.6 / 1; }
     blockquote { max-width: 16em; }
   }

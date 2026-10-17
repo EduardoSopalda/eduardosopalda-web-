@@ -285,6 +285,11 @@ const records: LexiconRecord[] = [
     object-position: center;
     background: #070707;
     border: 1px solid rgba(170, 104, 66, 0.4);
+    /* Exhibit treatment, not a pasted screenshot: every record image
+       (Zoom grids, event flyers, event photography alike) muted into
+       the same bronze/sepia family as the field's own specimen
+       renders, so a UI capture reads as a plate in the cabinet. */
+    filter: grayscale(0.5) sepia(0.3) saturate(1.2) brightness(0.85) contrast(1.05);
   }
 
   figcaption { margin-top: 0.55rem; }
