@@ -189,9 +189,9 @@ const beliefs = [
 
   /* On a pedestal, slowly turning -- bounded well short of edge-on, so
      a flat cutout never has to show its (nonexistent) side. The text
-     beside it never moves; only the specimen does. Desktop/tablet
-     only: below 800px .specimen img already has its own mobile float
-     (cabinet-float, further down); the two aren't meant to combine. */
+     beside it never moves; only the specimen does. Same turn at every
+     width: an earlier mobile-only vertical float (8px over 9s) read as
+     not moving at all next to a detailed sculpture. */
   .specimen {
     perspective: 60rem;
   }
@@ -201,12 +201,10 @@ const beliefs = [
     to { transform: rotateY(13deg) rotateX(-1deg); }
   }
 
-  @media (min-width: 801px) {
-    .specimen img {
-      animation: specimen-turn 26s ease-in-out infinite alternate;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
+  .specimen img {
+    animation: specimen-turn 26s ease-in-out infinite alternate;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
 
   figcaption {
@@ -309,14 +307,6 @@ const beliefs = [
       justify-self: center;
       margin-inline: auto;
     }
-    .specimen img {
-      animation: cabinet-float 9s ease-in-out infinite;
-    }
-  }
-
-  @keyframes cabinet-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
