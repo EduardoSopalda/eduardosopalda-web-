@@ -3,7 +3,7 @@
 // Roles are stated as given.
 // The Berlin congress stays in Upcoming until it happens, and already has its own page.
 import '../styles/fraunces.css';
-import 'typeface-glacial-indifference';
+import '@fontsource-variable/newsreader/opsz.css';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
@@ -244,11 +244,11 @@ const records: LexiconRecord[] = [
 
   .dek, .next p:not(.kicker) {
     max-width: 38rem;
-    font-family: var(--font-reading);
-    font-style: normal;
+    font-family: var(--font-display);
+    font-style: italic;
     font-size: 1.08rem;
-    line-height: 1.6;
-    color: var(--powder-pink);
+    line-height: 1.45;
+    color: var(--flesh);
   }
 
   .dek { margin: 1rem 0 0; }

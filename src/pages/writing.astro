@@ -8,7 +8,6 @@
 // falling back to the browser's own serif. Every other page loads it
 // explicitly; this was a gap, not a deliberate choice.
 import '../styles/fraunces.css';
-import 'typeface-glacial-indifference';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import { toArticleRow } from '../data/articleIndex';
@@ -294,11 +293,11 @@ const months = [
   .dek {
     margin: 1.2rem 0 0;
     max-width: 34rem;
-    font-family: var(--font-reading);
-    font-style: normal;
+    font-family: var(--font-display);
+    font-style: italic;
     font-size: 1.25rem;
-    line-height: 1.5;
-    color: var(--powder-pink);
+    line-height: 1.4;
+    color: var(--flesh);
   }
 
   .read {

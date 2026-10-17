@@ -17,7 +17,14 @@ import '../../styles/global.css';
 // own serif the whole time. Every other page on the site loads it
 // explicitly; this was a gap, not a deliberate choice.
 import '../../styles/fraunces.css';
-import 'typeface-glacial-indifference';
+// opsz.css, not the default index.css/wght.css -- per CLAUDE.md "honour
+// the optical size axis" (same reasoning as fraunces.css): index.css's
+// files lock opsz at a fixed instance, opsz.css keeps the full opsz
+// range in the variable font so the browser's own optical-size
+// interpolation (font-optical-sizing: auto, the default) can act on it
+// as text scales, same as Fraunces elsewhere on this site.
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { parseArticleBody, headingsOf } from '../../lib/parseArticleBody';
 import { catalogNoForTitle, leadFragmentFor } from '../../data/articleIndex';
