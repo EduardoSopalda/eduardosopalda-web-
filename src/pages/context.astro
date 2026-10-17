@@ -47,9 +47,35 @@ const specimens = [
           <p class="display">Before knowledge had departments, the world could still sit in one room.</p>
         </div>
         <figure class="hero-plate">
-          <img src="/cabinet/umbrella-elephant-cutout.png" alt="A seated figure with an elephant head holding an umbrella" />
+          <video autoplay muted playsinline poster="/cabinet/umbrella-elephant-cutout.png" aria-label="A seated figure with an elephant head holding an umbrella, slowly turning">
+            <source src="/cabinet/elephant-turn.mp4" type="video/mp4" />
+          </video>
           <figcaption>One room trying to hold the world</figcaption>
         </figure>
+        <script>
+          // Direct request: 10% slower, a 15s still pause between plays,
+          // then loop -- none of which the native loop attribute can do
+          // (it restarts instantly, no pause, no rate control), so this
+          // is hand-driven rather than left to autoplay+loop. Reduced
+          // motion skips the whole thing and just shows the poster
+          // frame, same pattern as the Who page's own specimen video.
+          const v = document.querySelector('.hero-plate video');
+          if (v) {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              v.removeAttribute('autoplay');
+              v.pause();
+              v.currentTime = 0;
+            } else {
+              v.playbackRate = 0.9;
+              v.addEventListener('ended', () => {
+                setTimeout(() => {
+                  v.currentTime = 0;
+                  v.play();
+                }, 15000);
+              });
+            }
+          }
+        </script>
       </section>
 
       <section class="block">
@@ -188,7 +214,7 @@ const specimens = [
   }
 
   .hero-plate, .plates figure { margin: 0; }
-  .hero-plate img, .plates img {
+  .hero-plate img, .hero-plate video, .plates img {
     display: block;
     width: 100%;
     height: auto;
