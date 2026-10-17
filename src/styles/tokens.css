@@ -15,6 +15,13 @@
   --gold: #F7C56A;
   --neon: #FF6E93;
 
+  /* Powder pink — the second deliberate accent, alongside gold. Gold
+     keeps its own job untouched (the nerve, its beads, whatever is
+     awake); powder pink takes over the reading-accent role flesh/oxide
+     used to carry alone (deks, quotes, pull-quotes), so the two colours
+     have distinct jobs rather than competing for the same one. */
+  --powder-pink: #F7CAD0;
+
   /* Bronze — the specimens' own glow, one step down from gold. The
      reference prototype's own EDUARDO colour, flat, no gradient.
      Nudged from #A6613A: that measured 4.39:1 on black, just under
@@ -54,16 +61,18 @@
 
   /* Type */
   --font-display: 'Fraunces Variable', 'Fraunces', serif;
-  --font-reading: 'Newsreader Variable', 'Newsreader', serif;
+  /* Reading font: Glacial Indifference, the same rounded sans as the
+     wordmark's surname. It stopped being wordmark-exclusive on
+     purpose -- it's now the site's actual reading voice, not just a
+     bespoke mark. Headings and short editorial accents stay Fraunces. */
+  --font-reading: 'Glacial Indifference', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
-  /* The wordmark is the one deliberate exception to the display
-     system — two bespoke faces reserved for the name-mark alone, not
-     used anywhere else on the site:
-     EDUARDO — Italiana, tall/elongated serif capitals, structured.
-     sopalda — Glacial Indifference, round and modern, because the
-       surname is round-letter-heavy and reads easiest leaning into
-       that rather than fighting it. */
+  /* EDUARDO keeps its own bespoke face -- Italiana, tall/elongated
+     serif capitals, structured, used nowhere else on the site.
+     sopalda's Glacial Indifference is no longer exclusive to the
+     wordmark (see --font-reading above), but stays bold here, where
+     the body text runs regular weight. */
   --font-wordmark-given: 'Italiana', serif;
   --font-wordmark: 'Glacial Indifference', sans-serif;
 

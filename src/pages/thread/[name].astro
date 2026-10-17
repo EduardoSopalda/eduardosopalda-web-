@@ -1,4 +1,9 @@
 ---
+// This page never imported fraunces.css -- its h1 and ArticleList's
+// Fraunces headings were silently falling back to the browser's own
+// serif. Every other page loads it explicitly; this was a gap.
+import '../../styles/fraunces.css';
+import 'typeface-glacial-indifference';
 import '../../styles/global.css';
 import { getCollection } from 'astro:content';
 import { toArticleRow } from '../../data/articleIndex';

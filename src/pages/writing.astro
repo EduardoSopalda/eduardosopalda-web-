@@ -3,6 +3,12 @@
 // is the archive: one featured piece, then the rest by year, each
 // carrying its own illustration when one exists. No sample titles.
 // The tomato masthead was a stand-in; the plates are the articles'.
+// This page never imported fraunces.css -- every Fraunces heading here
+// (h1, the numeral, article titles via ArticleList) was silently
+// falling back to the browser's own serif. Every other page loads it
+// explicitly; this was a gap, not a deliberate choice.
+import '../styles/fraunces.css';
+import 'typeface-glacial-indifference';
 import '../styles/global.css';
 import { getCollection } from 'astro:content';
 import { toArticleRow } from '../data/articleIndex';
@@ -288,11 +294,11 @@ const months = [
   .dek {
     margin: 1.2rem 0 0;
     max-width: 34rem;
-    font-family: var(--font-display);
-    font-style: italic;
+    font-family: var(--font-reading);
+    font-style: normal;
     font-size: 1.25rem;
-    line-height: 1.4;
-    color: var(--flesh);
+    line-height: 1.5;
+    color: var(--powder-pink);
   }
 
   .read {

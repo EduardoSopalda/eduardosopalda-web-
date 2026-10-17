@@ -1,5 +1,6 @@
 ---
 import '../styles/fraunces.css';
+import 'typeface-glacial-indifference';
 import '@fontsource/ibm-plex-mono/400.css';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
@@ -166,13 +167,13 @@ const specimens = [
 
   .block { margin-top: 5.2rem; }
 
-  .block p, .close p {
+  .block p:not(.kicker), .close p:not(.kicker) {
     max-width: 38rem;
-    font-family: var(--font-display);
-    font-style: italic;
+    font-family: var(--font-reading);
+    font-style: normal;
     font-size: 1.12rem;
-    line-height: 1.45;
-    color: var(--flesh);
+    line-height: 1.6;
+    color: var(--powder-pink);
   }
 
   .block em { color: var(--bone); }

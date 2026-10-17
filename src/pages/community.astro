@@ -3,6 +3,7 @@
 import '../styles/fraunces.css';
 import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/500.css';
+import 'typeface-glacial-indifference';
 import '../styles/global.css';
 import RoomNerve from '../components/RoomNerve.astro';
 import RoomShell from '../components/RoomShell.astro';
@@ -152,11 +153,11 @@ import RoomShell from '../components/RoomShell.astro';
     max-width: 34rem;
     padding-left: 1.1rem;
     border-left: 1px solid var(--bronze);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-reading);
     font-weight: 400;
     font-size: 0.98rem;
     line-height: 1.65;
-    color: var(--champagne);
+    color: var(--powder-pink);
   }
 
   .lede strong { color: var(--bone); font-weight: 500; }
@@ -260,11 +261,11 @@ import RoomShell from '../components/RoomShell.astro';
 
   .card-body p {
     margin: 0;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-reading);
     font-weight: 400;
     font-size: 0.86rem;
     line-height: 1.6;
-    color: var(--champagne);
+    color: var(--powder-pink);
   }
 
   .note, .card-link {
