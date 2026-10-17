@@ -53,9 +53,21 @@ const beliefs = [
           </p>
         </div>
         <figure class="specimen">
-          <img src="/cabinet/annotated-brain-cutout.png" alt="A sculptural brain inscribed with data, curiosity, responsibility, reflection, AI and growth" />
+          <video autoplay muted loop playsinline poster="/cabinet/brain-turn-poster.jpg" aria-label="A sculptural brain, slowly turning">
+            <source src="/cabinet/brain-turn.mp4" type="video/mp4" />
+          </video>
           <figcaption>A mind is a kind of cabinet</figcaption>
         </figure>
+        <script>
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const v = document.querySelector('.specimen video');
+            if (v) {
+              v.removeAttribute('autoplay');
+              v.pause();
+              v.currentTime = 0;
+            }
+          }
+        </script>
       </section>
 
       <section class="block">
@@ -136,11 +148,8 @@ const beliefs = [
 </html>
 
 <style>
-  /* Viewport scroll, not a scroll container. overflow:clip/hidden
-     (global.css locks both for the field) flattens 3D on phones,
-     so a rotateY turn paints as a still image. */
-  html, body { overflow: visible !important; height: auto; }
-  body { min-height: 100svh; color: var(--bone); }
+  html { overflow-y: auto; overflow-x: clip; }
+  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
 
   .kicker {
     margin: 0;
@@ -181,27 +190,13 @@ const beliefs = [
     margin: 0;
   }
 
-  .specimen img, .live video {
+  .specimen video, .live video {
     display: block;
     width: 100%;
     height: auto;
     max-height: 28rem;
     object-fit: contain;
     background: transparent;
-  }
-
-  /* Pedestal yaw. A flat cutout, so it turns and comes back
-     instead of going edge-on. Perspective is on the image itself.
-     13 degrees over 26s read as a still image, including on a phone. */
-  @keyframes specimen-turn {
-    from { transform: perspective(720px) rotateY(-40deg) rotateX(2deg); }
-    to { transform: perspective(720px) rotateY(40deg) rotateX(-2deg); }
-  }
-
-  .specimen img {
-    animation: specimen-turn 14s linear infinite alternate;
-    transform-origin: center center;
-    will-change: transform;
   }
 
   figcaption {
@@ -306,7 +301,4 @@ const beliefs = [
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .specimen img { animation: none; }
-  }
 </style>
