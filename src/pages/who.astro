@@ -136,8 +136,11 @@ const beliefs = [
 </html>
 
 <style>
-  html { overflow-y: auto; overflow-x: clip; }
-  body { overflow-y: auto; overflow-x: clip; min-height: 100svh; color: var(--bone); }
+  /* Viewport scroll, not a scroll container. overflow:clip/hidden
+     (global.css locks both for the field) flattens 3D on phones,
+     so a rotateY turn paints as a still image. */
+  html, body { overflow: visible !important; height: auto; }
+  body { min-height: 100svh; color: var(--bone); }
 
   .kicker {
     margin: 0;
@@ -187,23 +190,17 @@ const beliefs = [
     background: transparent;
   }
 
-  /* On a pedestal, slowly turning -- bounded well short of edge-on, so
-     a flat cutout never has to show its (nonexistent) side. The text
-     beside it never moves; only the specimen does. Same turn at every
-     width: an earlier mobile-only vertical float (8px over 9s) read as
-     not moving at all next to a detailed sculpture. */
-  .specimen {
-    perspective: 60rem;
-  }
-
+  /* Pedestal yaw. A flat cutout, so it turns and comes back
+     instead of going edge-on. Perspective is on the image itself.
+     13 degrees over 26s read as a still image, including on a phone. */
   @keyframes specimen-turn {
-    from { transform: rotateY(-13deg) rotateX(1deg); }
-    to { transform: rotateY(13deg) rotateX(-1deg); }
+    from { transform: perspective(720px) rotateY(-40deg) rotateX(2deg); }
+    to { transform: perspective(720px) rotateY(40deg) rotateX(-2deg); }
   }
 
   .specimen img {
-    animation: specimen-turn 26s ease-in-out infinite alternate;
-    transform-style: preserve-3d;
+    animation: specimen-turn 14s linear infinite alternate;
+    transform-origin: center center;
     will-change: transform;
   }
 
