@@ -1169,6 +1169,20 @@ import { STOPS } from '../data/stops';
     }
 
     // ---- input: drag horizontal (infinite) + vertical (bounded), wheel scrolls horizontal ----
+    // dragMoved: direct report -- "when I try to move the nerve and the
+    // menu it gets stuck." Root cause: touch-action:none on .field (see
+    // that rule's own comment) hands the WHOLE gesture to these pointer
+    // handlers and nothing else, but pointerdown used to bail out with
+    // no drag at all whenever it started on a .stop -- and the seven
+    // stops sit directly on the visible curve, exactly where a thumb
+    // trying to pan the nerve naturally lands. The result was a dead
+    // zone: no native scroll (touch-action blocks it), no JS pan
+    // (bailed out), nothing moved. Drag now always starts; a stop's own
+    // click handler below checks dragMoved and swallows the click
+    // instead, so a genuine pan starting on a stop still pans, and only
+    // an actual tap (little to no movement) still opens the room.
+    let dragMoved = false, dragStartX = 0, dragStartY = 0;
+    const DRAG_CLICK_SLOP = 6;
     addEventListener('pointermove', (e) => {
       px = e.clientX; py = e.clientY; hasPointer = true;
       lastActiveT = t;
@@ -1176,13 +1190,16 @@ import { STOPS } from '../data/stops';
         targetX -= (e.clientX - lastX) * 1.7;
         dragY = Math.max(-H * 0.34, Math.min(H * 0.34, dragY + (e.clientY - lastY) * 0.9));
         lastX = e.clientX; lastY = e.clientY;
+        if (!dragMoved && Math.hypot(e.clientX - dragStartX, e.clientY - dragStartY) > DRAG_CLICK_SLOP) {
+          dragMoved = true;
+        }
       }
     });
     addEventListener('pointerleave', () => { hasPointer = false; px = -9999; py = -9999; });
     root.addEventListener('pointerdown', (e) => {
       lastActiveT = t;
-      if ((e.target as HTMLElement).closest('.stop')) return;
       drag = true; lastX = e.clientX; lastY = e.clientY;
+      dragStartX = e.clientX; dragStartY = e.clientY; dragMoved = false;
     });
     addEventListener('pointerup', () => { drag = false; });
     addEventListener('wheel', (e) => {
@@ -2244,6 +2261,13 @@ import { STOPS } from '../data/stops';
       el.style.zIndex = '200'; // navigation always reads above specimens/fragments
       const xn = (i + 0.5) / STOPS.length;
       el.addEventListener('click', (e) => {
+        // The press that produced this click actually panned the field
+        // (dragMoved, set by the pointermove handler above) -- the
+        // pointer only happened to go down on this stop, it wasn't a
+        // choice to open the room. Swallow it outright; the real <a>
+        // would otherwise still navigate once e.preventDefault below is
+        // never reached.
+        if (dragMoved) { e.preventDefault(); return; }
         el.dataset.justClicked = '1';
         setTimeout(() => delete el.dataset.justClicked, 400);
         // Reduced motion, or a departure already underway: let the
