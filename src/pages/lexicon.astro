@@ -176,8 +176,9 @@ const records: LexiconRecord[] = [
         <p class="kicker">A field record · 2026</p>
         <h2>Conversations, indexed.</h2>
         <ol>
-          {records.map((r) => (
+          {records.map((r, i) => (
             <li>
+              <p class="no" aria-hidden="true">{String(records.length - i).padStart(2, '0')}</p>
               <figure>
                 <img src={r.img} alt={r.alt} />
               </figure>
@@ -265,13 +266,14 @@ const records: LexiconRecord[] = [
   }
 
   .feature {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr);
     gap: 1.8rem;
     align-items: center;
     margin-top: 3.2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(243, 235, 224, 0.14);
+    padding: 2rem;
+    border: 1px solid rgba(170, 104, 66, 0.4);
   }
 
   figure { margin: 0; }
@@ -293,15 +295,36 @@ const records: LexiconRecord[] = [
   .feature .meta, .index .meta { margin-top: 0.7rem; font-style: normal; font-family: var(--font-mono); }
 
   .index { margin-top: 4.5rem; }
-  ol { list-style: none; margin: 1.2rem 0 0; padding: 0; }
+  ol { list-style: none; margin: 1.6rem 0 0; padding: 0; }
   li {
+    position: relative;
     display: grid;
     grid-template-columns: 8.5rem minmax(0, 1fr);
     gap: 1.3rem;
     align-items: center;
-    padding: 1.15rem 0;
-    border-top: 1px solid rgba(243, 235, 224, 0.14);
+    margin-top: 1.1rem;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid rgba(170, 104, 66, 0.4);
   }
+  li:first-child { margin-top: 0; }
+
+  /* The accession tag -- a catalogue number on every specimen, not just
+     the field's own featured plate. Same bronze italic Fraunces as
+     Writing's "No.25", so a record reads as a specimen in a case, not
+     a row in a list. */
+  .no {
+    position: absolute;
+    top: 0.9rem;
+    right: 1.1rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--bronze);
+  }
+
+  .no::before { content: 'No. '; font-family: var(--font-mono); font-style: normal; font-size: 0.6rem; letter-spacing: 0.1em; vertical-align: 1px; }
   .role {
     display: inline-block;
     margin-top: 0.7rem;
