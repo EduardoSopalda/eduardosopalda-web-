@@ -187,6 +187,28 @@ const beliefs = [
     background: transparent;
   }
 
+  /* On a pedestal, slowly turning -- bounded well short of edge-on, so
+     a flat cutout never has to show its (nonexistent) side. The text
+     beside it never moves; only the specimen does. Desktop/tablet
+     only: below 800px .specimen img already has its own mobile float
+     (cabinet-float, further down); the two aren't meant to combine. */
+  .specimen {
+    perspective: 60rem;
+  }
+
+  @keyframes specimen-turn {
+    from { transform: rotateY(-13deg) rotateX(1deg); }
+    to { transform: rotateY(13deg) rotateX(-1deg); }
+  }
+
+  @media (min-width: 801px) {
+    .specimen img {
+      animation: specimen-turn 26s ease-in-out infinite alternate;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+  }
+
   figcaption {
     margin-top: 0.7rem;
     font-size: 0.62rem;
