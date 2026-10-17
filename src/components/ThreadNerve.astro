@@ -31,17 +31,25 @@ const { active = null } = Astro.props;
 </nav>
 
 <style>
+  /* Was position:fixed, bottom:0 -- permanently glued to the viewport
+     regardless of scroll, so it covered whatever content happened to
+     be near the bottom of the screen at any given moment (confirmed
+     with real scroll tests at 320px and 1440px: the hero numeral, then
+     archive rows, depending on scroll position -- not an edge case).
+     Tried position:sticky (dock under the main nerve while scrolling
+     past, same "always reachable" intent, without ever overlapping
+     content below it) but html's own overflow-x:hidden -- set
+     deliberately elsewhere on the site, not something to unwind for
+     this -- becomes the sticky containing block and silently defeats
+     it. Plain static flow instead: it sits once, in its own place,
+     and scrolls with the page like everything else. That fully
+     removes the overlap; it trades away "stays visible the whole
+     scroll," which was a convenience, not the actual complaint. */
   .thread-nerve {
-    position: fixed;
-    left: calc(1.75rem + 17rem + 6.5rem + max(0px, (100vw - 1.75rem - 17rem - 6.5rem - 7rem - 54rem) / 2));
-    width: min(54rem, calc(100vw - 1.75rem - 17rem - 6.5rem - 7rem));
-    right: auto;
-    bottom: 0;
-    z-index: 16;
-    margin: 0;
+    z-index: 14;
+    margin: 0 0 1.4rem;
     padding: 1.2rem 0 1rem;
     background: var(--void);
-    pointer-events: none;
   }
 
   .thread-nerve ol {
@@ -120,14 +128,6 @@ const { active = null } = Astro.props;
     outline: 1.5px solid var(--gold);
     outline-offset: 3px;
     border-radius: 2px;
-  }
-
-  @media (max-width: 900px) {
-    .thread-nerve {
-      left: 1.5rem;
-      right: 1.5rem;
-      width: auto;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

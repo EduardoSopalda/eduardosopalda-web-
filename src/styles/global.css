@@ -81,16 +81,10 @@ video {
 /* The archive and the thread row. These live here, not only in their
    components, so a navigation cannot drop them and leave a raw list. */
 .thread-nerve {
-  position: fixed;
-  left: calc(1.75rem + 17rem + 6.5rem + max(0px, (100vw - 1.75rem - 17rem - 6.5rem - 7rem - 54rem) / 2));
-  width: min(54rem, calc(100vw - 1.75rem - 17rem - 6.5rem - 7rem));
-  right: auto;
-  bottom: 0;
-  z-index: 16;
-  margin: 0;
+  z-index: 14;
+  margin: 0 0 1.4rem;
   padding: 1.2rem 0 1rem;
   background: var(--void);
-  pointer-events: none;
 }
 
 .thread-nerve ol {
@@ -241,14 +235,6 @@ video {
   text-transform: uppercase;
   color: var(--champagne);
   white-space: nowrap;
-}
-
-@media (max-width: 900px) {
-  .thread-nerve {
-    left: 1.5rem;
-    right: 1.5rem;
-    width: auto;
-  }
 }
 
 @media (max-width: 720px) {
