@@ -31,6 +31,12 @@ const open = process.env.BERLIN_OPEN === '1' || berlinOpen();
 const canonicalUrl = new URL('/out-loud/automa-chem-2026/', Astro.site);
 const ogImageUrl = new URL('/out-loud/automa-chem-2026/film-poster.jpg', Astro.site);
 const description = 'Data and AI in Sustainable Digital Transformation. From Brasília to the Plant Floor. AUTOMA Chem 2026, Estrel Berlin, 26 October 2026.';
+
+// Derived from FILM_LENGTH rather than a second hardcoded copy -- a
+// stray "7 minutes 47" aria-label is what drifted out of sync when the
+// film itself was replaced and FILM_LENGTH alone got updated.
+const [filmMin, filmSec] = FILM_LENGTH.split(':').map(Number);
+const filmSpoken = `${filmMin} minute${filmMin === 1 ? '' : 's'}${filmSec ? ` ${filmSec}` : ''}`;
 ---
 
 <!doctype html>
@@ -88,7 +94,7 @@ const description = 'Data and AI in Sustainable Digital Transformation. From Bra
                 controls
                 preload="metadata"
                 playsinline
-                aria-label="The talk as a narrated film, 7 minutes 47"
+                aria-label={`The talk as a narrated film, ${filmSpoken}`}
               ></video>
               <div class="film-meta"><span>Voice, music, animation</span><span>{FILM_LENGTH}</span></div>
             </div>

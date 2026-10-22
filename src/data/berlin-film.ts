@@ -4,11 +4,14 @@
 // src/pages/out-loud/automa-chem-2026.astro. Nothing here reaches the
 // closed HTML.
 
-// The narrated 7:47 film lives on the server only (uploaded by hand, never
+// The film lives on the server only (uploaded by hand via FileZilla, never
 // in git or dist). Keep the file at this path.
-export const FILM_SRC = '/automa-2026-film/AUTOMA-Chem-2026-Sopalda-film.mp4';
+// FILM_LENGTH is a placeholder -- update to the real runtime once known;
+// it also appears as a hardcoded "7 minutes 47" aria-label on the <video>
+// in automa-chem-2026.astro, which needs the same fix.
+export const FILM_SRC = '/automa-2026-film/EduardoSopalda_automachem2026.mp4';
 export const FILM_POSTER = '/out-loud/berlin/poster.jpg';
-export const FILM_LENGTH = '7:47';
+export const FILM_LENGTH = '10:00';
 
 export interface Section {
   at: number; // seconds
