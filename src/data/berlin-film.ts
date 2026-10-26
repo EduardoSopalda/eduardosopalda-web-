@@ -4,14 +4,17 @@
 // src/pages/out-loud/automa-chem-2026.astro. Nothing here reaches the
 // closed HTML.
 
-// The film lives on the server only (uploaded by hand via FileZilla, never
-// in git or dist). Keep the file at this path.
-// FILM_LENGTH is a placeholder -- update to the real runtime once known;
-// it also appears as a hardcoded "7 minutes 47" aria-label on the <video>
-// in automa-chem-2026.astro, which needs the same fix.
-export const FILM_SRC = '/automa-2026-film/EduardoSopalda_automachem2026.mp4';
+// The film lives on the server only (uploaded by hand, never in git or
+// dist). Keep the file at this path.
+// Reverted: EduardoSopalda_automachem2026.mp4 (the file this pointed at
+// for a few days) turned out to be a different clip entirely -- the
+// no-narration backup film made for the /automa-2026/ organiser page, not
+// a replacement for the real narrated film. The one below is the actual
+// 7:47 film Yvonne Espinosa saw and reviewed; see the feedback section
+// further down this page.
+export const FILM_SRC = '/automa-2026-film/AUTOMA-Chem-2026-Sopalda-film.mp4';
 export const FILM_POSTER = '/out-loud/berlin/poster.jpg';
-export const FILM_LENGTH = '10:00';
+export const FILM_LENGTH = '7:47';
 
 export interface Section {
   at: number; // seconds
