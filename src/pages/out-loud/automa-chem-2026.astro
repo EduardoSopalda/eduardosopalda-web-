@@ -143,8 +143,9 @@ const filmSpoken = `${filmMin} minute${filmMin === 1 ? '' : 's'}${filmSec ? ` ${
 
           <section class="feedback" aria-labelledby="fb-k">
             <p class="label" id="fb-k">What people are saying</p>
-            <p class="fb-q">"I LOVE LOVE LOVE it!!! Message is super clear and the video is beautiful. At first I thought ~7 min, maybe too long -- but it was so engaging that I listened to every word and loved the animation. Fantastic!!"</p>
+            <p class="fb-q">"&hellip;it was so engaging that I listened to every word and loved the animation. Fantastic!!"</p>
             <p class="fb-by">Yvonne Espinosa · Co-Founder, Kith AI Lab &amp; Kith Climate</p>
+            <p class="fb-note">This film will also be shared with the cohorts of Kith AI Lab.</p>
           </section>
 
           <dl class="colophon">
@@ -316,6 +317,7 @@ const filmSpoken = `${filmMin} minute${filmMin === 1 ? '' : 's'}${filmSec ? ` ${
   .feedback { margin-top: 96px; }
   .feedback .fb-q { font-family: var(--font-display); font-style: italic; letter-spacing: -0.01em; color: var(--bone); font-size: clamp(1.5rem, 2.4vw, 2.1rem); line-height: 1.32; max-width: 34rem; margin: 1.2rem 0 0; }
   .feedback .fb-by { font: 13px/1.7 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--flesh); margin: 1.4rem 0 0; }
+  .feedback .fb-note { font-family: var(--font-display); font-style: italic; color: var(--flesh); font-size: 1.05rem; line-height: 1.45; max-width: 30rem; margin: 1.5rem 0 0; }
 
   /* ── colophon ── */
   .colophon { margin: 88px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; border-top: 1px solid var(--line); padding-top: 1.2rem; }
