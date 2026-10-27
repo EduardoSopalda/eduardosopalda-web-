@@ -33,7 +33,8 @@
 
 .landing .mark,
 .landing .frag,
-.landing .cue {
+.landing .cue,
+.landing .consent-slot {
   pointer-events: auto;
 }
 
