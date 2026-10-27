@@ -1,0 +1,88 @@
+---
+// GA4 behind consent. Nothing from Google loads until the reader accepts.
+// Choice is stored in localStorage under "es-consent" ("granted" | "denied").
+const GA_ID = 'G-KFHG5HLBVQ';
+---
+<div id="consent" class="consent" role="region" aria-label="Analytics consent" hidden>
+  <p class="consent-q">Count my visit:</p>
+  <p class="consent-a"><button type="button" data-choice="granted">Yes</button><button type="button" data-choice="denied">No</button></p>
+</div>
+<div id="consent-reopen" class="consent consent-reopen" hidden>
+  <p><button type="button" data-reopen>Privacy</button></p>
+</div>
+<script is:inline define:vars={{ GA_ID }}>
+  (function () {
+    var KEY = 'es-consent';
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+    function load() {
+      if (window.__gaLoaded) return; window.__gaLoaded = true;
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      var s = document.createElement('script');
+      s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+      gtag('js', new Date()); gtag('config', GA_ID, { anonymize_ip: true });
+    }
+    var el = document.getElementById('consent');
+    var re = document.getElementById('consent-reopen');
+    var slot = document.getElementById('consent-slot');
+    if (slot) { slot.appendChild(el); slot.appendChild(re); el.classList.add('is-inline'); re.classList.add('is-inline'); }
+    function show(node) { node.classList.remove('is-leaving'); node.hidden = false; }
+    function hide(node) { node.classList.add('is-leaving'); setTimeout(function () { node.hidden = true; }, 600); }
+    var choice = null; try { choice = localStorage.getItem(KEY); } catch (e) {}
+    if (choice === 'granted') load();
+    if (choice) show(re); else show(el);
+    re.addEventListener('click', function (e) {
+      if (!e.target.closest('[data-reopen]')) return;
+      re.hidden = true; show(el);
+    });
+    el.addEventListener('click', function (e) {
+      var c = e.target && e.target.getAttribute('data-choice');
+      if (!c) return;
+      try { localStorage.setItem(KEY, c); } catch (err) {}
+      if (c === 'denied' && window.__gaLoaded) {
+        // Withdrawal: stop analytics and reload so gtag.js is gone.
+        gtag('consent', 'update', { analytics_storage: 'denied' });
+        location.reload(); return;
+      }
+      hide(el); setTimeout(function () { show(re); }, 650);
+      if (c === 'granted') load();
+    });
+  })();
+</script>
+<style>
+  /* Middle line of the centred footer: same caption as .meta. */
+  .consent {
+    position: fixed; z-index: 50; left: 50%; transform: translateX(-50%);
+    bottom: calc(48px + env(safe-area-inset-bottom));
+    font-family: var(--font-mono, monospace); font-size: .62rem;
+    letter-spacing: .16em; text-transform: uppercase; line-height: 1.8;
+    color: rgba(227, 175, 149, .65); white-space: nowrap;
+    opacity: 0; animation: consent-in 2s ease 2.8s forwards;
+  }
+  .consent.is-inline { position: static; transform: none; }
+  .consent-q { padding-left: .16em; }
+  .consent[hidden] { display: none; }
+  .consent p { margin: 0; }
+  #consent:not([hidden]) { display: flex; gap: 1em; align-items: center; }
+  .consent-a { display: flex; gap: .6em; }
+  .consent button {
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit;
+    background: transparent; cursor: pointer;
+    border: 1px solid rgba(227, 175, 149, .45); border-radius: 2px;
+    padding: .2em .75em .2em .9em; line-height: 1.6;
+    transition: background-color .35s ease, color .35s ease, border-color .35s ease;
+  }
+  .consent-reopen button { border-color: transparent; text-decoration: underline; text-underline-offset: .35em; text-decoration-color: rgba(227,175,149,.35); }
+  .consent button:hover, .consent button:focus-visible, .consent button:active, .consent button.is-hover {
+    background: var(--bone, #F3EBE0); color: var(--void, #000); border-color: var(--bone, #F3EBE0); outline: none;
+  }
+  .consent-reopen button:hover, .consent-reopen button:focus-visible { background: transparent; color: var(--flesh, #E3AF95); border-color: transparent; }
+  .consent-reopen { animation-delay: 0s; animation-duration: .8s; }
+  .consent.is-leaving { animation: consent-out .6s ease forwards; }
+  @keyframes consent-in { to { opacity: 1; } }
+  @keyframes consent-out { from { opacity: 1; } to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .consent { animation: none; opacity: 1; } }
+</style>

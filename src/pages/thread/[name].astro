@@ -1,4 +1,5 @@
 ---
+import Consent from '../../components/Consent.astro';
 // This page never imported fraunces.css -- its h1 and ArticleList's
 // Fraunces headings were silently falling back to the browser's own
 // serif. Every other page loads it explicitly; this was a gap.
@@ -48,6 +49,7 @@ const bySource = entries
         )}
       </div>
     </main>
+    <Consent />
   </body>
 </html>
 

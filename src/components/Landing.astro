@@ -68,7 +68,6 @@ import '../styles/sopalda-landing.css';
           dead href was a fake interaction on the first screen -- see
           non-negotiable 1, invent nothing, not even a placeholder
           destination. Becomes a real <a> the day there's a URL. */}
-      <p class="meta">Barcelona<br /><span class="li">LinkedIn</span></p>
       {/* Per the audit's own finding: a bare dot and a hairline, no
           visible label, only aria-label="Continue" -- discoverable by
           click or by wheel, but a first-time visitor on a phone (no
@@ -82,6 +81,9 @@ import '../styles/sopalda-landing.css';
         <span class="cue-dot" aria-hidden="true"></span>
         <span class="cue-label">unroll the logic</span>
       </button>
+      {/* Consent.astro moves its caption in here, so all three lines share one axis. */}
+      <div class="consent-slot" id="consent-slot"></div>
+      <p class="meta">Barcelona</p>
     </footer>
   </div>
 </section>

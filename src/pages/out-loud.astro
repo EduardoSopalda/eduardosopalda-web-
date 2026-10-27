@@ -1,4 +1,5 @@
 ---
+import Consent from '../components/Consent.astro';
 // Out Loud · Berlin. AUTOMA Chem 2026, Estrel Berlin, 26 October 2026.
 //
 // Two builds, decided at BUILD time (the site is static, on IONOS):
@@ -222,6 +223,7 @@ const filmSpoken = `${filmMin} minute${filmMin === 1 ? '' : 's'}${filmSec ? ` ${
         })();
       </script>
     )}
+    <Consent />
   </body>
 </html>
 

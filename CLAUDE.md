@@ -37,7 +37,7 @@ leave understanding one thing better than when they arrived.
    Nowhere else. It is powerful because it is scarce.
 7. **Reader pages must work with JavaScript off.** The field is one client island.
 8. **No em dashes or en dashes in any prose you write.** Use full stops and commas.
-9. **Do not add tracking, analytics, cookie banners, newsletter capture or contact forms.**
+9. **No tracking except Google Analytics 4 (G-KFHG5HLBVQ) behind consent.** gtag.js loads only after the reader clicks Accept in `src/components/Consent.astro` (Consent Mode v2, all defaults denied). Reject must stay equally prominent. No other analytics, newsletter capture or contact forms.
    The contact mechanism is the question each article ends on.
 
 ## Stack

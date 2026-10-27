@@ -328,7 +328,7 @@ body[data-landing='field'] .frag-source {
 .meta {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: .55rem;
+  font-size: .62rem;
   letter-spacing: .16em;
   text-transform: uppercase;
   /* .45 measured 2.76:1 on black at this size -- confirmed by direct
@@ -388,7 +388,7 @@ body[data-landing='field'] .frag-source {
    clears it at 5.69:1. */
 .cue-label {
   font-family: var(--font-mono);
-  font-size: .5rem;
+  font-size: .62rem;
   letter-spacing: .08em;
   color: rgba(247, 197, 106, .65);
   white-space: nowrap;
@@ -430,3 +430,12 @@ body[data-landing='field'] .frag-source {
     transform: none;
   }
 }
+
+/* Footer: one centred column. Cue, consent (moved in by Consent.astro),
+   Barcelona. padding-left equal to letter-spacing cancels the trailing
+   tracking so each line's ink is optically centred. */
+.foot { flex-direction: column; justify-content: flex-end; align-items: center; gap: .85rem; }
+.foot .cue { position: static; transform: none; margin: 0; padding: 0; }
+.foot .meta { text-align: center; padding-left: .16em; }
+.cue-label { text-transform: uppercase; letter-spacing: .16em; padding-left: .16em; font-size: .9rem; }
+.consent-slot:empty { display: none; }

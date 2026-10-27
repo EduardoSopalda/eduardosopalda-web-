@@ -1,4 +1,5 @@
 ---
+import Consent from './Consent.astro';
 // A quiet stop. Title and the nerve's own subtitle. No production notes.
 import '../styles/global.css';
 import RoomNerve from './RoomNerve.astro';
@@ -27,6 +28,7 @@ const current = STOPS.find((s) => s.label === title)?.href ?? '/';
       <h1>{title}</h1>
       <p class="label">{subtitle}</p>
     </main>
+    <Consent />
   </body>
 </html>
 
